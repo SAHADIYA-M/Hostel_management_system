@@ -45,6 +45,18 @@ app.add_middleware(
 )
 
 
+@app.get("/", tags=["Root"])
+def root():
+    """Root welcoming endpoint with links to documentation and health status."""
+    return {
+        "service": "Hostel Management System API",
+        "status": "online",
+        "docs": "/docs",
+        "health": "/api/health",
+        "db_check": "/api/db-check"
+    }
+
+
 @app.get("/api/health", tags=["Health"])
 def health_check():
     """Simple healthcheck endpoint to verify backend status."""
