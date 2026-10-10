@@ -65,7 +65,39 @@ hostel-management-system/
 
 ---
 
+## 🎨 UI/UX Design & Export Guidelines
+
+All UI screens, wireframes, and prototypes must be designed in our shared Figma project before frontend implementation begins.
+
+- **Official Figma File:** [Hostel Management System — UI Design (Figma)](https://www.figma.com/design/OIT1nOvW1WjS5YMywyweEy/Hostel-Management-System--UI-Design?t=7D2VjWokgU2jFMMr-1)
+- **Project Rule:** All team designs must be done strictly in this shared Figma project. Do not create separate personal draft files.
+
+### Quick Export & Save Steps
+1. **Frame in Figma:** Group each screen into a dedicated top-level Frame (Desktop `1440px` or `1920px`).
+2. **Export:** Select the frame ➔ In the right sidebar under **Export**, click **`+`** ➔ select **PNG** at **2x** resolution (or **SVG** for icons/vectors) ➔ click **Export [Frame Name]**.
+3. **Save Directory:** Save all exported image files strictly to `docs/design/`.
+4. **File Naming Convention:** Use lowercase kebab-case with numerical sequence prefixes:
+   - `01-dashboard.png`
+   - `02-students.png`
+   - `03-rooms-allotment.png`
+   - `04-fees-fines.png`
+   - `05-mess.png`
+   - `06-attendance.png`
+   - `07-visitors.png`
+   - `08-maintenance-complaints.png`
+5. **Commit to Git:**
+   ```powershell
+   git add docs/design/
+   git commit -m "docs(design): export and add Figma UI screens for <screen-name>"
+   git push origin <branch-name>
+   ```
+
+For the complete screen checklist and guidelines, see [`docs/design/README.md`](docs/design/README.md).
+
+---
+
 ## 👥 Team & Links
 
-- **Figma Design Link:** _[Add your Figma link here]_
+- **Figma Design Link:** [Hostel Management System — UI Design (Figma)](https://www.figma.com/design/OIT1nOvW1WjS5YMywyweEy/Hostel-Management-System--UI-Design?t=7D2VjWokgU2jFMMr-1)
 - **Team Members:** _[Add team member names here]_
+
