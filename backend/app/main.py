@@ -9,13 +9,26 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.db import init_db_pool, close_db_pool, get_db_connection
 
+# Import Routers
+from app.routers import (
+    auth,
+    hostels,
+    rooms,
+    students,
+    fees,
+    mess,
+    attendance,
+    visitors,
+    maintenance,
+    portal,
+)
+
 settings = get_settings()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Manage application startup and shutdown lifecycle."""
-    # Attempt pool initialization if database is configured
     try:
         init_db_pool()
         print("INFO: Database connection pool initialized successfully.")
@@ -23,7 +36,6 @@ async def lifespan(app: FastAPI):
         print(f"WARNING: Could not connect to database on startup ({e}).")
         print("Ensure your DATABASE_URL in .env is correct.")
     yield
-    # Shutdown
     close_db_pool()
     print("INFO: Database connection pool closed.")
 
@@ -35,14 +47,32 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Configure CORS for React frontend (Vite default: http://localhost:5173)
+# Configure CORS for React frontend (Local dev + Vercel / Netlify / Render deployments)
+cors_origins = list(settings.cors_origins_list)
+for origin in ["http://localhost:5173", "http://127.0.0.1:5173"]:
+    if origin not in cors_origins:
+        cors_origins.append(origin)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.cors_origins_list,
+    allow_origins=cors_origins,
+    allow_origin_regex=r"^(https?://(localhost|127\.0\.0\.1)(:[0-9]+)?|https://.*\.vercel\.app|https://.*\.netlify\.app|https://.*\.onrender\.com)$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include Routers
+app.include_router(auth.router)
+app.include_router(hostels.router)
+app.include_router(rooms.router)
+app.include_router(students.router)
+app.include_router(fees.router)
+app.include_router(mess.router)
+app.include_router(attendance.router)
+app.include_router(visitors.router)
+app.include_router(maintenance.router)
+app.include_router(portal.router)
 
 
 @app.get("/", tags=["Root"])

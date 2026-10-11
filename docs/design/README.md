@@ -82,6 +82,8 @@ Use lowercase, hyphen-separated (kebab-case) file names with two-digit sequence 
 
 | Screen / Feature | Expected File Name |
 |---|---|
+| **Login / Auth Gateway (Student & Warden)** | **`00-login-page.png`** |
+| Component UI Kit / Style Guide | `00-ui-kit.png` |
 | Admin / Warden Dashboard | `01-dashboard.png` |
 | Student Directory & Profiles | `02-students.png` |
 | Rooms & Allocation View | `03-rooms-allotment.png` |
@@ -91,7 +93,6 @@ Use lowercase, hyphen-separated (kebab-case) file names with two-digit sequence 
 | Visitor Log | `07-visitors.png` |
 | Maintenance & Complaints | `08-maintenance-complaints.png` |
 | Student Self-Service Portal (Personalized) | `09-student-portal.png` |
-| Component UI Kit / Style Guide (Optional) | `00-ui-kit.png` |
 
 ### 🔒 Role-Based Access & Gender Segregation Architecture
 * **Admin / Warden View (`01` through `08`):** Full operational scope across rooms, students, and staffing. Wardens are assigned 1:1 to hostels (`HOSTEL.type` matches the warden gender; e.g. Dr. Suresh Kumar for Ganga Boys, Prof. Meenakshi Sundaram for Yamuna Girls).
