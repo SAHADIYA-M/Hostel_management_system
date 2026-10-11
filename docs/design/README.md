@@ -90,7 +90,13 @@ Use lowercase, hyphen-separated (kebab-case) file names with two-digit sequence 
 | Student Attendance | `06-attendance.png` |
 | Visitor Log | `07-visitors.png` |
 | Maintenance & Complaints | `08-maintenance-complaints.png` |
+| Student Self-Service Portal (Personalized) | `09-student-portal.png` |
 | Component UI Kit / Style Guide (Optional) | `00-ui-kit.png` |
+
+### 🔒 Role-Based Access & Gender Segregation Architecture
+* **Admin / Warden View (`01` through `08`):** Full operational scope across rooms, students, and staffing. Wardens are assigned 1:1 to hostels (`HOSTEL.type` matches the warden gender; e.g. Dr. Suresh Kumar for Ganga Boys, Prof. Meenakshi Sundaram for Yamuna Girls).
+* **Student Self-Service View (`09`):** Strictly restricted to the authenticated student (`WHERE student_id = :id`). Students only see their own room and roommate, their individual fee and fine invoices, their mess plan, their personal attendance log, and can submit grievances/room repair tickets.
+
 
 ---
 

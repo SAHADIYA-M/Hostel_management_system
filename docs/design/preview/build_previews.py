@@ -113,6 +113,121 @@ def wrap_page(page_id, page_title, content_html):
 </html>
 """
 
+def get_student_sidebar_html(active_id):
+    items = [
+        ("overview", "#overview", "My Dashboard", "🏠", ""),
+        ("room", "#room", "My Room & Roommate", "🛏️", "Room 101"),
+        ("fees", "#fees", "My Fees & Fines", "💳", "Paid"),
+        ("mess", "#mess", "My Mess Plan", "🍽️", "Active"),
+        ("attendance", "#attendance", "My Attendance Log", "📅", "100%"),
+        ("grievances", "#grievances", "Grievances & Repairs", "🔧", "2 Resolved"),
+        ("visitors", "#visitors", "Registered Visitors", "👥", "2 Approved"),
+    ]
+
+    nav_links = ""
+    for item_id, href, label, icon, badge in items:
+        is_active = "active" if item_id == active_id else ""
+        badge_html = f'<span class="nav-badge">{badge}</span>' if badge else ""
+        nav_links += f"""
+        <a href="{href}" class="nav-item {is_active}">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">{icon}</span>
+                <span>{label}</span>
+            </div>
+            {badge_html}
+        </a>
+        """
+
+    return f"""
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-badge" style="background: linear-gradient(135deg, #10b981, #059669);">S</div>
+            <div class="logo-text">
+                <h1>HostelMS</h1>
+                <span style="color: #34d399;">Student Portal</span>
+            </div>
+        </div>
+
+        <div class="hostel-selector-box">
+            <label>Resident Profile</label>
+            <div class="hostel-pill" style="border-color: #059669;">
+                <span>🎓 Rahul Sharma</span>
+                <span style="font-size: 11px; background: #064e3b; color: #a7f3d0; padding: 2px 6px; border-radius: 4px;">#1001</span>
+            </div>
+            <div style="font-size: 11px; color: #94a3b8; margin-top: 6px;">
+                🏢 Ganga Boys Hostel • Room 101
+            </div>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">My Personal Space</div>
+            {nav_links}
+
+            <div class="nav-section-title" style="margin-top: 14px;">Switch View</div>
+            <a href="01-dashboard.html" class="nav-item" style="border: 1px dashed #334155; color: #94a3b8;">
+                <div class="nav-item-left">
+                    <span style="font-size: 16px;">🛡️</span>
+                    <span>Warden Admin View</span>
+                </div>
+                <span style="font-size: 12px;">→</span>
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-avatar" style="background: #10b981;">RS</div>
+            <div class="user-info">
+                <h4>Rahul Sharma</h4>
+                <p>REG2024001 • B.Tech CSE</p>
+            </div>
+        </div>
+    </aside>
+    """
+
+def get_student_topbar_html(active_title):
+    return f"""
+    <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="font-size: 15px; font-weight: 700; color: #0f172a;">
+                Student Self-Service Portal
+            </div>
+            <span class="badge badge-paid">Role: Student</span>
+            <span class="badge badge-info">Hostel #1: Ganga Boys</span>
+        </div>
+        <div class="topbar-actions">
+            <div class="system-status-indicator">
+                <span class="dot-online"></span>
+                <span>Logged in as: Rahul Sharma (REG2024001)</span>
+            </div>
+            <div style="font-size: 13px; font-weight: 500; color: #64748b; border-left: 1px solid #e2e8f0; padding-left: 16px;">
+                📅 Sunday, Oct 11, 2026
+            </div>
+        </div>
+    </header>
+    """
+
+def wrap_student_page(page_id, page_title, content_html):
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{page_title} - Hostel Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        {get_student_sidebar_html(page_id)}
+        <div class="main-wrapper">
+            {get_student_topbar_html(page_title)}
+            <main class="content-body">
+                {content_html}
+            </main>
+        </div>
+    </div>
+</body>
+</html>
+"""
+
 def generate_screens():
     screens = {}
 
@@ -969,6 +1084,299 @@ def generate_screens():
     </div>
     """)
 
+    # 09: Student Portal (Personal Student Self-Service View)
+    screens["09-student-portal"] = wrap_student_page("09-student-portal", "Student Self-Service Portal", """
+    <!-- Student Hero Profile Banner -->
+    <div class="student-hero-card" id="overview">
+        <div class="student-profile-left">
+            <div class="student-large-avatar">RS</div>
+            <div class="student-meta">
+                <h2>Rahul Sharma</h2>
+                <div class="student-meta-tags">
+                    <span class="student-badge-pill">REG: REG2024001</span>
+                    <span>•</span>
+                    <span class="student-badge-pill">Student ID #1001</span>
+                    <span>•</span>
+                    <span>📞 +919811122201</span>
+                    <span>•</span>
+                    <span>B.Tech Computer Science (Year 3)</span>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <button class="btn btn-outline" style="background: rgba(255,255,255,0.08); color: white; border-color: rgba(255,255,255,0.2);">🔧 Report Room Repair</button>
+            <button class="btn btn-primary">+ Lodge Grievance</button>
+        </div>
+    </div>
+
+    <!-- Strict Role-Based Isolation & Safeguard Notice -->
+    <div class="isolation-banner">
+        <div>
+            <strong>🔒 Personal Resident Space:</strong> This view is strictly filtered to your student record (<code>Student_ID: 1001</code>). Boys and Girls hostels are separated into independent buildings. Your assigned Warden is <strong>Dr. Suresh Kumar</strong> (+919876543210).
+        </div>
+        <span class="badge badge-active" style="background: #dcfce7; color: #15803d; border-color: #86efac;">Authorized Resident</span>
+    </div>
+
+    <!-- Student Metric Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-card-top">
+                <span class="stat-label">My Allotted Bed</span>
+                <div class="stat-icon-wrapper icon-blue">🛏️</div>
+            </div>
+            <div class="stat-value">Room 101</div>
+            <div class="stat-subtext">Ganga Boys • Double Sharing AC (Bed 1 of 2)</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-card-top">
+                <span class="stat-label">Outstanding Balance</span>
+                <div class="stat-icon-wrapper icon-emerald">💳</div>
+            </div>
+            <div class="stat-value" style="color: #059669;">₹0.00</div>
+            <div class="stat-subtext"><span class="trend-up">All Dues Cleared</span> (Fee ₹45,000 Paid)</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-card-top">
+                <span class="stat-label">Active Mess Plan</span>
+                <div class="stat-icon-wrapper icon-amber">🍽️</div>
+            </div>
+            <div class="stat-value" style="font-size: 22px;">North Indian</div>
+            <div class="stat-subtext">Veg & Non-Veg • ₹4,500/month (Mess #1)</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-card-top">
+                <span class="stat-label">Night Attendance</span>
+                <div class="stat-icon-wrapper icon-emerald">📅</div>
+            </div>
+            <div class="stat-value" style="color: #059669;">100%</div>
+            <div class="stat-subtext">Oct 10: Present • Oct 09: Present</div>
+        </div>
+    </div>
+
+    <!-- Two-Column Interactive Details Grid -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+        
+        <!-- Left Column: Finances, Grievances, Attendance -->
+        <div>
+            <!-- Financial Ledger (Fee & Fine) -->
+            <div class="card-panel" id="fees" style="margin-bottom: 24px;">
+                <div class="panel-header">
+                    <h3>💳 My Fees & Disciplinary Fines</h3>
+                    <span class="badge badge-paid">No Pending Dues</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Record Ref</th>
+                                <th>Description / Item</th>
+                                <th>Amount</th>
+                                <th>Due / Incurred Date</th>
+                                <th>Status</th>
+                                <th>Receipt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>FEE-501</code></td>
+                                <td>Semester Hostel Rent & Mess Package</td>
+                                <td>₹45,000.00</td>
+                                <td>2026-10-31</td>
+                                <td><span class="badge badge-paid">PAID</span></td>
+                                <td><button class="btn btn-outline" style="padding: 3px 8px; font-size: 11.5px;">View Receipt</button></td>
+                            </tr>
+                            <tr>
+                                <td><code>FINE-701</code></td>
+                                <td>Disciplinary Fine: Late entry past 10:30 PM curfew</td>
+                                <td>₹500.00</td>
+                                <td>2026-10-06</td>
+                                <td><span class="badge badge-paid">PAID</span></td>
+                                <td><button class="btn btn-outline" style="padding: 3px 8px; font-size: 11.5px;">Receipt</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Grievances & Maintenance Tickets -->
+            <div class="card-panel" id="grievances" style="margin-bottom: 24px;">
+                <div class="panel-header">
+                    <h3>🔧 My Complaints & Maintenance Requests</h3>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">+ Request Repair</button>
+                        <button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">+ New Complaint</button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Ticket ID</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Date Filed</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>COMP-401</code></td>
+                                <td>Student Grievance</td>
+                                <td>Wi-Fi access point in 1st floor wing keeps dropping connection</td>
+                                <td>2026-10-07</td>
+                                <td><span class="badge badge-resolved">RESOLVED</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>REQ-301</code></td>
+                                <td>Room Maintenance</td>
+                                <td>Ceiling fan speed regulator not functioning in Room 101</td>
+                                <td>2026-10-08</td>
+                                <td><span class="badge badge-resolved">RESOLVED</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Attendance History -->
+            <div class="card-panel" id="attendance">
+                <div class="panel-header">
+                    <h3>📅 My Night Attendance History</h3>
+                    <span class="badge badge-info">Verified by Warden Dr. Suresh Kumar</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Hostel & Room</th>
+                                <th>Roll Call Session</th>
+                                <th>Attendance Status</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>2026-10-10</strong></td>
+                                <td>Ganga Boys • Room 101</td>
+                                <td>Night Curfew Verification (10:00 PM)</td>
+                                <td><span class="badge badge-present">✓ PRESENT</span></td>
+                                <td>Marked in room by Warden</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2026-10-09</strong></td>
+                                <td>Ganga Boys • Room 101</td>
+                                <td>Night Curfew Verification (10:00 PM)</td>
+                                <td><span class="badge badge-present">✓ PRESENT</span></td>
+                                <td>Marked in room by Warden</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Roommate, Visitors, Staff Contacts -->
+        <div>
+            <!-- Room & Roommate Card -->
+            <div class="card-panel" id="room" style="margin-bottom: 24px;">
+                <div class="panel-header">
+                    <h3>🛏️ Room 101 Details</h3>
+                    <span class="badge badge-info">Double AC</span>
+                </div>
+                <div style="padding: 20px;">
+                    <div style="font-size: 13px; color: #64748b; margin-bottom: 14px;">
+                        Ganga Boys Hostel • 1st Floor, East Wing<br>
+                        <strong>Capacity:</strong> 2 Students (Occupancy: 2/2)
+                    </div>
+
+                    <div style="font-weight: 600; font-size: 12.5px; text-transform: uppercase; color: #475569; margin-bottom: 10px; letter-spacing: 0.5px;">
+                        Occupants
+                    </div>
+
+                    <!-- Bed 1: Current Student -->
+                    <div class="roommate-card" style="border-left: 3px solid #2563eb;">
+                        <div class="user-avatar" style="background: #2563eb; width: 34px; height: 34px; font-size: 12px;">RS</div>
+                        <div>
+                            <div style="font-weight: 600; font-size: 13px; color: #0f172a;">Rahul Sharma (You)</div>
+                            <div style="font-size: 11.5px; color: #64748b;">Bed 1 • Allotted: Aug 01, 2026</div>
+                        </div>
+                    </div>
+
+                    <!-- Bed 2: Roommate -->
+                    <div class="roommate-card">
+                        <div class="user-avatar" style="background: #64748b; width: 34px; height: 34px; font-size: 12px;">AV</div>
+                        <div>
+                            <div style="font-weight: 600; font-size: 13px; color: #0f172a;">Aditya Verma</div>
+                            <div style="font-size: 11.5px; color: #64748b;">Bed 2 • REG2024002 • 📞 +919811122202</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Approved Visitors -->
+            <div class="card-panel" id="visitors" style="margin-bottom: 24px;">
+                <div class="panel-header">
+                    <h3>👥 Approved Visitors</h3>
+                    <button class="btn btn-outline" style="padding: 3px 8px; font-size: 11px;">+ Add</button>
+                </div>
+                <div style="padding: 16px;">
+                    <div class="contact-pill-item">
+                        <div>
+                            <div style="font-weight: 600;">Ramesh Sharma</div>
+                            <div style="font-size: 11.5px; color: #64748b;">Father • +919845011111</div>
+                        </div>
+                        <span class="badge badge-paid" style="font-size: 11px;">Visited Oct 05</span>
+                    </div>
+
+                    <div class="contact-pill-item">
+                        <div>
+                            <div style="font-weight: 600;">Sunita Sharma</div>
+                            <div style="font-size: 11.5px; color: #64748b;">Mother • +919845011112</div>
+                        </div>
+                        <span class="badge badge-paid" style="font-size: 11px;">Visited Oct 05</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emergency & Hostel Staff Contacts -->
+            <div class="card-panel">
+                <div class="panel-header">
+                    <h3>📞 Hostel #1 Staff Contacts</h3>
+                </div>
+                <div style="padding: 16px;">
+                    <div class="contact-pill-item">
+                        <div>
+                            <div style="font-weight: 600;">Dr. Suresh Kumar</div>
+                            <div style="font-size: 11.5px; color: #64748b;">Assigned Hostel Warden (Male)</div>
+                        </div>
+                        <a href="tel:+919876543210" style="color: #2563eb; font-weight: 600; font-size: 12px; text-decoration: none;">Call</a>
+                    </div>
+
+                    <div class="contact-pill-item">
+                        <div>
+                            <div style="font-weight: 600;">Head Caretaker</div>
+                            <div style="font-size: 11.5px; color: #64748b;">Hostel Staff • Room Inquiries</div>
+                        </div>
+                        <a href="tel:+919123456780" style="color: #2563eb; font-weight: 600; font-size: 12px; text-decoration: none;">Call</a>
+                    </div>
+
+                    <div class="contact-pill-item">
+                        <div>
+                            <div style="font-weight: 600;">Night Security Guard</div>
+                            <div style="font-size: 11.5px; color: #64748b;">Main Gate & Night Entry</div>
+                        </div>
+                        <a href="tel:+919123456782" style="color: #2563eb; font-weight: 600; font-size: 12px; text-decoration: none;">Call</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    """)
+
     # Write out each HTML screen
     for key, content in screens.items():
         file_path = BASE_DIR / f"{key}.html"
@@ -984,10 +1392,28 @@ def generate_screens():
     <link rel="stylesheet" href="styles.css">
 </head>
 <body style="padding: 40px; background: #0f172a; color: white; display: flex; flex-direction: column; align-items: center;">
-    <div style="max-width: 900px; width: 100%;">
-        <h1 style="font-size: 28px; margin-bottom: 8px;">Hostel Management System — UI Screens</h1>
-        <p style="color: #94a3b8; margin-bottom: 30px;">Interactive high-fidelity responsive design previews for all 8 core modules.</p>
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+    <div style="max-width: 960px; width: 100%;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+            <div>
+                <h1 style="font-size: 28px; margin-bottom: 4px;">Hostel Management System — UI Screens</h1>
+                <p style="color: #94a3b8;">High-fidelity interactive UI design previews with role-based access & gender hostel separation.</p>
+            </div>
+            <a href="00-ui-kit.html" class="btn btn-outline" style="background: #1e293b; color: #cbd5e1; border-color: #334155;">🎨 View UI Kit</a>
+        </div>
+
+        <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                <div>
+                    <span class="badge badge-paid" style="background: #064e3b; color: #a7f3d0; border-color: #059669; font-size: 11px; margin-bottom: 6px;">NEW: Student View</span>
+                    <h2 style="font-size: 18px; margin-bottom: 4px;">🎓 Screen 09: Student Self-Service Portal</h2>
+                    <p style="color: #94a3b8; font-size: 13px;">Personalized resident view displaying strictly student-specific room, fee ledger, roommate, attendance, and grievances.</p>
+                </div>
+                <a href="09-student-portal.html" class="btn btn-primary" style="background: #10b981; border-color: #059669;">Open Student Portal →</a>
+            </div>
+        </div>
+
+        <h3 style="font-size: 14px; text-transform: uppercase; color: #64748b; letter-spacing: 0.8px; margin-bottom: 12px;">Warden & Administrative Management Screens</h3>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
     """
     for key, label, icon in [
         ("01-dashboard", "01: Overview / Dashboard", "📊"),
@@ -1000,11 +1426,11 @@ def generate_screens():
         ("08-maintenance-complaints", "08: Maintenance & Complaints", "🔧"),
     ]:
         index_html += f"""
-            <a href="{key}.html" style="background: #1e293b; padding: 20px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155;">
+            <a href="{key}.html" style="background: #1e293b; padding: 18px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155; transition: transform 0.15s ease;">
                 <span style="font-size: 24px;">{icon}</span>
                 <div>
-                    <div style="font-weight: 600; font-size: 15px;">{label}</div>
-                    <div style="font-size: 12px; color: #94a3b8;">View responsive screen →</div>
+                    <div style="font-weight: 600; font-size: 14.5px;">{label}</div>
+                    <div style="font-size: 12px; color: #94a3b8;">Warden view →</div>
                 </div>
             </a>
         """
@@ -1028,7 +1454,8 @@ def export_screenshots():
         "05-mess",
         "06-attendance",
         "07-visitors",
-        "08-maintenance-complaints"
+        "08-maintenance-complaints",
+        "09-student-portal"
     ]
 
     for key in screen_keys:
@@ -1052,4 +1479,4 @@ def export_screenshots():
 if __name__ == "__main__":
     generate_screens()
     export_screenshots()
-    print("ALL 8 SCREENS GENERATED AND EXPORTED SUCCESSFULLY.")
+    print("ALL 10 SCREENS GENERATED AND EXPORTED SUCCESSFULLY.")

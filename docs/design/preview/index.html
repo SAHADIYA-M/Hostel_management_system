@@ -5,72 +5,90 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body style="padding: 40px; background: #0f172a; color: white; display: flex; flex-direction: column; align-items: center;">
-    <div style="max-width: 900px; width: 100%;">
-        <h1 style="font-size: 28px; margin-bottom: 8px;">Hostel Management System — UI Screens</h1>
-        <p style="color: #94a3b8; margin-bottom: 30px;">Interactive high-fidelity responsive design previews for all 8 core modules.</p>
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+    <div style="max-width: 960px; width: 100%;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+            <div>
+                <h1 style="font-size: 28px; margin-bottom: 4px;">Hostel Management System — UI Screens</h1>
+                <p style="color: #94a3b8;">High-fidelity interactive UI design previews with role-based access & gender hostel separation.</p>
+            </div>
+            <a href="00-ui-kit.html" class="btn btn-outline" style="background: #1e293b; color: #cbd5e1; border-color: #334155;">🎨 View UI Kit</a>
+        </div>
+
+        <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                <div>
+                    <span class="badge badge-paid" style="background: #064e3b; color: #a7f3d0; border-color: #059669; font-size: 11px; margin-bottom: 6px;">NEW: Student View</span>
+                    <h2 style="font-size: 18px; margin-bottom: 4px;">🎓 Screen 09: Student Self-Service Portal</h2>
+                    <p style="color: #94a3b8; font-size: 13px;">Personalized resident view displaying strictly student-specific room, fee ledger, roommate, attendance, and grievances.</p>
+                </div>
+                <a href="09-student-portal.html" class="btn btn-primary" style="background: #10b981; border-color: #059669;">Open Student Portal →</a>
+            </div>
+        </div>
+
+        <h3 style="font-size: 14px; text-transform: uppercase; color: #64748b; letter-spacing: 0.8px; margin-bottom: 12px;">Warden & Administrative Management Screens</h3>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
     
-            <a href="01-dashboard.html" style="background: #1e293b; padding: 20px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155;">
+            <a href="01-dashboard.html" style="background: #1e293b; padding: 18px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155; transition: transform 0.15s ease;">
                 <span style="font-size: 24px;">📊</span>
                 <div>
-                    <div style="font-weight: 600; font-size: 15px;">01: Overview / Dashboard</div>
-                    <div style="font-size: 12px; color: #94a3b8;">View responsive screen →</div>
+                    <div style="font-weight: 600; font-size: 14.5px;">01: Overview / Dashboard</div>
+                    <div style="font-size: 12px; color: #94a3b8;">Warden view →</div>
                 </div>
             </a>
         
-            <a href="02-students.html" style="background: #1e293b; padding: 20px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155;">
+            <a href="02-students.html" style="background: #1e293b; padding: 18px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155; transition: transform 0.15s ease;">
                 <span style="font-size: 24px;">🎓</span>
                 <div>
-                    <div style="font-weight: 600; font-size: 15px;">02: Student Management</div>
-                    <div style="font-size: 12px; color: #94a3b8;">View responsive screen →</div>
+                    <div style="font-weight: 600; font-size: 14.5px;">02: Student Management</div>
+                    <div style="font-size: 12px; color: #94a3b8;">Warden view →</div>
                 </div>
             </a>
         
-            <a href="03-rooms-allotment.html" style="background: #1e293b; padding: 20px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155;">
+            <a href="03-rooms-allotment.html" style="background: #1e293b; padding: 18px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155; transition: transform 0.15s ease;">
                 <span style="font-size: 24px;">🛏️</span>
                 <div>
-                    <div style="font-weight: 600; font-size: 15px;">03: Rooms & Room Allotment</div>
-                    <div style="font-size: 12px; color: #94a3b8;">View responsive screen →</div>
+                    <div style="font-weight: 600; font-size: 14.5px;">03: Rooms & Room Allotment</div>
+                    <div style="font-size: 12px; color: #94a3b8;">Warden view →</div>
                 </div>
             </a>
         
-            <a href="04-fees-fines.html" style="background: #1e293b; padding: 20px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155;">
+            <a href="04-fees-fines.html" style="background: #1e293b; padding: 18px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155; transition: transform 0.15s ease;">
                 <span style="font-size: 24px;">💳</span>
                 <div>
-                    <div style="font-weight: 600; font-size: 15px;">04: Fee & Fine Ledger</div>
-                    <div style="font-size: 12px; color: #94a3b8;">View responsive screen →</div>
+                    <div style="font-weight: 600; font-size: 14.5px;">04: Fee & Fine Ledger</div>
+                    <div style="font-size: 12px; color: #94a3b8;">Warden view →</div>
                 </div>
             </a>
         
-            <a href="05-mess.html" style="background: #1e293b; padding: 20px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155;">
+            <a href="05-mess.html" style="background: #1e293b; padding: 18px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155; transition: transform 0.15s ease;">
                 <span style="font-size: 24px;">🍽️</span>
                 <div>
-                    <div style="font-weight: 600; font-size: 15px;">05: Mess Subscriptions</div>
-                    <div style="font-size: 12px; color: #94a3b8;">View responsive screen →</div>
+                    <div style="font-weight: 600; font-size: 14.5px;">05: Mess Subscriptions</div>
+                    <div style="font-size: 12px; color: #94a3b8;">Warden view →</div>
                 </div>
             </a>
         
-            <a href="06-attendance.html" style="background: #1e293b; padding: 20px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155;">
+            <a href="06-attendance.html" style="background: #1e293b; padding: 18px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155; transition: transform 0.15s ease;">
                 <span style="font-size: 24px;">📅</span>
                 <div>
-                    <div style="font-weight: 600; font-size: 15px;">06: Student Attendance</div>
-                    <div style="font-size: 12px; color: #94a3b8;">View responsive screen →</div>
+                    <div style="font-weight: 600; font-size: 14.5px;">06: Student Attendance</div>
+                    <div style="font-size: 12px; color: #94a3b8;">Warden view →</div>
                 </div>
             </a>
         
-            <a href="07-visitors.html" style="background: #1e293b; padding: 20px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155;">
+            <a href="07-visitors.html" style="background: #1e293b; padding: 18px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155; transition: transform 0.15s ease;">
                 <span style="font-size: 24px;">👥</span>
                 <div>
-                    <div style="font-weight: 600; font-size: 15px;">07: Visitor Registry & Log</div>
-                    <div style="font-size: 12px; color: #94a3b8;">View responsive screen →</div>
+                    <div style="font-weight: 600; font-size: 14.5px;">07: Visitor Registry & Log</div>
+                    <div style="font-size: 12px; color: #94a3b8;">Warden view →</div>
                 </div>
             </a>
         
-            <a href="08-maintenance-complaints.html" style="background: #1e293b; padding: 20px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155;">
+            <a href="08-maintenance-complaints.html" style="background: #1e293b; padding: 18px; border-radius: 10px; text-decoration: none; color: white; display: flex; align-items: center; gap: 14px; border: 1px solid #334155; transition: transform 0.15s ease;">
                 <span style="font-size: 24px;">🔧</span>
                 <div>
-                    <div style="font-weight: 600; font-size: 15px;">08: Maintenance & Complaints</div>
-                    <div style="font-size: 12px; color: #94a3b8;">View responsive screen →</div>
+                    <div style="font-weight: 600; font-size: 14.5px;">08: Maintenance & Complaints</div>
+                    <div style="font-size: 12px; color: #94a3b8;">Warden view →</div>
                 </div>
             </a>
         
