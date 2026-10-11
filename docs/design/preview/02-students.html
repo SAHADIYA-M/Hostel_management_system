@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management - Hostel Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-badge">H</div>
+            <div class="logo-text">
+                <h1>HostelMS</h1>
+                <span>Enterprise DBMS</span>
+            </div>
+        </div>
+
+        <div class="hostel-selector-box">
+            <label>Current Hostel</label>
+            <div class="hostel-pill">
+                <span>🏢 Ganga Boys Hostel</span>
+                <span style="font-size: 11px; opacity: 0.7;">▼</span>
+            </div>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Hostel Operations</div>
+            
+        <a href="01-dashboard.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">📊</span>
+                <span>Dashboard</span>
+            </div>
+            
+        </a>
+        
+        <a href="02-students.html" class="nav-item active">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🎓</span>
+                <span>Students</span>
+            </div>
+            <span class="nav-badge">7</span>
+        </a>
+        
+        <a href="03-rooms-allotment.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🛏️</span>
+                <span>Rooms & Allotment</span>
+            </div>
+            <span class="nav-badge">9</span>
+        </a>
+        
+        <a href="04-fees-fines.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">💳</span>
+                <span>Fees & Fines</span>
+            </div>
+            <span class="nav-badge">3 Pending</span>
+        </a>
+        
+        <a href="05-mess.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🍽️</span>
+                <span>Mess Plans</span>
+            </div>
+            <span class="nav-badge">3 Plans</span>
+        </a>
+        
+        <a href="06-attendance.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">📅</span>
+                <span>Attendance</span>
+            </div>
+            <span class="nav-badge">Today</span>
+        </a>
+        
+        <a href="07-visitors.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">👥</span>
+                <span>Visitor Log</span>
+            </div>
+            <span class="nav-badge">4 Visits</span>
+        </a>
+        
+        <a href="08-maintenance-complaints.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🔧</span>
+                <span>Maintenance & Issues</span>
+            </div>
+            <span class="nav-badge">4 Active</span>
+        </a>
+        
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-avatar">SK</div>
+            <div class="user-info">
+                <h4>Dr. Suresh Kumar</h4>
+                <p>Chief Warden • Hostel #1</p>
+            </div>
+        </div>
+    </aside>
+    
+        <div class="main-wrapper">
+            
+    <header class="topbar">
+        <div class="search-box">
+            <span style="color: #94a3b8; font-size: 14px;">🔍</span>
+            <input type="text" placeholder="Search student by name, Reg No, room, phone..." />
+        </div>
+        <div class="topbar-actions">
+            <div class="system-status-indicator">
+                <span class="dot-online"></span>
+                <span>HostelMS • Online (Hostel #1 Active)</span>
+            </div>
+            <div style="font-size: 13px; font-weight: 500; color: #64748b; border-left: 1px solid #e2e8f0; padding-left: 16px;">
+                📅 Sunday, Oct 11, 2026
+            </div>
+        </div>
+    </header>
+    
+            <main class="content-body">
+                
+    <div class="page-header">
+        <div class="page-title-group">
+            <h2>Student Directory & Allotments</h2>
+            <p>Registered students, assigned rooms, mess plans, and contact details</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-outline">📥 Export CSV</button>
+            <button class="btn btn-primary">+ Register Student</button>
+        </div>
+    </div>
+
+    <div class="card-panel">
+        <div class="filter-bar">
+            <div class="filter-group">
+                <input type="text" placeholder="Filter by name or Reg No..." class="select-input" style="width: 240px;" />
+                <select class="select-input">
+                    <option>All Hostels (3)</option>
+                    <option>Ganga Boys Hostel</option>
+                    <option>Yamuna Girls Hostel</option>
+                    <option>Kaveri Boys Hostel</option>
+                </select>
+                <select class="select-input">
+                    <option>Allotment: All</option>
+                    <option>Allotted Only</option>
+                    <option>Unallotted Only</option>
+                </select>
+            </div>
+            <div style="font-size: 13px; color: #64748b; font-weight: 500;">
+                Showing <strong>7</strong> of 7 registered students
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Full Name</th>
+                        <th>Reg No</th>
+                        <th>Phone</th>
+                        <th>Assigned Room</th>
+                        <th>Allot Date</th>
+                        <th>Mess Plan</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#1001</td>
+                        <td><strong>Rahul Sharma</strong></td>
+                        <td><code>REG2024001</code></td>
+                        <td>+919811122201</td>
+                        <td><span class="badge badge-info">Ganga • Room 101</span></td>
+                        <td>2026-08-01</td>
+                        <td>North Indian Veg/Non-Veg</td>
+                        <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Edit</button></td>
+                    </tr>
+                    <tr>
+                        <td>#1002</td>
+                        <td><strong>Aditya Verma</strong></td>
+                        <td><code>REG2024002</code></td>
+                        <td>+919811122202</td>
+                        <td><span class="badge badge-info">Ganga • Room 101</span></td>
+                        <td>2026-08-01</td>
+                        <td>North Indian Veg/Non-Veg</td>
+                        <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Edit</button></td>
+                    </tr>
+                    <tr>
+                        <td>#1003</td>
+                        <td><strong>Kavya Nair</strong></td>
+                        <td><code>REG2024003</code></td>
+                        <td>+919811122203</td>
+                        <td><span class="badge badge-info">Yamuna • Room 201</span></td>
+                        <td>2026-08-01</td>
+                        <td>South Indian Pure Veg</td>
+                        <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Edit</button></td>
+                    </tr>
+                    <tr>
+                        <td>#1004</td>
+                        <td><strong>Ananya Iyer</strong></td>
+                        <td><code>REG2024004</code></td>
+                        <td>+919811122204</td>
+                        <td><span class="badge badge-info">Yamuna • Room 202</span></td>
+                        <td>2026-08-02</td>
+                        <td>South Indian Pure Veg</td>
+                        <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Edit</button></td>
+                    </tr>
+                    <tr style="background: #fffbeb;">
+                        <td>#1005</td>
+                        <td><strong>Vikram Rathore</strong></td>
+                        <td><code>REG2024005</code></td>
+                        <td>+919811122205</td>
+                        <td><span class="badge badge-pending">Unallotted</span></td>
+                        <td>—</td>
+                        <td>North Indian Veg/Non-Veg</td>
+                        <td><button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Allot Room</button></td>
+                    </tr>
+                    <tr style="background: #fffbeb;">
+                        <td>#1006</td>
+                        <td><strong>Pooja Menon</strong></td>
+                        <td><code>REG2024006</code></td>
+                        <td>+919811122206</td>
+                        <td><span class="badge badge-pending">Unallotted</span></td>
+                        <td>—</td>
+                        <td><span style="color: #94a3b8;">None</span></td>
+                        <td><button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Allot Room</button></td>
+                    </tr>
+                    <tr>
+                        <td>#1007</td>
+                        <td><strong>Siddharth Joshi</strong></td>
+                        <td><code>REG2024007</code></td>
+                        <td>+919811122207</td>
+                        <td><span class="badge badge-info">Kaveri • Room 301</span></td>
+                        <td>2026-08-05</td>
+                        <td>Special Continental</td>
+                        <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Edit</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+            </main>
+        </div>
+    </div>
+</body>
+</html>

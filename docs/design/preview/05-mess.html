@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mess Management - Hostel Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-badge">H</div>
+            <div class="logo-text">
+                <h1>HostelMS</h1>
+                <span>Enterprise DBMS</span>
+            </div>
+        </div>
+
+        <div class="hostel-selector-box">
+            <label>Current Hostel</label>
+            <div class="hostel-pill">
+                <span>🏢 Ganga Boys Hostel</span>
+                <span style="font-size: 11px; opacity: 0.7;">▼</span>
+            </div>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Hostel Operations</div>
+            
+        <a href="01-dashboard.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">📊</span>
+                <span>Dashboard</span>
+            </div>
+            
+        </a>
+        
+        <a href="02-students.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🎓</span>
+                <span>Students</span>
+            </div>
+            <span class="nav-badge">7</span>
+        </a>
+        
+        <a href="03-rooms-allotment.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🛏️</span>
+                <span>Rooms & Allotment</span>
+            </div>
+            <span class="nav-badge">9</span>
+        </a>
+        
+        <a href="04-fees-fines.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">💳</span>
+                <span>Fees & Fines</span>
+            </div>
+            <span class="nav-badge">3 Pending</span>
+        </a>
+        
+        <a href="05-mess.html" class="nav-item active">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🍽️</span>
+                <span>Mess Plans</span>
+            </div>
+            <span class="nav-badge">3 Plans</span>
+        </a>
+        
+        <a href="06-attendance.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">📅</span>
+                <span>Attendance</span>
+            </div>
+            <span class="nav-badge">Today</span>
+        </a>
+        
+        <a href="07-visitors.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">👥</span>
+                <span>Visitor Log</span>
+            </div>
+            <span class="nav-badge">4 Visits</span>
+        </a>
+        
+        <a href="08-maintenance-complaints.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🔧</span>
+                <span>Maintenance & Issues</span>
+            </div>
+            <span class="nav-badge">4 Active</span>
+        </a>
+        
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-avatar">SK</div>
+            <div class="user-info">
+                <h4>Dr. Suresh Kumar</h4>
+                <p>Chief Warden • Hostel #1</p>
+            </div>
+        </div>
+    </aside>
+    
+        <div class="main-wrapper">
+            
+    <header class="topbar">
+        <div class="search-box">
+            <span style="color: #94a3b8; font-size: 14px;">🔍</span>
+            <input type="text" placeholder="Search student by name, Reg No, room, phone..." />
+        </div>
+        <div class="topbar-actions">
+            <div class="system-status-indicator">
+                <span class="dot-online"></span>
+                <span>HostelMS • Online (Hostel #1 Active)</span>
+            </div>
+            <div style="font-size: 13px; font-weight: 500; color: #64748b; border-left: 1px solid #e2e8f0; padding-left: 16px;">
+                📅 Sunday, Oct 11, 2026
+            </div>
+        </div>
+    </header>
+    
+            <main class="content-body">
+                
+    <div class="page-header">
+        <div class="page-title-group">
+            <h2>Mess Packages & Student Subscriptions</h2>
+            <p>Student mess meal packages and monthly billing</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-primary">+ Add New Mess Plan</button>
+        </div>
+    </div>
+
+    <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 28px;">
+        <div class="card-panel" style="margin-bottom: 0;">
+            <div style="padding: 24px;">
+                <span class="badge badge-paid" style="margin-bottom: 12px;">Mess #1</span>
+                <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 8px;">North Indian Veg & Non-Veg</h3>
+                <div style="font-size: 26px; font-weight: 700; color: #2563eb; margin-bottom: 12px;">₹4,500 <span style="font-size: 13px; color: #64748b; font-weight: 400;">/ month</span></div>
+                <div style="font-size: 13px; color: #475569; margin-bottom: 16px;">4 Meals daily • Chicken & Paneer 3x weekly</div>
+                <div style="padding-top: 14px; border-top: 1px solid #e2e8f0; font-size: 12.5px; font-weight: 600;">
+                    👥 3 Students Enrolled:
+                    <div style="color: #64748b; font-weight: 400; margin-top: 4px;">Rahul Sharma, Aditya Verma, Vikram Rathore</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-panel" style="margin-bottom: 0;">
+            <div style="padding: 24px;">
+                <span class="badge badge-paid" style="margin-bottom: 12px;">Mess #2</span>
+                <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 8px;">South Indian Pure Veg</h3>
+                <div style="font-size: 26px; font-weight: 700; color: #2563eb; margin-bottom: 12px;">₹4,000 <span style="font-size: 13px; color: #64748b; font-weight: 400;">/ month</span></div>
+                <div style="font-size: 13px; color: #475569; margin-bottom: 16px;">Pure vegetarian • Traditional meals & filter coffee</div>
+                <div style="padding-top: 14px; border-top: 1px solid #e2e8f0; font-size: 12.5px; font-weight: 600;">
+                    👥 2 Students Enrolled:
+                    <div style="color: #64748b; font-weight: 400; margin-top: 4px;">Kavya Nair, Ananya Iyer</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-panel" style="margin-bottom: 0;">
+            <div style="padding: 24px;">
+                <span class="badge badge-paid" style="margin-bottom: 12px;">Mess #3</span>
+                <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 8px;">Special Dietary & Continental</h3>
+                <div style="font-size: 26px; font-weight: 700; color: #2563eb; margin-bottom: 12px;">₹5,200 <span style="font-size: 13px; color: #64748b; font-weight: 400;">/ month</span></div>
+                <div style="font-size: 13px; color: #475569; margin-bottom: 16px;">Custom high-protein menu • Fresh salad & fruit bar</div>
+                <div style="padding-top: 14px; border-top: 1px solid #e2e8f0; font-size: 12.5px; font-weight: 600;">
+                    👥 1 Student Enrolled:
+                    <div style="color: #64748b; font-weight: 400; margin-top: 4px;">Siddharth Joshi</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+            </main>
+        </div>
+    </div>
+</body>
+</html>

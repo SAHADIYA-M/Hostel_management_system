@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fee & Fine Ledger - Hostel Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-badge">H</div>
+            <div class="logo-text">
+                <h1>HostelMS</h1>
+                <span>Enterprise DBMS</span>
+            </div>
+        </div>
+
+        <div class="hostel-selector-box">
+            <label>Current Hostel</label>
+            <div class="hostel-pill">
+                <span>🏢 Ganga Boys Hostel</span>
+                <span style="font-size: 11px; opacity: 0.7;">▼</span>
+            </div>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Hostel Operations</div>
+            
+        <a href="01-dashboard.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">📊</span>
+                <span>Dashboard</span>
+            </div>
+            
+        </a>
+        
+        <a href="02-students.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🎓</span>
+                <span>Students</span>
+            </div>
+            <span class="nav-badge">7</span>
+        </a>
+        
+        <a href="03-rooms-allotment.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🛏️</span>
+                <span>Rooms & Allotment</span>
+            </div>
+            <span class="nav-badge">9</span>
+        </a>
+        
+        <a href="04-fees-fines.html" class="nav-item active">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">💳</span>
+                <span>Fees & Fines</span>
+            </div>
+            <span class="nav-badge">3 Pending</span>
+        </a>
+        
+        <a href="05-mess.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🍽️</span>
+                <span>Mess Plans</span>
+            </div>
+            <span class="nav-badge">3 Plans</span>
+        </a>
+        
+        <a href="06-attendance.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">📅</span>
+                <span>Attendance</span>
+            </div>
+            <span class="nav-badge">Today</span>
+        </a>
+        
+        <a href="07-visitors.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">👥</span>
+                <span>Visitor Log</span>
+            </div>
+            <span class="nav-badge">4 Visits</span>
+        </a>
+        
+        <a href="08-maintenance-complaints.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🔧</span>
+                <span>Maintenance & Issues</span>
+            </div>
+            <span class="nav-badge">4 Active</span>
+        </a>
+        
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-avatar">SK</div>
+            <div class="user-info">
+                <h4>Dr. Suresh Kumar</h4>
+                <p>Chief Warden • Hostel #1</p>
+            </div>
+        </div>
+    </aside>
+    
+        <div class="main-wrapper">
+            
+    <header class="topbar">
+        <div class="search-box">
+            <span style="color: #94a3b8; font-size: 14px;">🔍</span>
+            <input type="text" placeholder="Search student by name, Reg No, room, phone..." />
+        </div>
+        <div class="topbar-actions">
+            <div class="system-status-indicator">
+                <span class="dot-online"></span>
+                <span>HostelMS • Online (Hostel #1 Active)</span>
+            </div>
+            <div style="font-size: 13px; font-weight: 500; color: #64748b; border-left: 1px solid #e2e8f0; padding-left: 16px;">
+                📅 Sunday, Oct 11, 2026
+            </div>
+        </div>
+    </header>
+    
+            <main class="content-body">
+                
+    <div class="page-header">
+        <div class="page-title-group">
+            <h2>Student Fees & Disciplinary Fines</h2>
+            <p>Fee invoice records and disciplinary fines registry</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-outline">Record Fine</button>
+            <button class="btn btn-primary">+ Generate Fee Invoice</button>
+        </div>
+    </div>
+
+    <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
+        <div class="stat-card">
+            <div class="stat-label">Total Fee Billed</div>
+            <div class="stat-value">₹2,40,000</div>
+            <div class="stat-subtext">5 Active Invoices</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Collected Fees</div>
+            <div class="stat-value" style="color: #059669;">₹95,000</div>
+            <div class="stat-subtext"><span class="trend-up">2 Paid Invoices</span> (Rahul, Kavya)</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Outstanding Fees & Fines</div>
+            <div class="stat-value" style="color: #dc2626;">₹1,46,300</div>
+            <div class="stat-subtext"><span class="trend-warning">3 Fees + 2 Fines Pending</span></div>
+        </div>
+    </div>
+
+    <!-- Fees Table -->
+    <div class="card-panel" style="margin-bottom: 24px;">
+        <div class="panel-header">
+            <h3>Hostel Fee Records</h3>
+            <span class="badge badge-info">Due Date: 2026-10-31</span>
+        </div>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Fee ID</th>
+                        <th>Student Name</th>
+                        <th>Reg No</th>
+                        <th>Amount</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#501</td>
+                        <td>Rahul Sharma</td>
+                        <td><code>REG2024001</code></td>
+                        <td>₹45,000.00</td>
+                        <td>2026-10-31</td>
+                        <td><span class="badge badge-paid">PAID</span></td>
+                        <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Receipt</button></td>
+                    </tr>
+                    <tr>
+                        <td>#502</td>
+                        <td>Aditya Verma</td>
+                        <td><code>REG2024002</code></td>
+                        <td>₹45,000.00</td>
+                        <td>2026-10-31</td>
+                        <td><span class="badge badge-pending">PENDING</span></td>
+                        <td><button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Mark Paid</button></td>
+                    </tr>
+                    <tr>
+                        <td>#503</td>
+                        <td>Kavya Nair</td>
+                        <td><code>REG2024003</code></td>
+                        <td>₹50,000.00</td>
+                        <td>2026-10-31</td>
+                        <td><span class="badge badge-paid">PAID</span></td>
+                        <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Receipt</button></td>
+                    </tr>
+                    <tr>
+                        <td>#504</td>
+                        <td>Ananya Iyer</td>
+                        <td><code>REG2024004</code></td>
+                        <td>₹55,000.00</td>
+                        <td>2026-10-31</td>
+                        <td><span class="badge badge-pending">PENDING</span></td>
+                        <td><button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Mark Paid</button></td>
+                    </tr>
+                    <tr>
+                        <td>#505</td>
+                        <td>Siddharth Joshi</td>
+                        <td><code>REG2024007</code></td>
+                        <td>₹45,000.00</td>
+                        <td>2026-10-31</td>
+                        <td><span class="badge badge-pending">PENDING</span></td>
+                        <td><button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Mark Paid</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Fines Table -->
+    <div class="card-panel">
+        <div class="panel-header">
+            <h3>Disciplinary Fines Registry</h3>
+            <span class="badge badge-pending">Disciplinary Registry</span>
+        </div>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>FID</th>
+                        <th>Student Name</th>
+                        <th>Reason / Infraction</th>
+                        <th>Fine Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#701</td>
+                        <td>Rahul Sharma (1001)</td>
+                        <td>Late entry past 10:30 PM curfew</td>
+                        <td>₹500.00</td>
+                        <td><span class="badge badge-paid">PAID</span></td>
+                        <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>#702</td>
+                        <td>Aditya Verma (1002)</td>
+                        <td>Unauthorized electric kettle in room</td>
+                        <td>₹1,000.00</td>
+                        <td><span class="badge badge-pending">PENDING</span></td>
+                        <td><button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Collect</button></td>
+                    </tr>
+                    <tr>
+                        <td>#703</td>
+                        <td>Siddharth Joshi (1007)</td>
+                        <td>Noise violation during quiet hours</td>
+                        <td>₹300.00</td>
+                        <td><span class="badge badge-pending">PENDING</span></td>
+                        <td><button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Collect</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+            </main>
+        </div>
+    </div>
+</body>
+</html>

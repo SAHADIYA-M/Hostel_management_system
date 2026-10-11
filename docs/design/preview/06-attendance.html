@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Attendance - Hostel Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-badge">H</div>
+            <div class="logo-text">
+                <h1>HostelMS</h1>
+                <span>Enterprise DBMS</span>
+            </div>
+        </div>
+
+        <div class="hostel-selector-box">
+            <label>Current Hostel</label>
+            <div class="hostel-pill">
+                <span>🏢 Ganga Boys Hostel</span>
+                <span style="font-size: 11px; opacity: 0.7;">▼</span>
+            </div>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Hostel Operations</div>
+            
+        <a href="01-dashboard.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">📊</span>
+                <span>Dashboard</span>
+            </div>
+            
+        </a>
+        
+        <a href="02-students.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🎓</span>
+                <span>Students</span>
+            </div>
+            <span class="nav-badge">7</span>
+        </a>
+        
+        <a href="03-rooms-allotment.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🛏️</span>
+                <span>Rooms & Allotment</span>
+            </div>
+            <span class="nav-badge">9</span>
+        </a>
+        
+        <a href="04-fees-fines.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">💳</span>
+                <span>Fees & Fines</span>
+            </div>
+            <span class="nav-badge">3 Pending</span>
+        </a>
+        
+        <a href="05-mess.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🍽️</span>
+                <span>Mess Plans</span>
+            </div>
+            <span class="nav-badge">3 Plans</span>
+        </a>
+        
+        <a href="06-attendance.html" class="nav-item active">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">📅</span>
+                <span>Attendance</span>
+            </div>
+            <span class="nav-badge">Today</span>
+        </a>
+        
+        <a href="07-visitors.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">👥</span>
+                <span>Visitor Log</span>
+            </div>
+            <span class="nav-badge">4 Visits</span>
+        </a>
+        
+        <a href="08-maintenance-complaints.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🔧</span>
+                <span>Maintenance & Issues</span>
+            </div>
+            <span class="nav-badge">4 Active</span>
+        </a>
+        
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-avatar">SK</div>
+            <div class="user-info">
+                <h4>Dr. Suresh Kumar</h4>
+                <p>Chief Warden • Hostel #1</p>
+            </div>
+        </div>
+    </aside>
+    
+        <div class="main-wrapper">
+            
+    <header class="topbar">
+        <div class="search-box">
+            <span style="color: #94a3b8; font-size: 14px;">🔍</span>
+            <input type="text" placeholder="Search student by name, Reg No, room, phone..." />
+        </div>
+        <div class="topbar-actions">
+            <div class="system-status-indicator">
+                <span class="dot-online"></span>
+                <span>HostelMS • Online (Hostel #1 Active)</span>
+            </div>
+            <div style="font-size: 13px; font-weight: 500; color: #64748b; border-left: 1px solid #e2e8f0; padding-left: 16px;">
+                📅 Sunday, Oct 11, 2026
+            </div>
+        </div>
+    </header>
+    
+            <main class="content-body">
+                
+    <div class="page-header">
+        <div class="page-title-group">
+            <h2>Hostel Night Attendance Log</h2>
+            <p>Mark daily hostel night attendance by hostel and room</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-outline">📅 Change Date</button>
+            <button class="btn btn-primary">💾 Save Attendance Checklist</button>
+        </div>
+    </div>
+
+    <div class="card-panel">
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label style="font-size: 13px; font-weight: 600;">Attendance Date:</label>
+                <input type="date" value="2026-10-10" class="date-input" />
+                <select class="select-input">
+                    <option>All Allotted Students (5)</option>
+                    <option>Ganga Boys Hostel (2)</option>
+                    <option>Yamuna Girls Hostel (2)</option>
+                    <option>Kaveri Boys Hostel (1)</option>
+                </select>
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <span class="badge badge-paid">Present: 4</span>
+                <span class="badge badge-absent">Absent: 1</span>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Student Name</th>
+                        <th>Room</th>
+                        <th>Previous Day (Oct 09)</th>
+                        <th>Attendance Status (Oct 10)</th>
+                        <th>Quick Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#1001</td>
+                        <td><strong>Rahul Sharma</strong></td>
+                        <td><span class="badge badge-info">Ganga • 101</span></td>
+                        <td><span class="badge badge-paid">Present</span></td>
+                        <td><span class="badge badge-paid" style="font-size: 13px; padding: 6px 14px;">✓ PRESENT</span></td>
+                        <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Toggle Absent</button></td>
+                    </tr>
+                    <tr>
+                        <td>#1002</td>
+                        <td><strong>Aditya Verma</strong></td>
+                        <td><span class="badge badge-info">Ganga • 101</span></td>
+                        <td><span class="badge badge-absent">Absent</span></td>
+                        <td><span class="badge badge-paid" style="font-size: 13px; padding: 6px 14px;">✓ PRESENT</span></td>
+                        <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Toggle Absent</button></td>
+                    </tr>
+                    <tr>
+                        <td>#1003</td>
+                        <td><strong>Kavya Nair</strong></td>
+                        <td><span class="badge badge-info">Yamuna • 201</span></td>
+                        <td><span class="badge badge-paid">Present</span></td>
+                        <td><span class="badge badge-paid" style="font-size: 13px; padding: 6px 14px;">✓ PRESENT</span></td>
+                        <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Toggle Absent</button></td>
+                    </tr>
+                    <tr style="background: #fef2f2;">
+                        <td>#1004</td>
+                        <td><strong>Ananya Iyer</strong></td>
+                        <td><span class="badge badge-info">Yamuna • 202</span></td>
+                        <td><span class="badge badge-paid">Present</span></td>
+                        <td><span class="badge badge-absent" style="font-size: 13px; padding: 6px 14px;">✕ ABSENT</span></td>
+                        <td><button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Mark Present</button></td>
+                    </tr>
+                    <tr>
+                        <td>#1007</td>
+                        <td><strong>Siddharth Joshi</strong></td>
+                        <td><span class="badge badge-info">Kaveri • 301</span></td>
+                        <td><span class="badge badge-paid">Present</span></td>
+                        <td><span class="badge badge-paid" style="font-size: 13px; padding: 6px 14px;">✓ PRESENT</span></td>
+                        <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Toggle Absent</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+            </main>
+        </div>
+    </div>
+</body>
+</html>

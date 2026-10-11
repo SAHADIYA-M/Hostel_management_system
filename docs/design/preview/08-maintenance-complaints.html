@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance & Complaints - Hostel Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-badge">H</div>
+            <div class="logo-text">
+                <h1>HostelMS</h1>
+                <span>Enterprise DBMS</span>
+            </div>
+        </div>
+
+        <div class="hostel-selector-box">
+            <label>Current Hostel</label>
+            <div class="hostel-pill">
+                <span>🏢 Ganga Boys Hostel</span>
+                <span style="font-size: 11px; opacity: 0.7;">▼</span>
+            </div>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-title">Hostel Operations</div>
+            
+        <a href="01-dashboard.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">📊</span>
+                <span>Dashboard</span>
+            </div>
+            
+        </a>
+        
+        <a href="02-students.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🎓</span>
+                <span>Students</span>
+            </div>
+            <span class="nav-badge">7</span>
+        </a>
+        
+        <a href="03-rooms-allotment.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🛏️</span>
+                <span>Rooms & Allotment</span>
+            </div>
+            <span class="nav-badge">9</span>
+        </a>
+        
+        <a href="04-fees-fines.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">💳</span>
+                <span>Fees & Fines</span>
+            </div>
+            <span class="nav-badge">3 Pending</span>
+        </a>
+        
+        <a href="05-mess.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🍽️</span>
+                <span>Mess Plans</span>
+            </div>
+            <span class="nav-badge">3 Plans</span>
+        </a>
+        
+        <a href="06-attendance.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">📅</span>
+                <span>Attendance</span>
+            </div>
+            <span class="nav-badge">Today</span>
+        </a>
+        
+        <a href="07-visitors.html" class="nav-item ">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">👥</span>
+                <span>Visitor Log</span>
+            </div>
+            <span class="nav-badge">4 Visits</span>
+        </a>
+        
+        <a href="08-maintenance-complaints.html" class="nav-item active">
+            <div class="nav-item-left">
+                <span style="font-size: 16px;">🔧</span>
+                <span>Maintenance & Issues</span>
+            </div>
+            <span class="nav-badge">4 Active</span>
+        </a>
+        
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="user-avatar">SK</div>
+            <div class="user-info">
+                <h4>Dr. Suresh Kumar</h4>
+                <p>Chief Warden • Hostel #1</p>
+            </div>
+        </div>
+    </aside>
+    
+        <div class="main-wrapper">
+            
+    <header class="topbar">
+        <div class="search-box">
+            <span style="color: #94a3b8; font-size: 14px;">🔍</span>
+            <input type="text" placeholder="Search student by name, Reg No, room, phone..." />
+        </div>
+        <div class="topbar-actions">
+            <div class="system-status-indicator">
+                <span class="dot-online"></span>
+                <span>HostelMS • Online (Hostel #1 Active)</span>
+            </div>
+            <div style="font-size: 13px; font-weight: 500; color: #64748b; border-left: 1px solid #e2e8f0; padding-left: 16px;">
+                📅 Sunday, Oct 11, 2026
+            </div>
+        </div>
+    </header>
+    
+            <main class="content-body">
+                
+    <div class="page-header">
+        <div class="page-title-group">
+            <h2>Maintenance Requests & Student Complaints</h2>
+            <p>Hostel facility repairs and student grievance tracking</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-outline">+ New Maintenance Ticket</button>
+            <button class="btn btn-primary">+ Lodge Student Complaint</button>
+        </div>
+    </div>
+
+    <!-- Maintenance Table -->
+    <div class="card-panel" style="margin-bottom: 24px;">
+        <div class="panel-header">
+            <h3>Hostel & Room Maintenance Requests</h3>
+            <span class="badge badge-info">Maintenance Work Orders</span>
+        </div>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Req ID</th>
+                        <th>Hostel</th>
+                        <th>Scope / Room</th>
+                        <th>Issue Description</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#301</td>
+                        <td>Ganga Boys</td>
+                        <td><span class="badge badge-info">Room 101</span></td>
+                        <td>Ceiling fan speed regulator not functioning</td>
+                        <td>2026-10-08</td>
+                        <td><span class="badge badge-resolved">RESOLVED</span></td>
+                        <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>#302</td>
+                        <td>Ganga Boys</td>
+                        <td><span class="badge badge-progress">Hostel-wide</span></td>
+                        <td>Main corridor water cooler filter replacement required</td>
+                        <td>2026-10-09</td>
+                        <td><span class="badge badge-progress">IN PROGRESS</span></td>
+                        <td><button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Update</button></td>
+                    </tr>
+                    <tr>
+                        <td>#303</td>
+                        <td>Yamuna Girls</td>
+                        <td><span class="badge badge-info">Room 201</span></td>
+                        <td>Bathroom door latch loose</td>
+                        <td>2026-10-09</td>
+                        <td><span class="badge badge-open">OPEN</span></td>
+                        <td><button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Assign Staff</button></td>
+                    </tr>
+                    <tr>
+                        <td>#304</td>
+                        <td>Kaveri Boys</td>
+                        <td><span class="badge badge-progress">Hostel-wide</span></td>
+                        <td>Solar water heater pressure valve inspection</td>
+                        <td>2026-10-10</td>
+                        <td><span class="badge badge-open">OPEN</span></td>
+                        <td><button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Assign Staff</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Complaints Table -->
+    <div class="card-panel">
+        <div class="panel-header">
+            <h3>Student Grievances & Complaints</h3>
+            <span class="badge badge-pending">Student Grievance Log</span>
+        </div>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Comp ID</th>
+                        <th>Filed By</th>
+                        <th>Complaint Description</th>
+                        <th>Date Filed</th>
+                        <th>Current Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#401</td>
+                        <td>Rahul Sharma (1001)</td>
+                        <td>Wi-Fi access point in 1st floor wing keeps dropping connection</td>
+                        <td>2026-10-07</td>
+                        <td><span class="badge badge-resolved">RESOLVED</span></td>
+                        <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Log Notes</button></td>
+                    </tr>
+                    <tr>
+                        <td>#402</td>
+                        <td>Kavya Nair (1003)</td>
+                        <td>Hot water supply delayed in morning hours</td>
+                        <td>2026-10-09</td>
+                        <td><span class="badge badge-progress">IN PROGRESS</span></td>
+                        <td><button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Resolve</button></td>
+                    </tr>
+                    <tr>
+                        <td>#403</td>
+                        <td>Siddharth Joshi (1007)</td>
+                        <td>Mess breakfast timing does not align with morning lab schedule</td>
+                        <td>2026-10-10</td>
+                        <td><span class="badge badge-open">OPEN</span></td>
+                        <td><button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Resolve</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+            </main>
+        </div>
+    </div>
+</body>
+</html>
