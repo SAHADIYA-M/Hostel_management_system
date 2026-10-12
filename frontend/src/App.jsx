@@ -6,6 +6,7 @@ import {
   Route,
   useNavigate,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import {
   LayoutDashboard, Building2, DoorOpen, Users, Wallet,
@@ -19,6 +20,7 @@ import StudentPortal from "./components/StudentPortal.jsx";
 import LoginPage from "./components/LoginPage.jsx";
 
 // API Services
+import authService from "./api/services/authService.js";
 import hostelService from "./api/services/hostelService.js";
 import studentService from "./api/services/studentService.js";
 import feeService from "./api/services/feeService.js";
@@ -1037,24 +1039,19 @@ function AppShell({ currentUser, onLogout }) {
             </div>
           )}
 
-          <Routes>
-            <Route path="/" element={<Dashboard currentUser={currentUser} data={data} refreshData={loadAllData} />} />
-            {navigation.filter((item) => item.path !== "/").map((item) => (
-              <Route
-                key={item.path}
-                path={item.path}
-                element={<RecordPage currentUser={currentUser} page={item.path} data={data} refreshData={loadAllData} />}
-              />
-            ))}
-            <Route path="*" element={<Dashboard currentUser={currentUser} data={data} refreshData={loadAllData} />} />
-          </Routes>
+          {navigation.some((item) => item.path === location.pathname && item.path !== "/") ? (
+            <RecordPage currentUser={currentUser} page={location.pathname} data={data} refreshData={loadAllData} />
+          ) : (
+            <Dashboard currentUser={currentUser} data={data} refreshData={loadAllData} />
+          )}
         </main>
       </div>
     </div>
   );
 }
 
-export default function App() {
+function AppContent() {
+  const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const saved = localStorage.getItem("hostel_user");
@@ -1064,42 +1061,145 @@ export default function App() {
     }
   });
 
+  // Guard against browser back-forward cache (bfcache), popstate & multi-tab logout
+  useEffect(() => {
+    function verifyAuthAndPreventCache() {
+      const saved = localStorage.getItem("hostel_user");
+      if (!saved) {
+        if (currentUser) {
+          setCurrentUser(null);
+        }
+        if (window.location.pathname !== "/login") {
+          window.location.replace("/login");
+        }
+      }
+    }
+
+    // Listens for page restores from bfcache (browser back/forward button)
+    window.addEventListener("pageshow", verifyAuthAndPreventCache);
+    // Listens for history navigation popstate events
+    window.addEventListener("popstate", verifyAuthAndPreventCache);
+    // Listens for session invalidation in another tab
+    const handleStorageChange = (e) => {
+      if (e.key === "hostel_user" && !e.newValue) {
+        setCurrentUser(null);
+        window.location.replace("/login");
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("pageshow", verifyAuthAndPreventCache);
+      window.removeEventListener("popstate", verifyAuthAndPreventCache);
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [currentUser]);
+
   function handleLoginSuccess(user) {
     setCurrentUser(user);
     try {
       localStorage.setItem("hostel_user", JSON.stringify(user));
+      sessionStorage.setItem("hostel_user", JSON.stringify(user));
     } catch (e) {
-      console.error(e);
+      console.error("Storage set error:", e);
+    }
+    // Replace history entry so /login cannot be navigated back to
+    if (user.role === "STUDENT") {
+      navigate("/portal", { replace: true });
+    } else {
+      navigate("/", { replace: true });
     }
   }
 
-  function handleLogout() {
-    setCurrentUser(null);
+  async function handleLogout() {
+    try {
+      await authService.logout();
+    } catch (e) {
+      console.warn("Logout notification error:", e);
+    }
+
     try {
       localStorage.removeItem("hostel_user");
+      localStorage.clear();
+      sessionStorage.clear();
     } catch (e) {
-      console.error(e);
+      console.error("Storage clear error:", e);
     }
+
+    setCurrentUser(null);
+
+    // Overwrite current history state and replace location to /login
+    // This removes the protected page from the forward/back history stack
+    window.history.replaceState(null, "", "/login");
+    navigate("/login", { replace: true });
   }
 
-  // Not logged in → show login gate
-  if (!currentUser) {
-    return <LoginPage onLoginSuccess={handleLoginSuccess} />;
-  }
+  return (
+    <Routes>
+      {/* Public Login Route */}
+      <Route
+        path="/login"
+        element={
+          currentUser ? (
+            <Navigate to={currentUser.role === "STUDENT" ? "/portal" : "/"} replace />
+          ) : (
+            <LoginPage onLoginSuccess={handleLoginSuccess} />
+          )
+        }
+      />
 
-  // Student logged in → show only their personal portal (no router/sidebar)
-  if (currentUser.role === "STUDENT") {
-    return (
-      <div className="min-h-screen bg-slate-50">
-        <StudentPortal currentUser={currentUser} onLogout={handleLogout} />
-      </div>
-    );
-  }
+      {/* Student Portal (Protected for STUDENT) */}
+      <Route
+        path="/portal"
+        element={
+          !currentUser ? (
+            <Navigate to="/login" replace />
+          ) : currentUser.role !== "STUDENT" ? (
+            <Navigate to="/" replace />
+          ) : (
+            <div className="min-h-screen bg-slate-50">
+              <StudentPortal currentUser={currentUser} onLogout={handleLogout} />
+            </div>
+          )
+        }
+      />
 
-  // Warden logged in → full admin shell
+      {/* Warden Administration Routes (Protected for WARDEN) */}
+      {navigation.map((item) => (
+        <Route
+          key={item.path}
+          path={item.path}
+          element={
+            !currentUser ? (
+              <Navigate to="/login" replace />
+            ) : currentUser.role !== "WARDEN" ? (
+              <Navigate to="/portal" replace />
+            ) : (
+              <AppShell currentUser={currentUser} onLogout={handleLogout} />
+            )
+          }
+        />
+      ))}
+
+      {/* Fallback Catch-all Route */}
+      <Route
+        path="*"
+        element={
+          !currentUser ? (
+            <Navigate to="/login" replace />
+          ) : (
+            <Navigate to={currentUser.role === "STUDENT" ? "/portal" : "/"} replace />
+          )
+        }
+      />
+    </Routes>
+  );
+}
+
+export default function App() {
   return (
     <BrowserRouter>
-      <AppShell currentUser={currentUser} onLogout={handleLogout} />
+      <AppContent />
     </BrowserRouter>
   );
 }
