@@ -17,13 +17,13 @@ export default function LoginPage({ onLoginSuccess }) {
     };
   }, []);
 
-  // Student credentials (pre-filled with valid DB record)
-  const [studentRegNo, setStudentRegNo] = useState("REG2024001");
-  const [studentPhone, setStudentPhone] = useState("+919811122201");
+  // Student credentials (empty by default — placeholders guide the user)
+  const [studentRegNo, setStudentRegNo] = useState("");
+  const [studentPhone, setStudentPhone] = useState("");
 
-  // Warden credentials (pre-filled with valid DB record)
-  const [wardenId, setWardenId] = useState("1");
-  const [wardenPhone, setWardenPhone] = useState("+919876543210");
+  // Warden credentials (empty by default — placeholders guide the user)
+  const [wardenId, setWardenId] = useState("");
+  const [wardenPhone, setWardenPhone] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
