@@ -9,7 +9,7 @@
 -- 3. staff (1:N with hostel, no Name)
 -- 4. room (weak entity, hostel_id + room_no)
 -- 5. mess (mess plans)
--- 6. student (12-14 allotted students per hostel, respecting room capacity)
+-- 6. student (5-6 allotted students per hostel, respecting room capacity)
 -- 7. fee (Pending & Paid)
 -- 8. fine (Pending & Paid)
 -- 9. attendance (Present & Absent)
@@ -45,7 +45,7 @@ INSERT INTO hostel.hostel (hostel_id, name, address, type) VALUES
 (3, 'Kaveri Boys Hostel', 'East Campus, Sector 9, Academic City', 'Boys');
 
 -- ----------------------------------------------------------------------------
--- 2. WARDEN (1:1 with HOSTEL - Kerala Style)
+-- 2. WARDEN (1:1 with HOSTEL)
 -- ----------------------------------------------------------------------------
 INSERT INTO hostel.warden (warden_id, name, phone, hostel_id) VALUES
 (1, 'Dr. K. Radhakrishnan', '+919876543210', 1),
@@ -100,36 +100,39 @@ INSERT INTO hostel.mess (mess_id, type, cost) VALUES
 (3, 'Special Dietary & Coastal Menu', 5200.00);
 
 -- ----------------------------------------------------------------------------
--- 6. STUDENT (6 allotted students per hostel + 2 un-allotted; Kerala Style)
+-- 6. STUDENT (5-6 allotted students per hostel + 2 un-allotted)
+-- Featuring: Sahadiya M, Rose Sharlin, Adithyan VT, Bharath P, Srividya K,
+--            Anagha ES, Anagha P, Ayfa P, Neeraja T
 -- ----------------------------------------------------------------------------
 INSERT INTO hostel.student (student_id, fname, lname, reg_no, phone, hostel_id, room_no, allot_date, mess_id) VALUES
 -- Hostel 1: Ganga Boys Hostel (6 Boys)
-(1001, 'Ashwin', 'K.', 'REG2024001', '+919811122201', 1, 101, '2026-08-01', 1),
-(1002, 'Rahul', 'Nair', 'REG2024002', '+919811122202', 1, 101, '2026-08-01', 1),
-(1003, 'Vishnu', 'Prasad', 'REG2024003', '+919811122203', 1, 102, '2026-08-01', 1),
-(1004, 'Gokul', 'Das', 'REG2024004', '+919811122204', 1, 102, '2026-08-01', 2),
+(1001, 'Adithyan', 'VT', 'REG2024001', '+919811122201', 1, 101, '2026-08-01', 1),
+(1002, 'Bharath', 'P.', 'REG2024002', '+919811122202', 1, 101, '2026-08-01', 1),
+(1003, 'Ashwin', 'K.', 'REG2024003', '+919811122203', 1, 102, '2026-08-01', 1),
+(1004, 'Gokul', 'Krishna', 'REG2024004', '+919811122204', 1, 102, '2026-08-01', 2),
 (1005, 'Amal', 'Joseph', 'REG2024005', '+919811122205', 1, 103, '2026-08-02', 3),
-(1006, 'Nithin', 'Kurup', 'REG2024006', '+919811122206', 1, 104, '2026-08-02', 1),
+(1006, 'Fahad', 'Rahman', 'REG2024006', '+919811122206', 1, 104, '2026-08-02', 1),
 
--- Hostel 2: Yamuna Girls Hostel (6 Girls)
-(1007, 'Ananya', 'M.', 'REG2024007', '+919811122207', 2, 201, '2026-08-01', 2),
-(1008, 'Kavya', 'Madhavan', 'REG2024008', '+919811122208', 2, 201, '2026-08-01', 2),
-(1009, 'Malavika', 'Menon', 'REG2024009', '+919811122209', 2, 202, '2026-08-02', 2),
-(1010, 'Gopika', 'V.', 'REG2024010', '+919811122210', 2, 203, '2026-08-02', 1),
-(1011, 'Sneha', 'Varghese', 'REG2024011', '+919811122211', 2, 203, '2026-08-02', 3),
-(1012, 'Devika', 'Pillai', 'REG2024012', '+919811122212', 2, 204, '2026-08-03', 2),
+-- Hostel 2: Yamuna Girls Hostel (7 Girls)
+(1007, 'Sahadiya', 'M.', 'REG2024007', '+919811122207', 2, 201, '2026-08-01', 2),
+(1008, 'Rose', 'Sharlin', 'REG2024008', '+919811122208', 2, 201, '2026-08-01', 2),
+(1009, 'Srividya', 'K.', 'REG2024009', '+919811122209', 2, 202, '2026-08-01', 2),
+(1010, 'Anagha', 'ES', 'REG2024010', '+919811122210', 2, 203, '2026-08-02', 1),
+(1011, 'Anagha', 'P.', 'REG2024011', '+919811122211', 2, 203, '2026-08-02', 1),
+(1012, 'Ayfa', 'P.', 'REG2024012', '+919811122212', 2, 204, '2026-08-02', 3),
+(1013, 'Neeraja', 'T.', 'REG2024013', '+919811122213', 2, 204, '2026-08-02', 3),
 
 -- Hostel 3: Kaveri Boys Hostel (6 Boys)
-(1013, 'Pranav', 'R.', 'REG2024013', '+919811122213', 3, 301, '2026-08-01', 3),
-(1014, 'Akhil', 'Chandran', 'REG2024014', '+919811122214', 3, 301, '2026-08-01', 1),
-(1015, 'Midhun', 'S.', 'REG2024015', '+919811122215', 3, 302, '2026-08-01', 3),
-(1016, 'Kiran', 'Babu', 'REG2024016', '+919811122216', 3, 303, '2026-08-02', 2),
-(1017, 'Bibin', 'Thomas', 'REG2024017', '+919811122217', 3, 303, '2026-08-02', 1),
-(1018, 'Jishnu', 'Mohan', 'REG2024018', '+919811122218', 3, 304, '2026-08-02', 1),
+(1014, 'Pranav', 'R.', 'REG2024014', '+919811122214', 3, 301, '2026-08-01', 3),
+(1015, 'Akhil', 'Chandran', 'REG2024015', '+919811122215', 3, 301, '2026-08-01', 1),
+(1016, 'Midhun', 'S.', 'REG2024016', '+919811122216', 3, 302, '2026-08-01', 3),
+(1017, 'Kiran', 'Babu', 'REG2024017', '+919811122217', 3, 303, '2026-08-02', 2),
+(1018, 'Bibin', 'Thomas', 'REG2024018', '+919811122218', 3, 303, '2026-08-02', 1),
+(1019, 'Vishnu', 'Prasad', 'REG2024019', '+919811122219', 3, 304, '2026-08-02', 1),
 
 -- Un-allotted Students (2 Students)
-(1019, 'Sarath', 'P.', 'REG2024019', '+919811122219', NULL, NULL, NULL, 1),
-(1020, 'Parvathy', 'Nair', 'REG2024020', '+919811122220', NULL, NULL, NULL, NULL);
+(1020, 'Sarath', 'P.', 'REG2024020', '+919811122220', NULL, NULL, NULL, 1),
+(1021, 'Devika', 'S.', 'REG2024021', '+919811122221', NULL, NULL, NULL, NULL);
 
 -- ----------------------------------------------------------------------------
 -- 7. FEE (1:N from STUDENT)
@@ -149,13 +152,14 @@ INSERT INTO hostel.fee (fee_id, due_date, amount, status, student_id) VALUES
 (510, '2026-10-31', 44000.00, 'Paid', 1010),
 (511, '2026-10-31', 44000.00, 'Pending', 1011),
 (512, '2026-10-31', 50000.00, 'Paid', 1012),
+(513, '2026-10-31', 50000.00, 'Paid', 1013),
 -- Hostel 3: Kaveri Boys
-(513, '2026-10-31', 45000.00, 'Pending', 1013),
-(514, '2026-10-31', 45000.00, 'Paid', 1014),
-(515, '2026-10-31', 48000.00, 'Pending', 1015),
-(516, '2026-10-31', 52000.00, 'Paid', 1016),
+(514, '2026-10-31', 45000.00, 'Pending', 1014),
+(515, '2026-10-31', 45000.00, 'Paid', 1015),
+(516, '2026-10-31', 48000.00, 'Pending', 1016),
 (517, '2026-10-31', 52000.00, 'Paid', 1017),
-(518, '2026-10-31', 45000.00, 'Pending', 1018);
+(518, '2026-10-31', 52000.00, 'Paid', 1018),
+(519, '2026-10-31', 45000.00, 'Pending', 1019);
 
 -- ----------------------------------------------------------------------------
 -- 8. FINE (1:N from STUDENT)
@@ -164,9 +168,9 @@ INSERT INTO hostel.fine (fid, reason, amount, status, student_id) VALUES
 (701, 'Late entry past 10:30 PM curfew', 500.00, 'Paid', 1001),
 (702, 'Unauthorized electric kettle in room', 1000.00, 'Pending', 1002),
 (703, 'Noise violation during quiet hours', 300.00, 'Pending', 1007),
-(704, 'Damaged window mesh screen', 450.00, 'Paid', 1003),
-(705, 'Missed mandatory hostel assembly', 250.00, 'Pending', 1011),
-(706, 'Unapproved room guest overnight', 1200.00, 'Pending', 1014);
+(704, 'Damaged window mesh screen', 450.00, 'Paid', 1008),
+(705, 'Missed mandatory hostel assembly', 250.00, 'Pending', 1010),
+(706, 'Unapproved room guest overnight', 1200.00, 'Pending', 1015);
 
 -- ----------------------------------------------------------------------------
 -- 9. ATTENDANCE (Composite key student_id + date)
@@ -187,31 +191,32 @@ INSERT INTO hostel.attendance (student_id, date, status) VALUES
 (1010, '2026-10-11', 'Present'),
 (1011, '2026-10-11', 'Absent'),
 (1012, '2026-10-11', 'Present'),
--- Hostel 3
 (1013, '2026-10-11', 'Present'),
+-- Hostel 3
 (1014, '2026-10-11', 'Present'),
 (1015, '2026-10-11', 'Present'),
 (1016, '2026-10-11', 'Present'),
-(1017, '2026-10-11', 'Absent'),
-(1018, '2026-10-11', 'Present'),
+(1017, '2026-10-11', 'Present'),
+(1018, '2026-10-11', 'Absent'),
+(1019, '2026-10-11', 'Present'),
 -- 2026-10-10 (Yesterday)
 (1001, '2026-10-10', 'Present'),
 (1002, '2026-10-10', 'Present'),
 (1007, '2026-10-10', 'Present'),
 (1008, '2026-10-10', 'Absent'),
-(1013, '2026-10-10', 'Present'),
-(1014, '2026-10-10', 'Present');
+(1014, '2026-10-10', 'Present'),
+(1015, '2026-10-10', 'Present');
 
 -- ----------------------------------------------------------------------------
--- 10. VISITOR (Kerala Style Parents & Guardians)
+-- 10. VISITOR (Parents & Guardians)
 -- ----------------------------------------------------------------------------
 INSERT INTO hostel.visitor (visitor_id, name, relation, phone) VALUES
 (201, 'K. Radhakrishnan', 'Father', '+919845011111'),
 (202, 'Sujatha Radhakrishnan', 'Mother', '+919845011112'),
-(203, 'Madhavan Nair', 'Father', '+919845011113'),
-(204, 'Gireesh Nair', 'Brother', '+919845011114'),
-(205, 'Kurian Varghese', 'Guardian', '+919845011115'),
-(206, 'Latha Pillai', 'Mother', '+919845011116');
+(203, 'M. Sreedharan', 'Father', '+919845011113'),
+(204, 'Rosemary Sharlin', 'Mother', '+919845011114'),
+(205, 'E. S. Balan', 'Father', '+919845011115'),
+(206, 'Thomas Varghese', 'Guardian', '+919845011116');
 
 -- ----------------------------------------------------------------------------
 -- 11. VISIT (Composite key student_id + visitor_id + visit_date)
@@ -219,10 +224,10 @@ INSERT INTO hostel.visitor (visitor_id, name, relation, phone) VALUES
 INSERT INTO hostel.visit (student_id, visitor_id, visit_date) VALUES
 (1001, 201, '2026-10-05'),
 (1001, 202, '2026-10-05'),
-(1008, 203, '2026-10-08'),
-(1002, 204, '2026-10-10'),
-(1011, 205, '2026-10-09'),
-(1012, 206, '2026-10-10');
+(1007, 203, '2026-10-08'),
+(1008, 204, '2026-10-09'),
+(1010, 205, '2026-10-10'),
+(1018, 206, '2026-10-10');
 
 -- ----------------------------------------------------------------------------
 -- 12. MAINTENANCE
@@ -242,8 +247,7 @@ INSERT INTO hostel.maintenance (request_id, hostel_id, room_no, description, dat
 INSERT INTO hostel.complaint (complaint_id, date, description, status, student_id) VALUES
 (401, '2026-10-07', 'Wi-Fi access point in 1st floor wing keeps dropping connection', 'Resolved', 1001),
 (402, '2026-10-09', 'Hot water supply delayed in morning hours', 'In Progress', 1007),
-(403, '2026-10-10', 'Mess breakfast timing does not align with morning lab schedule', 'Open', 1013),
+(403, '2026-10-10', 'Mess breakfast timing does not align with morning lab schedule', 'Open', 1014),
 (404, '2026-10-11', 'Need extra study chair in Room 104', 'Open', 1006),
 (405, '2026-10-10', 'Water dispenser empty on second floor wing', 'Resolved', 1008),
-(406, '2026-10-11', 'Gym equipment dumbbell rack unstable', 'Open', 1016);
-
+(406, '2026-10-11', 'Gym equipment dumbbell rack unstable', 'Open', 1017);

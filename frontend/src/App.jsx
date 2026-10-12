@@ -185,23 +185,25 @@ function Dashboard({ currentUser, data, refreshData }) {
   const scopedComplaints = isWarden ? data.complaints.filter((c) => scopedStudentIds.has(c.student_id)) : data.complaints;
 
   const metrics = [
-    { label: isWarden ? "Assigned Hostel" : "Total Hostels", value: isWarden ? (currentUser.hostel_name || "1") : data.hostels.length, icon: Building2, color: "bg-indigo-50 text-indigo-600" },
-    { label: "Total Rooms", value: scopedRooms.length, icon: DoorOpen, color: "bg-sky-50 text-sky-600" },
+    { label: isWarden ? "Assigned Hostel" : "Total Hostels", value: isWarden ? (currentUser.hostel_name || "1") : data.hostels.length, icon: Building2, color: "bg-indigo-50 text-indigo-600", path: "/hostels" },
+    { label: "Total Rooms", value: scopedRooms.length, icon: DoorOpen, color: "bg-sky-50 text-sky-600", path: "/rooms" },
     {
       label: "Available Capacity",
       value: scopedRooms.reduce((sum, room) => sum + Math.max(0, room.capacity - (room.current_occupants || 0)), 0),
       icon: CheckCircle2,
       color: "bg-emerald-50 text-emerald-600",
+      path: "/rooms",
     },
-    { label: "Registered Students", value: scopedStudents.length, icon: Users, color: "bg-violet-50 text-violet-600" },
+    { label: "Registered Students", value: scopedStudents.length, icon: Users, color: "bg-violet-50 text-violet-600", path: "/students" },
     {
       label: "Pending Fees & Fines",
       value: [...scopedFees, ...scopedFines].filter((item) => item.status === "Pending").length,
       icon: Wallet,
       color: "bg-amber-50 text-amber-600",
+      path: "/fees-fines",
     },
-    { label: "Open Maintenance", value: scopedMaintenance.filter((item) => item.status === "Open").length, icon: Wrench, color: "bg-rose-50 text-rose-600" },
-    { label: "Open Complaints", value: scopedComplaints.filter((item) => item.status === "Open").length, icon: MessageSquare, color: "bg-orange-50 text-orange-600" },
+    { label: "Open Maintenance", value: scopedMaintenance.filter((item) => item.status === "Open").length, icon: Wrench, color: "bg-rose-50 text-rose-600", path: "/maintenance" },
+    { label: "Open Complaints", value: scopedComplaints.filter((item) => item.status === "Open").length, icon: MessageSquare, color: "bg-orange-50 text-orange-600", path: "/complaints" },
   ];
 
   return (
@@ -220,11 +222,15 @@ function Dashboard({ currentUser, data, refreshData }) {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {metrics.map(({ label, value, icon: Icon, color }) => (
-          <div key={label} className="group rounded-2xl border border-slate-200/70 bg-white p-5 shadow-card transition-all duration-200 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg">
+        {metrics.map(({ label, value, icon: Icon, color, path }) => (
+          <div
+            key={label}
+            onClick={() => path && navigate(path)}
+            className="group cursor-pointer rounded-2xl border border-slate-200/70 bg-white p-5 shadow-card transition-all duration-200 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg"
+          >
             <div className="flex items-center justify-between">
               <span className={`rounded-xl p-3 ${color}`}><Icon size={21} /></span>
-              <ArrowRight size={16} className="text-slate-300" />
+              <ArrowRight size={16} className="text-slate-300 group-hover:text-indigo-600 transition" />
             </div>
             <p className="mt-5 text-sm text-slate-500">{label}</p>
             <p className="mt-1 text-3xl font-bold text-slate-900">{value}</p>
@@ -241,6 +247,40 @@ function Dashboard({ currentUser, data, refreshData }) {
           <Button secondary onClick={() => navigate("/maintenance")}><Wrench size={16} /> Log Maintenance Request</Button>
           <Button secondary onClick={() => navigate("/complaints")}><MessageSquare size={16} /> Review Complaints</Button>
         </div>
+      </section>
+
+      {/* Hostel Residents Directory */}
+      <section className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
+        <div className="flex items-center justify-between border-b border-slate-100 p-5">
+          <div>
+            <h3 className="font-bold text-slate-900">Hostel Residents Directory</h3>
+            <p className="text-xs text-slate-500">Recently registered and allotted students</p>
+          </div>
+          <Button secondary onClick={() => navigate("/students")}>
+            View All {scopedStudents.length} Students <ArrowRight size={14} />
+          </Button>
+        </div>
+        <DataTable
+          columns={[
+            { key: "reg_no", label: "Reg No." },
+            {
+              key: "name",
+              label: "Student Name",
+              render: (s) => (
+                <div className="flex items-center gap-2">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-50 text-xs font-bold text-indigo-600">
+                    {(s.fname?.[0] || "") + (s.lname?.[0] || "")}
+                  </span>
+                  <span className="font-semibold text-slate-900">{s.fname} {s.lname}</span>
+                </div>
+              ),
+            },
+            { key: "hostel_name", label: "Hostel", render: (s) => s.hostel_name || "Un-allotted" },
+            { key: "room_no", label: "Room", render: (s) => s.room_no ? `Room ${s.room_no}` : "Pending" },
+            { key: "phone", label: "Phone" },
+          ]}
+          rows={scopedStudents.slice(0, 6)}
+        />
       </section>
 
       <section className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
@@ -1010,7 +1050,7 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                     onChange={(v) => setField(key, v)}
                     required
                     pattern="^[A-Za-z][A-Za-z\s\.]*$"
-                    placeholder={key === "fname" ? "e.g. Rahul" : key === "lname" ? "e.g. Nair" : "e.g. K. Radhakrishnan"}
+                    placeholder={key === "fname" ? "e.g. Sahadiya" : key === "lname" ? "e.g. M." : "e.g. Dr. K. Radhakrishnan"}
                     title="Letters, spaces, or dots only"
                   />
                 ) : key === "relation" ? (
@@ -1282,7 +1322,14 @@ function AppContent() {
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const saved = localStorage.getItem("hostel_user");
-      return saved ? JSON.parse(saved) : null;
+      if (!saved) return null;
+      const parsed = JSON.parse(saved);
+      // Purge stale session with obsolete names if any
+      if (parsed?.name && /(sharma|sherma|verma|varma|patil|agarwal|agarval|gupta)/i.test(parsed.name)) {
+        localStorage.removeItem("hostel_user");
+        return null;
+      }
+      return parsed;
     } catch {
       return null;
     }

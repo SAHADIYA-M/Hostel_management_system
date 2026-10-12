@@ -62,9 +62,9 @@ def get_sidebar_html(active_id):
         </div>
 
         <div class="sidebar-footer">
-            <div class="user-avatar">SK</div>
+            <div class="user-avatar">KR</div>
             <div class="user-info">
-                <h4>Dr. Suresh Kumar</h4>
+                <h4>Dr. K. Radhakrishnan</h4>
                 <p>Chief Warden • Hostel #1</p>
             </div>
         </div>
@@ -151,11 +151,11 @@ def get_student_sidebar_html(active_id):
         <div class="hostel-selector-box">
             <label>Resident Profile</label>
             <div class="hostel-pill" style="border-color: #059669;">
-                <span>🎓 Rahul Sharma</span>
+                <span>🎓 Sahadiya M.</span>
                 <span style="font-size: 11px; background: #064e3b; color: #a7f3d0; padding: 2px 6px; border-radius: 4px;">#1001</span>
             </div>
             <div style="font-size: 11px; color: #94a3b8; margin-top: 6px;">
-                🏢 Ganga Boys Hostel • Room 101
+                🏢 Yamuna Girls Hostel • Room 201
             </div>
         </div>
 
@@ -174,10 +174,10 @@ def get_student_sidebar_html(active_id):
         </div>
 
         <div class="sidebar-footer">
-            <div class="user-avatar" style="background: #10b981;">RS</div>
+            <div class="user-avatar" style="background: #10b981;">SM</div>
             <div class="user-info">
-                <h4>Rahul Sharma</h4>
-                <p>REG2024001 • B.Tech CSE</p>
+                <h4>Sahadiya M.</h4>
+                <p>REG2024007 • B.Tech CSE</p>
             </div>
         </div>
     </aside>
@@ -191,12 +191,12 @@ def get_student_topbar_html(active_title):
                 Student Self-Service Portal
             </div>
             <span class="badge badge-paid">Role: Student</span>
-            <span class="badge badge-info">Hostel #1: Ganga Boys</span>
+            <span class="badge badge-info">Hostel #2: Yamuna Girls</span>
         </div>
         <div class="topbar-actions">
             <div class="system-status-indicator">
                 <span class="dot-online"></span>
-                <span>Logged in as: Rahul Sharma (REG2024001)</span>
+                <span>Logged in as: Sahadiya M. (REG2024007)</span>
             </div>
             <div style="font-size: 13px; font-weight: 500; color: #64748b; border-left: 1px solid #e2e8f0; padding-left: 16px;">
                 📅 Sunday, Oct 11, 2026
@@ -302,7 +302,7 @@ def generate_screens():
                         <tr>
                             <td><strong>Ganga Boys Hostel</strong></td>
                             <td><span class="badge badge-info">Boys</span></td>
-                            <td>Dr. Suresh Kumar (+919876543210)</td>
+                            <td>Dr. K. Radhakrishnan (+919876543210)</td>
                             <td>3 Staff</td>
                             <td>
                                 <div class="capacity-container">
@@ -351,7 +351,7 @@ def generate_screens():
             <div style="padding: 20px; display: flex; flex-direction: column; gap: 14px;">
                 <div style="padding: 12px; background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 6px;">
                     <div style="font-weight: 600; font-size: 13px; color: #b45309;">2 Students Unallotted</div>
-                    <div style="font-size: 12px; color: #78350f; margin-top: 2px;">Vikram Rathore & Pooja Menon require room allocation.</div>
+                    <div style="font-size: 12px; color: #78350f; margin-top: 2px;">Sarath P. & Devika S. require room allocation.</div>
                 </div>
                 <div style="padding: 12px; background: #fef2f2; border-left: 4px solid #ef4444; border-radius: 6px;">
                     <div style="font-weight: 600; font-size: 13px; color: #b91c1c;">Water Cooler Filter Alert</div>
@@ -417,9 +417,9 @@ def generate_screens():
                 <tbody>
                     <tr>
                         <td>#1001</td>
-                        <td><strong>Rahul Sharma</strong></td>
+                        <td><strong>Adithyan VT</strong></td>
                         <td><code>REG2024001</code></td>
-                        <td>+919811122201</td>
+                        <td>+919811122207</td>
                         <td><span class="badge badge-info">Ganga • Room 101</span></td>
                         <td>2026-08-01</td>
                         <td>North Indian Veg/Non-Veg</td>
@@ -427,7 +427,7 @@ def generate_screens():
                     </tr>
                     <tr>
                         <td>#1002</td>
-                        <td><strong>Aditya Verma</strong></td>
+                        <td><strong>Rose Sharlin</strong></td>
                         <td><code>REG2024002</code></td>
                         <td>+919811122202</td>
                         <td><span class="badge badge-info">Ganga • Room 101</span></td>
@@ -437,39 +437,39 @@ def generate_screens():
                     </tr>
                     <tr>
                         <td>#1003</td>
-                        <td><strong>Kavya Nair</strong></td>
-                        <td><code>REG2024003</code></td>
-                        <td>+919811122203</td>
+                        <td><strong>Sahadiya M.</strong></td>
+                        <td><code>REG2024007</code></td>
+                        <td>+919811122207</td>
                         <td><span class="badge badge-info">Yamuna • Room 201</span></td>
                         <td>2026-08-01</td>
-                        <td>South Indian Pure Veg</td>
+                        <td>Traditional Kerala Pure Veg</td>
                         <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Edit</button></td>
                     </tr>
                     <tr>
                         <td>#1004</td>
-                        <td><strong>Ananya Iyer</strong></td>
-                        <td><code>REG2024004</code></td>
-                        <td>+919811122204</td>
-                        <td><span class="badge badge-info">Yamuna • Room 202</span></td>
-                        <td>2026-08-02</td>
-                        <td>South Indian Pure Veg</td>
+                        <td><strong>Rose Sharlin</strong></td>
+                        <td><code>REG2024008</code></td>
+                        <td>+919811122208</td>
+                        <td><span class="badge badge-info">Yamuna • Room 201</span></td>
+                        <td>2026-08-01</td>
+                        <td>Traditional Kerala Pure Veg</td>
                         <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Edit</button></td>
                     </tr>
                     <tr style="background: #fffbeb;">
                         <td>#1005</td>
-                        <td><strong>Vikram Rathore</strong></td>
-                        <td><code>REG2024005</code></td>
-                        <td>+919811122205</td>
+                        <td><strong>Sarath P.</strong></td>
+                        <td><code>REG2024020</code></td>
+                        <td>+919811122220</td>
                         <td><span class="badge badge-pending">Unallotted</span></td>
                         <td>—</td>
-                        <td>North Indian Veg/Non-Veg</td>
+                        <td>Kerala Non-Veg & Veg Meals</td>
                         <td><button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Allot Room</button></td>
                     </tr>
                     <tr style="background: #fffbeb;">
                         <td>#1006</td>
-                        <td><strong>Pooja Menon</strong></td>
-                        <td><code>REG2024006</code></td>
-                        <td>+919811122206</td>
+                        <td><strong>Devika S.</strong></td>
+                        <td><code>REG2024021</code></td>
+                        <td>+919811122221</td>
                         <td><span class="badge badge-pending">Unallotted</span></td>
                         <td>—</td>
                         <td><span style="color: #94a3b8;">None</span></td>
@@ -477,12 +477,12 @@ def generate_screens():
                     </tr>
                     <tr>
                         <td>#1007</td>
-                        <td><strong>Siddharth Joshi</strong></td>
-                        <td><code>REG2024007</code></td>
-                        <td>+919811122207</td>
+                        <td><strong>Pranav R.</strong></td>
+                        <td><code>REG2024014</code></td>
+                        <td>+919811122214</td>
                         <td><span class="badge badge-info">Kaveri • Room 301</span></td>
-                        <td>2026-08-05</td>
-                        <td>Special Continental</td>
+                        <td>2026-08-01</td>
+                        <td>Special Dietary & Coastal Menu</td>
                         <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Edit</button></td>
                     </tr>
                 </tbody>
@@ -525,8 +525,8 @@ def generate_screens():
                 </div>
                 <div style="font-size: 12px; color: #0f172a; margin-bottom: 14px;">
                     <strong>Occupants (2/2):</strong>
-                    <div style="margin-top: 4px; color: #475569;">• Rahul Sharma (1001)</div>
-                    <div style="color: #475569;">• Aditya Verma (1002)</div>
+                    <div style="margin-top: 4px; color: #475569;">• Adithyan VT (1001)</div>
+                    <div style="color: #475569;">• Rose Sharlin (1002)</div>
                 </div>
                 <button class="btn btn-outline" style="width: 100%; justify-content: center; font-size: 12px; padding: 6px;" disabled>Capacity Reached</button>
             </div>
@@ -616,7 +616,7 @@ def generate_screens():
         <div class="stat-card">
             <div class="stat-label">Collected Fees</div>
             <div class="stat-value" style="color: #059669;">₹95,000</div>
-            <div class="stat-subtext"><span class="trend-up">2 Paid Invoices</span> (Rahul, Kavya)</div>
+            <div class="stat-subtext"><span class="trend-up">2 Paid Invoices</span> (Adithyan, Sahadiya)</div>
         </div>
         <div class="stat-card">
             <div class="stat-label">Outstanding Fees & Fines</div>
@@ -647,7 +647,7 @@ def generate_screens():
                 <tbody>
                     <tr>
                         <td>#501</td>
-                        <td>Rahul Sharma</td>
+                        <td>Adithyan VT</td>
                         <td><code>REG2024001</code></td>
                         <td>₹45,000.00</td>
                         <td>2026-10-31</td>
@@ -656,7 +656,7 @@ def generate_screens():
                     </tr>
                     <tr>
                         <td>#502</td>
-                        <td>Aditya Verma</td>
+                        <td>Rose Sharlin</td>
                         <td><code>REG2024002</code></td>
                         <td>₹45,000.00</td>
                         <td>2026-10-31</td>
@@ -665,8 +665,8 @@ def generate_screens():
                     </tr>
                     <tr>
                         <td>#503</td>
-                        <td>Kavya Nair</td>
-                        <td><code>REG2024003</code></td>
+                        <td>Sahadiya M.</td>
+                        <td><code>REG2024007</code></td>
                         <td>₹50,000.00</td>
                         <td>2026-10-31</td>
                         <td><span class="badge badge-paid">PAID</span></td>
@@ -674,17 +674,17 @@ def generate_screens():
                     </tr>
                     <tr>
                         <td>#504</td>
-                        <td>Ananya Iyer</td>
-                        <td><code>REG2024004</code></td>
-                        <td>₹55,000.00</td>
+                        <td>Rose Sharlin</td>
+                        <td><code>REG2024008</code></td>
+                        <td>₹50,000.00</td>
                         <td>2026-10-31</td>
                         <td><span class="badge badge-pending">PENDING</span></td>
                         <td><button class="btn btn-primary" style="padding: 4px 10px; font-size: 12px;">Mark Paid</button></td>
                     </tr>
                     <tr>
                         <td>#505</td>
-                        <td>Siddharth Joshi</td>
-                        <td><code>REG2024007</code></td>
+                        <td>Pranav R.</td>
+                        <td><code>REG2024014</code></td>
                         <td>₹45,000.00</td>
                         <td>2026-10-31</td>
                         <td><span class="badge badge-pending">PENDING</span></td>
@@ -716,7 +716,7 @@ def generate_screens():
                 <tbody>
                     <tr>
                         <td>#701</td>
-                        <td>Rahul Sharma (1001)</td>
+                        <td>Adithyan VT (1001)</td>
                         <td>Late entry past 10:30 PM curfew</td>
                         <td>₹500.00</td>
                         <td><span class="badge badge-paid">PAID</span></td>
@@ -724,7 +724,7 @@ def generate_screens():
                     </tr>
                     <tr>
                         <td>#702</td>
-                        <td>Aditya Verma (1002)</td>
+                        <td>Rose Sharlin (1002)</td>
                         <td>Unauthorized electric kettle in room</td>
                         <td>₹1,000.00</td>
                         <td><span class="badge badge-pending">PENDING</span></td>
@@ -732,7 +732,7 @@ def generate_screens():
                     </tr>
                     <tr>
                         <td>#703</td>
-                        <td>Siddharth Joshi (1007)</td>
+                        <td>Sahadiya M. (1007)</td>
                         <td>Noise violation during quiet hours</td>
                         <td>₹300.00</td>
                         <td><span class="badge badge-pending">PENDING</span></td>
@@ -760,12 +760,12 @@ def generate_screens():
         <div class="card-panel" style="margin-bottom: 0;">
             <div style="padding: 24px;">
                 <span class="badge badge-paid" style="margin-bottom: 12px;">Mess #1</span>
-                <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 8px;">North Indian Veg & Non-Veg</h3>
+                <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 8px;">Kerala Non-Veg & Veg Meals</h3>
                 <div style="font-size: 26px; font-weight: 700; color: #2563eb; margin-bottom: 12px;">₹4,500 <span style="font-size: 13px; color: #64748b; font-weight: 400;">/ month</span></div>
                 <div style="font-size: 13px; color: #475569; margin-bottom: 16px;">4 Meals daily • Chicken & Paneer 3x weekly</div>
                 <div style="padding-top: 14px; border-top: 1px solid #e2e8f0; font-size: 12.5px; font-weight: 600;">
                     👥 3 Students Enrolled:
-                    <div style="color: #64748b; font-weight: 400; margin-top: 4px;">Rahul Sharma, Aditya Verma, Vikram Rathore</div>
+                    <div style="color: #64748b; font-weight: 400; margin-top: 4px;">Adithyan VT, Bharath P., Sarath P.</div>
                 </div>
             </div>
         </div>
@@ -773,12 +773,12 @@ def generate_screens():
         <div class="card-panel" style="margin-bottom: 0;">
             <div style="padding: 24px;">
                 <span class="badge badge-paid" style="margin-bottom: 12px;">Mess #2</span>
-                <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 8px;">South Indian Pure Veg</h3>
+                <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 8px;">Traditional Kerala Pure Veg</h3>
                 <div style="font-size: 26px; font-weight: 700; color: #2563eb; margin-bottom: 12px;">₹4,000 <span style="font-size: 13px; color: #64748b; font-weight: 400;">/ month</span></div>
                 <div style="font-size: 13px; color: #475569; margin-bottom: 16px;">Pure vegetarian • Traditional meals & filter coffee</div>
                 <div style="padding-top: 14px; border-top: 1px solid #e2e8f0; font-size: 12.5px; font-weight: 600;">
                     👥 2 Students Enrolled:
-                    <div style="color: #64748b; font-weight: 400; margin-top: 4px;">Kavya Nair, Ananya Iyer</div>
+                    <div style="color: #64748b; font-weight: 400; margin-top: 4px;">Sahadiya M., Rose Sharlin</div>
                 </div>
             </div>
         </div>
@@ -786,12 +786,12 @@ def generate_screens():
         <div class="card-panel" style="margin-bottom: 0;">
             <div style="padding: 24px;">
                 <span class="badge badge-paid" style="margin-bottom: 12px;">Mess #3</span>
-                <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 8px;">Special Dietary & Continental</h3>
+                <h3 style="font-size: 17px; font-weight: 700; margin-bottom: 8px;">Special Dietary & Coastal Menu</h3>
                 <div style="font-size: 26px; font-weight: 700; color: #2563eb; margin-bottom: 12px;">₹5,200 <span style="font-size: 13px; color: #64748b; font-weight: 400;">/ month</span></div>
                 <div style="font-size: 13px; color: #475569; margin-bottom: 16px;">Custom high-protein menu • Fresh salad & fruit bar</div>
                 <div style="padding-top: 14px; border-top: 1px solid #e2e8f0; font-size: 12.5px; font-weight: 600;">
                     👥 1 Student Enrolled:
-                    <div style="color: #64748b; font-weight: 400; margin-top: 4px;">Siddharth Joshi</div>
+                    <div style="color: #64748b; font-weight: 400; margin-top: 4px;">Pranav R.</div>
                 </div>
             </div>
         </div>
@@ -844,15 +844,15 @@ def generate_screens():
                 <tbody>
                     <tr>
                         <td>#1001</td>
-                        <td><strong>Rahul Sharma</strong></td>
-                        <td><span class="badge badge-info">Ganga • 101</span></td>
+                        <td><strong>Adithyan VT</strong></td>
+                        <td><span class="badge badge-info">Kaveri • 303</span></td>
                         <td><span class="badge badge-paid">Present</span></td>
                         <td><span class="badge badge-paid" style="font-size: 13px; padding: 6px 14px;">✓ PRESENT</span></td>
                         <td><button class="btn btn-outline" style="padding: 4px 10px; font-size: 12px;">Toggle Absent</button></td>
                     </tr>
                     <tr>
                         <td>#1002</td>
-                        <td><strong>Aditya Verma</strong></td>
+                        <td><strong>Rose Sharlin</strong></td>
                         <td><span class="badge badge-info">Ganga • 101</span></td>
                         <td><span class="badge badge-absent">Absent</span></td>
                         <td><span class="badge badge-paid" style="font-size: 13px; padding: 6px 14px;">✓ PRESENT</span></td>
@@ -860,7 +860,7 @@ def generate_screens():
                     </tr>
                     <tr>
                         <td>#1003</td>
-                        <td><strong>Kavya Nair</strong></td>
+                        <td><strong>Sahadiya M.</strong></td>
                         <td><span class="badge badge-info">Yamuna • 201</span></td>
                         <td><span class="badge badge-paid">Present</span></td>
                         <td><span class="badge badge-paid" style="font-size: 13px; padding: 6px 14px;">✓ PRESENT</span></td>
@@ -868,7 +868,7 @@ def generate_screens():
                     </tr>
                     <tr style="background: #fef2f2;">
                         <td>#1004</td>
-                        <td><strong>Ananya Iyer</strong></td>
+                        <td><strong>Rose Sharlin</strong></td>
                         <td><span class="badge badge-info">Yamuna • 202</span></td>
                         <td><span class="badge badge-paid">Present</span></td>
                         <td><span class="badge badge-absent" style="font-size: 13px; padding: 6px 14px;">✕ ABSENT</span></td>
@@ -876,7 +876,7 @@ def generate_screens():
                     </tr>
                     <tr>
                         <td>#1007</td>
-                        <td><strong>Siddharth Joshi</strong></td>
+                        <td><strong>Pranav R.</strong></td>
                         <td><span class="badge badge-info">Kaveri • 301</span></td>
                         <td><span class="badge badge-paid">Present</span></td>
                         <td><span class="badge badge-paid" style="font-size: 13px; padding: 6px 14px;">✓ PRESENT</span></td>
@@ -921,37 +921,37 @@ def generate_screens():
                 <tbody>
                     <tr>
                         <td><strong>2026-10-10</strong></td>
-                        <td>Arun Verma</td>
-                        <td>Brother</td>
-                        <td>+919845011114</td>
-                        <td>Aditya Verma (#1002)</td>
+                        <td>Thomas Varghese</td>
+                        <td>Guardian</td>
+                        <td>+919845011116</td>
+                        <td>Rose Sharlin (#1002)</td>
                         <td><span class="badge badge-info">Ganga • 101</span></td>
                         <td><span class="badge badge-paid">Completed</span></td>
                     </tr>
                     <tr>
                         <td><strong>2026-10-08</strong></td>
-                        <td>Gopinath Nair</td>
+                        <td>M. Sreedharan</td>
                         <td>Father</td>
                         <td>+919845011113</td>
-                        <td>Kavya Nair (#1003)</td>
+                        <td>Sahadiya M. (#1007)</td>
                         <td><span class="badge badge-info">Yamuna • 201</span></td>
                         <td><span class="badge badge-paid">Completed</span></td>
                     </tr>
                     <tr>
                         <td><strong>2026-10-05</strong></td>
-                        <td>Ramesh Sharma</td>
+                        <td>M. Sreedharan</td>
                         <td>Father</td>
-                        <td>+919845011111</td>
-                        <td>Rahul Sharma (#1001)</td>
+                        <td>+919845011113</td>
+                        <td>Adithyan VT (#1001)</td>
                         <td><span class="badge badge-info">Ganga • 101</span></td>
                         <td><span class="badge badge-paid">Completed</span></td>
                     </tr>
                     <tr>
                         <td><strong>2026-10-05</strong></td>
-                        <td>Sunita Sharma</td>
+                        <td>Rosemary Sharlin</td>
                         <td>Mother</td>
-                        <td>+919845011112</td>
-                        <td>Rahul Sharma (#1001)</td>
+                        <td>+919845011116</td>
+                        <td>Adithyan VT (#1001)</td>
                         <td><span class="badge badge-info">Ganga • 101</span></td>
                         <td><span class="badge badge-paid">Completed</span></td>
                     </tr>
@@ -1056,7 +1056,7 @@ def generate_screens():
                 <tbody>
                     <tr>
                         <td>#401</td>
-                        <td>Rahul Sharma (1001)</td>
+                        <td>Adithyan VT (1001)</td>
                         <td>Wi-Fi access point in 1st floor wing keeps dropping connection</td>
                         <td>2026-10-07</td>
                         <td><span class="badge badge-resolved">RESOLVED</span></td>
@@ -1064,7 +1064,7 @@ def generate_screens():
                     </tr>
                     <tr>
                         <td>#402</td>
-                        <td>Kavya Nair (1003)</td>
+                        <td>Sahadiya M. (1007)</td>
                         <td>Hot water supply delayed in morning hours</td>
                         <td>2026-10-09</td>
                         <td><span class="badge badge-progress">IN PROGRESS</span></td>
@@ -1072,7 +1072,7 @@ def generate_screens():
                     </tr>
                     <tr>
                         <td>#403</td>
-                        <td>Siddharth Joshi (1007)</td>
+                        <td>Sahadiya M. (1007)</td>
                         <td>Mess breakfast timing does not align with morning lab schedule</td>
                         <td>2026-10-10</td>
                         <td><span class="badge badge-open">OPEN</span></td>
@@ -1089,15 +1089,15 @@ def generate_screens():
     <!-- Student Hero Profile Banner -->
     <div class="student-hero-card" id="overview">
         <div class="student-profile-left">
-            <div class="student-large-avatar">RS</div>
+            <div class="student-large-avatar">SM</div>
             <div class="student-meta">
-                <h2>Rahul Sharma</h2>
+                <h2>Sahadiya M.</h2>
                 <div class="student-meta-tags">
-                    <span class="student-badge-pill">REG: REG2024001</span>
+                    <span class="student-badge-pill">REG: REG2024007</span>
                     <span>•</span>
-                    <span class="student-badge-pill">Student ID #1001</span>
+                    <span class="student-badge-pill">Student ID #1007</span>
                     <span>•</span>
-                    <span>📞 +919811122201</span>
+                    <span>📞 +919811122207</span>
                     <span>•</span>
                     <span>B.Tech Computer Science (Year 3)</span>
                 </div>
@@ -1112,7 +1112,7 @@ def generate_screens():
     <!-- Strict Role-Based Isolation & Safeguard Notice -->
     <div class="isolation-banner">
         <div>
-            <strong>🔒 Personal Resident Space:</strong> This view is strictly filtered to your student record (<code>Student_ID: 1001</code>). Boys and Girls hostels are separated into independent buildings. Your assigned Warden is <strong>Dr. Suresh Kumar</strong> (+919876543210).
+            <strong>🔒 Personal Resident Space:</strong> This view is strictly filtered to your student record (<code>Student_ID: 1007</code>). Boys and Girls hostels are separated into independent buildings. Your assigned Warden is <strong>Prof. Mary Varghese</strong> (+919876543211).
         </div>
         <span class="badge badge-active" style="background: #dcfce7; color: #15803d; border-color: #86efac;">Authorized Resident</span>
     </div>
@@ -1124,8 +1124,8 @@ def generate_screens():
                 <span class="stat-label">My Allotted Bed</span>
                 <div class="stat-icon-wrapper icon-blue">🛏️</div>
             </div>
-            <div class="stat-value">Room 101</div>
-            <div class="stat-subtext">Ganga Boys • Double Sharing AC (Bed 1 of 2)</div>
+            <div class="stat-value">Room 201</div>
+            <div class="stat-subtext">Yamuna Girls • Double Sharing AC (Bed 1 of 2)</div>
         </div>
 
         <div class="stat-card">
@@ -1134,7 +1134,7 @@ def generate_screens():
                 <div class="stat-icon-wrapper icon-emerald">💳</div>
             </div>
             <div class="stat-value" style="color: #059669;">₹0.00</div>
-            <div class="stat-subtext"><span class="trend-up">All Dues Cleared</span> (Fee ₹45,000 Paid)</div>
+            <div class="stat-subtext"><span class="trend-up">All Dues Cleared</span> (Fee ₹50,000 Paid)</div>
         </div>
 
         <div class="stat-card">
@@ -1142,8 +1142,8 @@ def generate_screens():
                 <span class="stat-label">Active Mess Plan</span>
                 <div class="stat-icon-wrapper icon-amber">🍽️</div>
             </div>
-            <div class="stat-value" style="font-size: 22px;">North Indian</div>
-            <div class="stat-subtext">Veg & Non-Veg • ₹4,500/month (Mess #1)</div>
+            <div class="stat-value" style="font-size: 22px;">Kerala Veg</div>
+            <div class="stat-subtext">Traditional Pure Veg • ₹4,000/month (Mess #2)</div>
         </div>
 
         <div class="stat-card">
@@ -1181,19 +1181,19 @@ def generate_screens():
                         </thead>
                         <tbody>
                             <tr>
-                                <td><code>FEE-501</code></td>
+                                <td><code>FEE-507</code></td>
                                 <td>Semester Hostel Rent & Mess Package</td>
-                                <td>₹45,000.00</td>
+                                <td>₹50,000.00</td>
                                 <td>2026-10-31</td>
                                 <td><span class="badge badge-paid">PAID</span></td>
                                 <td><button class="btn btn-outline" style="padding: 3px 8px; font-size: 11.5px;">View Receipt</button></td>
                             </tr>
                             <tr>
-                                <td><code>FINE-701</code></td>
-                                <td>Disciplinary Fine: Late entry past 10:30 PM curfew</td>
-                                <td>₹500.00</td>
-                                <td>2026-10-06</td>
-                                <td><span class="badge badge-paid">PAID</span></td>
+                                <td><code>FINE-703</code></td>
+                                <td>Disciplinary Fine: Noise violation during quiet hours</td>
+                                <td>₹300.00</td>
+                                <td>2026-10-08</td>
+                                <td><span class="badge badge-pending">PENDING</span></td>
                                 <td><button class="btn btn-outline" style="padding: 3px 8px; font-size: 11.5px;">Receipt</button></td>
                             </tr>
                         </tbody>
@@ -1223,18 +1223,18 @@ def generate_screens():
                         </thead>
                         <tbody>
                             <tr>
-                                <td><code>COMP-401</code></td>
+                                <td><code>COMP-402</code></td>
                                 <td>Student Grievance</td>
-                                <td>Wi-Fi access point in 1st floor wing keeps dropping connection</td>
-                                <td>2026-10-07</td>
-                                <td><span class="badge badge-resolved">RESOLVED</span></td>
+                                <td>Hot water supply delayed in morning hours</td>
+                                <td>2026-10-09</td>
+                                <td><span class="badge badge-progress">IN PROGRESS</span></td>
                             </tr>
                             <tr>
-                                <td><code>REQ-301</code></td>
+                                <td><code>REQ-303</code></td>
                                 <td>Room Maintenance</td>
-                                <td>Ceiling fan speed regulator not functioning in Room 101</td>
-                                <td>2026-10-08</td>
-                                <td><span class="badge badge-resolved">RESOLVED</span></td>
+                                <td>Bathroom door latch loose in Room 201</td>
+                                <td>2026-10-09</td>
+                                <td><span class="badge badge-open">OPEN</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -1245,7 +1245,7 @@ def generate_screens():
             <div class="card-panel" id="attendance">
                 <div class="panel-header">
                     <h3>📅 My Night Attendance History</h3>
-                    <span class="badge badge-info">Verified by Warden Dr. Suresh Kumar</span>
+                    <span class="badge badge-info">Verified by Warden Prof. Mary Varghese</span>
                 </div>
                 <div class="table-responsive">
                     <table class="data-table">
@@ -1261,14 +1261,14 @@ def generate_screens():
                         <tbody>
                             <tr>
                                 <td><strong>2026-10-10</strong></td>
-                                <td>Ganga Boys • Room 101</td>
+                                <td>Yamuna Girls • Room 201</td>
                                 <td>Night Curfew Verification (10:00 PM)</td>
                                 <td><span class="badge badge-present">✓ PRESENT</span></td>
                                 <td>Marked in room by Warden</td>
                             </tr>
                             <tr>
                                 <td><strong>2026-10-09</strong></td>
-                                <td>Ganga Boys • Room 101</td>
+                                <td>Yamuna Girls • Room 201</td>
                                 <td>Night Curfew Verification (10:00 PM)</td>
                                 <td><span class="badge badge-present">✓ PRESENT</span></td>
                                 <td>Marked in room by Warden</td>
@@ -1284,12 +1284,12 @@ def generate_screens():
             <!-- Room & Roommate Card -->
             <div class="card-panel" id="room" style="margin-bottom: 24px;">
                 <div class="panel-header">
-                    <h3>🛏️ Room 101 Details</h3>
+                    <h3>🛏️ Room 201 Details</h3>
                     <span class="badge badge-info">Double AC</span>
                 </div>
                 <div style="padding: 20px;">
                     <div style="font-size: 13px; color: #64748b; margin-bottom: 14px;">
-                        Ganga Boys Hostel • 1st Floor, East Wing<br>
+                        Yamuna Girls Hostel • 2nd Floor, West Wing<br>
                         <strong>Capacity:</strong> 2 Students (Occupancy: 2/2)
                     </div>
 
@@ -1301,7 +1301,7 @@ def generate_screens():
                     <div class="roommate-card" style="border-left: 3px solid #2563eb;">
                         <div class="user-avatar" style="background: #2563eb; width: 34px; height: 34px; font-size: 12px;">RS</div>
                         <div>
-                            <div style="font-weight: 600; font-size: 13px; color: #0f172a;">Rahul Sharma (You)</div>
+                            <div style="font-weight: 600; font-size: 13px; color: #0f172a;">Sahadiya M. (You)</div>
                             <div style="font-size: 11.5px; color: #64748b;">Bed 1 • Allotted: Aug 01, 2026</div>
                         </div>
                     </div>
@@ -1310,8 +1310,8 @@ def generate_screens():
                     <div class="roommate-card">
                         <div class="user-avatar" style="background: #64748b; width: 34px; height: 34px; font-size: 12px;">AV</div>
                         <div>
-                            <div style="font-weight: 600; font-size: 13px; color: #0f172a;">Aditya Verma</div>
-                            <div style="font-size: 11.5px; color: #64748b;">Bed 2 • REG2024002 • 📞 +919811122202</div>
+                            <div style="font-weight: 600; font-size: 13px; color: #0f172a;">Rose Sharlin</div>
+                            <div style="font-size: 11.5px; color: #64748b;">Bed 2 • REG2024008 • 📞 +919811122208</div>
                         </div>
                     </div>
                 </div>
@@ -1326,16 +1326,16 @@ def generate_screens():
                 <div style="padding: 16px;">
                     <div class="contact-pill-item">
                         <div>
-                            <div style="font-weight: 600;">Ramesh Sharma</div>
-                            <div style="font-size: 11.5px; color: #64748b;">Father • +919845011111</div>
+                            <div style="font-weight: 600;">M. Sreedharan</div>
+                            <div style="font-size: 11.5px; color: #64748b;">Father • +919845011113</div>
                         </div>
                         <span class="badge badge-paid" style="font-size: 11px;">Visited Oct 05</span>
                     </div>
 
                     <div class="contact-pill-item">
                         <div>
-                            <div style="font-weight: 600;">Sunita Sharma</div>
-                            <div style="font-size: 11.5px; color: #64748b;">Mother • +919845011112</div>
+                            <div style="font-weight: 600;">Rosemary Sharlin</div>
+                            <div style="font-size: 11.5px; color: #64748b;">Mother • +919845011116</div>
                         </div>
                         <span class="badge badge-paid" style="font-size: 11px;">Visited Oct 05</span>
                     </div>
@@ -1345,23 +1345,23 @@ def generate_screens():
             <!-- Emergency & Hostel Staff Contacts -->
             <div class="card-panel">
                 <div class="panel-header">
-                    <h3>📞 Hostel #1 Staff Contacts</h3>
+                    <h3>📞 Hostel #2 Staff Contacts</h3>
                 </div>
                 <div style="padding: 16px;">
                     <div class="contact-pill-item">
                         <div>
-                            <div style="font-weight: 600;">Dr. Suresh Kumar</div>
-                            <div style="font-size: 11.5px; color: #64748b;">Assigned Hostel Warden (Male)</div>
+                            <div style="font-weight: 600;">Prof. Mary Varghese</div>
+                            <div style="font-size: 11.5px; color: #64748b;">Assigned Hostel Warden (Female)</div>
                         </div>
                         <a href="tel:+919876543210" style="color: #2563eb; font-weight: 600; font-size: 12px; text-decoration: none;">Call</a>
                     </div>
 
                     <div class="contact-pill-item">
                         <div>
-                            <div style="font-weight: 600;">Head Caretaker</div>
-                            <div style="font-size: 11.5px; color: #64748b;">Hostel Staff • Room Inquiries</div>
+                            <div style="font-weight: 600;">Hostel Matron</div>
+                            <div style="font-size: 11.5px; color: #64748b;">Hostel Staff • Student Welfare</div>
                         </div>
-                        <a href="tel:+919123456780" style="color: #2563eb; font-weight: 600; font-size: 12px; text-decoration: none;">Call</a>
+                        <a href="tel:+919123456783" style="color: #2563eb; font-weight: 600; font-size: 12px; text-decoration: none;">Call</a>
                     </div>
 
                     <div class="contact-pill-item">

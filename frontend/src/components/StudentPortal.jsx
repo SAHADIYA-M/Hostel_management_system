@@ -25,6 +25,20 @@ export default function StudentPortal({ currentUser, onLogout }) {
     try {
       const data = await portalService.getStudentPortal(id);
       setPortalData(data);
+      // Synchronize cached user name in localStorage if outdated
+      try {
+        const stored = localStorage.getItem("hostel_user");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          const fullName = `${data.fname} ${data.lname}`.trim();
+          if (parsed.name !== fullName) {
+            parsed.name = fullName;
+            localStorage.setItem("hostel_user", JSON.stringify(parsed));
+          }
+        }
+      } catch (e) {
+        // Ignore localStorage error
+      }
     } catch (err) {
       console.error("Failed to load student portal data:", err);
       setError(err.message || "Failed to load portal data from backend API.");
