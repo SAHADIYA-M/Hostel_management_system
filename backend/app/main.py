@@ -4,7 +4,7 @@ Architecture: React Frontend -> FastAPI REST API -> psycopg 3 (Raw SQL) -> Postg
 """
 
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.db import init_db_pool, close_db_pool, get_db_connection
@@ -61,6 +61,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Prevent browser/proxy caching of sensitive hostel records & auth responses
+@app.middleware("http")
+async def add_security_and_cache_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 # Include Routers
 app.include_router(auth.router)

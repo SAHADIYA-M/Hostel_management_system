@@ -16,6 +16,16 @@ export const authService = {
     });
     return response.data;
   },
+
+  async logout() {
+    try {
+      const response = await api.post("/auth/logout");
+      return response.data;
+    } catch {
+      // In case backend is offline, logout continues client-side
+      return { status: "logged_out" };
+    }
+  },
 };
 
 export default authService;

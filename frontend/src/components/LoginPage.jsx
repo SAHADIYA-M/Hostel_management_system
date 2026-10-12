@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Building2, ArrowRight, AlertCircle, Loader2 } from "lucide-react";
 import authService from "../api/services/authService";
 
 export default function LoginPage({ onLoginSuccess }) {
   const [role, setRole] = useState("student"); // 'student' | 'warden'
+
+  // Neutralize forward/back arrow navigation while on login page so stale protected views cannot be accessed
+  useEffect(() => {
+    window.history.pushState(null, "", window.location.href);
+    const handlePopState = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   // Student credentials (pre-filled with valid DB record)
   const [studentRegNo, setStudentRegNo] = useState("REG2024001");

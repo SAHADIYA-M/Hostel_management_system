@@ -16,7 +16,7 @@ export const hostels = [
 export const wardens = [
   {
     Warden_ID: 1,
-    Name: "Dr. Suresh Kumar",
+    Name: "Dr. K. Radhakrishnan",
     Phone: "9876543210",
     Hostel_ID: 1,
   },
@@ -54,10 +54,10 @@ export const rooms = [
 export const students = [
   {
     Student_ID: 1001,
-    FName: "Rahul",
-    LName: "Sharma",
-    Reg_No: "RA21110030101",
-    Phone: "9876501234",
+    FName: "Ashwin",
+    LName: "K.",
+    Reg_No: "REG2024001",
+    Phone: "+919811122201",
     Hostel_ID: 1,
     Room_No: 101,
     Allot_Date: "2026-08-01",
@@ -65,25 +65,25 @@ export const students = [
   },
   {
     Student_ID: 1002,
-    FName: "Priya",
+    FName: "Rahul",
     LName: "Nair",
-    Reg_No: "RA21110030102",
-    Phone: "9876501235",
-    Hostel_ID: null,
-    Room_No: null,
-    Allot_Date: null,
-    Mess_ID: 2,
-  },
-  {
-    Student_ID: 1003,
-    FName: "Arjun",
-    LName: "Menon",
-    Reg_No: "RA21110030103",
-    Phone: "9876501236",
+    Reg_No: "REG2024002",
+    Phone: "+919811122202",
     Hostel_ID: 1,
     Room_No: 101,
-    Allot_Date: "2026-08-02",
+    Allot_Date: "2026-08-01",
     Mess_ID: 1,
+  },
+  {
+    Student_ID: 1007,
+    FName: "Ananya",
+    LName: "M.",
+    Reg_No: "REG2024007",
+    Phone: "+919811122207",
+    Hostel_ID: 2,
+    Room_No: 201,
+    Allot_Date: "2026-08-01",
+    Mess_ID: 2,
   },
 ];
 
@@ -98,7 +98,7 @@ export const fees = [
   {
     Fee_ID: 502,
     Due_Date: "2026-10-15",
-    Amount: 40000,
+    Amount: 45000,
     Status: "Paid",
     Student_ID: 1002,
   },
@@ -115,31 +115,31 @@ export const fines = [
 ];
 
 export const messPlans = [
-  { Mess_ID: 1, Type: "North Indian Veg & Non-Veg", Cost: 4500 },
-  { Mess_ID: 2, Type: "South Indian Pure Veg", Cost: 4000 },
+  { Mess_ID: 1, Type: "Kerala Non-Veg & Veg Meals", Cost: 4500 },
+  { Mess_ID: 2, Type: "Traditional Kerala Pure Veg", Cost: 4000 },
 ];
 
 export const attendance = [
   {
     Student_ID: 1001,
-    Student_Name: "Rahul Sharma",
+    Student_Name: "Ashwin K.",
     Room_No: 101,
     Date: "2026-10-11",
     Status: "Present",
   },
   {
     Student_ID: 1002,
-    Student_Name: "Priya Nair",
-    Room_No: null,
+    Student_Name: "Rahul Nair",
+    Room_No: 101,
     Date: "2026-10-11",
-    Status: "Absent",
+    Status: "Present",
   },
 ];
 
 export const visitors = [
   {
     Visitor_ID: 201,
-    Name: "Ramesh Sharma",
+    Name: "K. Radhakrishnan",
     Relation: "Father",
     Phone: "9845123456",
   },
@@ -148,9 +148,9 @@ export const visitors = [
 export const visits = [
   {
     Student_ID: 1001,
-    Student_Name: "Rahul Sharma",
+    Student_Name: "Ashwin K.",
     Visitor_ID: 201,
-    Visitor_Name: "Ramesh Sharma",
+    Visitor_Name: "K. Radhakrishnan",
     Relation: "Father",
     Visit_Date: "2026-10-10",
   },

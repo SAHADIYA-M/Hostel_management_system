@@ -97,3 +97,13 @@ def warden_login(req: WardenLoginRequest, conn=Depends(get_db_connection)):
             "hostel_name": warden["hostel_name"],
             "hostel_type": warden["hostel_type"],
         }
+
+
+@router.post("/logout")
+def logout():
+    """
+    Explicit session termination endpoint.
+    Acknowledge client-side logout to ensure full lifecycle invalidation.
+    """
+    return {"status": "success", "message": "Session terminated successfully."}
+
