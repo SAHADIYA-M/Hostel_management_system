@@ -36,14 +36,19 @@ def student_login(req: StudentLoginRequest, conn=Depends(get_db_connection)):
             FROM hostel.student s
             LEFT JOIN hostel.hostel h ON s.hostel_id = h.hostel_id
             WHERE LOWER(TRIM(s.reg_no)) = LOWER(TRIM(%s))
-              AND TRIM(s.phone) = TRIM(%s);
+              AND (
+                  TRIM(s.phone) = TRIM(%s)
+                  OR RIGHT(REGEXP_REPLACE(s.phone, '[^0-9]', '', 'g'), 10) = RIGHT(REGEXP_REPLACE(%s, '[^0-9]', '', 'g'), 10)
+              );
         """
-        cur.execute(query, (req.reg_no, req.phone))
+        clean_reg = req.reg_no.strip().upper()
+        clean_phone = req.phone.strip()
+        cur.execute(query, (clean_reg, clean_phone, clean_phone))
         student = cur.fetchone()
 
         if not student:
             # Check if reg_no exists for a clearer error message
-            cur.execute("SELECT 1 FROM hostel.student WHERE LOWER(TRIM(reg_no)) = LOWER(TRIM(%s));", (req.reg_no,))
+            cur.execute("SELECT 1 FROM hostel.student WHERE LOWER(TRIM(reg_no)) = LOWER(TRIM(%s));", (clean_reg,))
             if not cur.fetchone():
                 raise HTTPException(status_code=401, detail="Registration number not found in hostel records.")
             raise HTTPException(status_code=401, detail="Invalid registered phone number for this student.")
@@ -78,9 +83,13 @@ def warden_login(req: WardenLoginRequest, conn=Depends(get_db_connection)):
             FROM hostel.warden w
             JOIN hostel.hostel h ON w.hostel_id = h.hostel_id
             WHERE w.warden_id = %s
-              AND TRIM(w.phone) = TRIM(%s);
+              AND (
+                  TRIM(w.phone) = TRIM(%s)
+                  OR RIGHT(REGEXP_REPLACE(w.phone, '[^0-9]', '', 'g'), 10) = RIGHT(REGEXP_REPLACE(%s, '[^0-9]', '', 'g'), 10)
+              );
         """
-        cur.execute(query, (req.warden_id, req.phone))
+        clean_phone = req.phone.strip()
+        cur.execute(query, (req.warden_id, clean_phone, clean_phone))
         warden = cur.fetchone()
 
         if not warden:

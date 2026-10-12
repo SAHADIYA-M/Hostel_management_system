@@ -28,12 +28,28 @@ export default function LoginPage({ onLoginSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const INDIAN_PHONE_REGEX = /^(\+91)?[6-9]\d{9}$/;
+  const REG_NO_REGEX = /^REG\d{7}$/;
+
   async function handleStudentSubmit(e) {
     e.preventDefault();
     setError("");
+
+    const cleanReg = studentRegNo.trim().toUpperCase();
+    const cleanPhone = studentPhone.trim();
+
+    if (!REG_NO_REGEX.test(cleanReg)) {
+      setError("Registration number must be exactly 10 characters: 'REG' followed by 7 digits (e.g. REG2024001).");
+      return;
+    }
+    if (!INDIAN_PHONE_REGEX.test(cleanPhone)) {
+      setError("Mobile number must be a valid 10-digit Indian phone number starting with 6, 7, 8, or 9 (optional '+91' prefix, e.g. 9811122201).");
+      return;
+    }
+
     setLoading(true);
     try {
-      const user = await authService.studentLogin(studentRegNo, studentPhone);
+      const user = await authService.studentLogin(cleanReg, cleanPhone);
       onLoginSuccess(user);
     } catch (err) {
       setError(err.message || "Invalid registration number or phone number.");
@@ -45,9 +61,16 @@ export default function LoginPage({ onLoginSuccess }) {
   async function handleWardenSubmit(e) {
     e.preventDefault();
     setError("");
+
+    const cleanPhone = wardenPhone.trim();
+    if (!INDIAN_PHONE_REGEX.test(cleanPhone)) {
+      setError("Mobile number must be a valid 10-digit Indian phone number starting with 6, 7, 8, or 9 (optional '+91' prefix, e.g. 9876543210).");
+      return;
+    }
+
     setLoading(true);
     try {
-      const user = await authService.wardenLogin(wardenId, wardenPhone);
+      const user = await authService.wardenLogin(wardenId, cleanPhone);
       onLoginSuccess(user);
     } catch (err) {
       setError(err.message || "Invalid Warden ID or phone number.");
@@ -121,11 +144,15 @@ export default function LoginPage({ onLoginSuccess }) {
               <input
                 type="text"
                 required
+                maxLength={10}
+                pattern="^REG[0-9]{7}$"
                 placeholder="e.g. REG2024001"
+                title="10 characters: REG followed by 7 digits"
                 value={studentRegNo}
-                onChange={(e) => setStudentRegNo(e.target.value)}
-                className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-500/20"
+                onChange={(e) => setStudentRegNo(e.target.value.toUpperCase())}
+                className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm uppercase text-slate-900 outline-none transition focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-500/20"
               />
+              <p className="mt-1 text-[11px] text-slate-400">10 characters: REG followed by 7 digits (e.g. REG2024001)</p>
             </div>
 
             <div>
@@ -135,11 +162,15 @@ export default function LoginPage({ onLoginSuccess }) {
               <input
                 type="tel"
                 required
-                placeholder="e.g. +919811122201"
+                maxLength={13}
+                pattern="^(\+91)?[6-9][0-9]{9}$"
+                placeholder="e.g. 9811122201 or +919811122201"
+                title="10-digit Indian mobile number starting with 6, 7, 8, or 9 (optional +91)"
                 value={studentPhone}
                 onChange={(e) => setStudentPhone(e.target.value)}
                 className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-500/20"
               />
+              <p className="mt-1 text-[11px] text-slate-400">10 digits starting with 6, 7, 8, or 9 (optional +91)</p>
             </div>
 
             <button
@@ -169,6 +200,7 @@ export default function LoginPage({ onLoginSuccess }) {
               </label>
               <input
                 type="number"
+                min="1"
                 required
                 placeholder="e.g. 1"
                 value={wardenId}
@@ -184,11 +216,15 @@ export default function LoginPage({ onLoginSuccess }) {
               <input
                 type="tel"
                 required
-                placeholder="e.g. +919876543210"
+                maxLength={13}
+                pattern="^(\+91)?[6-9][0-9]{9}$"
+                placeholder="e.g. 9876543210 or +919876543210"
+                title="10-digit Indian mobile number starting with 6, 7, 8, or 9 (optional +91)"
                 value={wardenPhone}
                 onChange={(e) => setWardenPhone(e.target.value)}
                 className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 outline-none transition focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-500/20"
               />
+              <p className="mt-1 text-[11px] text-slate-400">10 digits starting with 6, 7, 8, or 9 (optional +91)</p>
             </div>
 
             <button

@@ -3,10 +3,20 @@ Pydantic schemas for Hostel Management System REST API.
 Strictly aligned with docs/project-context.md (Revision 2) and ER diagram entities.
 """
 
+import re
 from typing import Optional, List
 from datetime import date
 from decimal import Decimal
 from pydantic import BaseModel, Field, field_validator
+
+# Indian Mobile Number: 10 digits starting with 6, 7, 8, 9; optional '+91' prefix
+INDIAN_PHONE_REGEX = re.compile(r"^(\+91)?[6-9]\d{9}$")
+
+# Student Register Number: exactly 10 characters, starting with 'REG' followed by 7 digits
+REG_NO_REGEX = re.compile(r"^REG\d{7}$")
+
+# Name format: letters, spaces, dots for initials
+NAME_REGEX = re.compile(r"^[A-Za-z][A-Za-z\s\.]*$")
 
 
 # -----------------------------------------------------------------------------
@@ -30,9 +40,9 @@ class HostelResponse(HostelBase):
 # -----------------------------------------------------------------------------
 class RoomCreate(BaseModel):
     hostel_id: int
-    room_no: int
-    type: str = Field(..., max_length=30)
-    capacity: int = Field(..., gt=0)
+    room_no: int = Field(..., ge=100, le=999)
+    type: str = Field(..., min_length=3, max_length=30)
+    capacity: int = Field(..., ge=1, le=10)
 
 
 class RoomResponse(BaseModel):
@@ -48,14 +58,38 @@ class RoomResponse(BaseModel):
 # 3. STUDENT
 # -----------------------------------------------------------------------------
 class StudentCreate(BaseModel):
-    fname: str = Field(..., max_length=50)
-    lname: str = Field(..., max_length=50)
-    reg_no: str = Field(..., max_length=30)
-    phone: str = Field(..., max_length=15)
+    fname: str = Field(..., min_length=1, max_length=50)
+    lname: str = Field(..., min_length=1, max_length=50)
+    reg_no: str = Field(..., min_length=10, max_length=10)
+    phone: str = Field(..., min_length=10, max_length=15)
     hostel_id: Optional[int] = None
-    room_no: Optional[int] = None
+    room_no: Optional[int] = Field(None, ge=100, le=999)
     allot_date: Optional[date] = None
     mess_id: Optional[int] = None
+
+    @field_validator("reg_no")
+    @classmethod
+    def validate_reg_no(cls, v: str) -> str:
+        cleaned = v.strip().upper()
+        if not REG_NO_REGEX.match(cleaned):
+            raise ValueError("Student registration number must be exactly 10 characters starting with 'REG' followed by 7 digits (e.g. REG2024001).")
+        return cleaned
+
+    @field_validator("phone")
+    @classmethod
+    def validate_phone(cls, v: str) -> str:
+        cleaned = v.strip()
+        if not INDIAN_PHONE_REGEX.match(cleaned):
+            raise ValueError("Mobile number must be a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9 (optional '+91' prefix, e.g. 9876543210 or +919876543210).")
+        return cleaned
+
+    @field_validator("fname", "lname")
+    @classmethod
+    def validate_name(cls, v: str) -> str:
+        cleaned = v.strip()
+        if not NAME_REGEX.match(cleaned):
+            raise ValueError("Name must contain letters, spaces, or periods only.")
+        return cleaned
 
 
 class StudentAllotRequest(BaseModel):
@@ -84,7 +118,7 @@ class StudentResponse(BaseModel):
 # -----------------------------------------------------------------------------
 class FeeCreate(BaseModel):
     due_date: date
-    amount: Decimal = Field(..., ge=0)
+    amount: Decimal = Field(..., gt=0, le=200000)
     status: str = Field("Pending")
     student_id: int
 
@@ -118,8 +152,8 @@ class FeeResponse(BaseModel):
 
 
 class FineCreate(BaseModel):
-    reason: str = Field(..., max_length=255)
-    amount: Decimal = Field(..., ge=0)
+    reason: str = Field(..., min_length=5, max_length=255)
+    amount: Decimal = Field(..., gt=0, le=50000)
     status: str = Field("Pending")
     student_id: int
 
@@ -156,8 +190,8 @@ class FineResponse(BaseModel):
 # 5. MESS
 # -----------------------------------------------------------------------------
 class MessCreate(BaseModel):
-    type: str = Field(..., max_length=50)
-    cost: Decimal = Field(..., ge=0)
+    type: str = Field(..., min_length=3, max_length=50)
+    cost: Decimal = Field(..., gt=0, le=50000)
 
 
 class MessResponse(BaseModel):
@@ -204,9 +238,25 @@ class AttendanceResponse(BaseModel):
 # 7. VISITOR & VISIT
 # -----------------------------------------------------------------------------
 class VisitorCreate(BaseModel):
-    name: str = Field(..., max_length=100)
-    relation: str = Field(..., max_length=50)
-    phone: str = Field(..., max_length=15)
+    name: str = Field(..., min_length=2, max_length=100)
+    relation: str = Field(..., min_length=2, max_length=50)
+    phone: str = Field(..., min_length=10, max_length=15)
+
+    @field_validator("phone")
+    @classmethod
+    def validate_phone(cls, v: str) -> str:
+        cleaned = v.strip()
+        if not INDIAN_PHONE_REGEX.match(cleaned):
+            raise ValueError("Mobile number must be a valid 10-digit Indian mobile number starting with 6, 7, 8, or 9 (optional '+91' prefix, e.g. 9845011111 or +919845011111).")
+        return cleaned
+
+    @field_validator("name")
+    @classmethod
+    def validate_name(cls, v: str) -> str:
+        cleaned = v.strip()
+        if not NAME_REGEX.match(cleaned):
+            raise ValueError("Visitor name must contain letters, spaces, or periods only.")
+        return cleaned
 
 
 class VisitorResponse(BaseModel):
@@ -236,8 +286,8 @@ class VisitResponse(BaseModel):
 # -----------------------------------------------------------------------------
 class MaintenanceCreate(BaseModel):
     hostel_id: int
-    room_no: Optional[int] = None
-    description: str = Field(..., max_length=500)
+    room_no: Optional[int] = Field(None, ge=100, le=999)
+    description: str = Field(..., min_length=5, max_length=500)
     date: date
     status: str = Field("Open")
 
@@ -272,7 +322,7 @@ class MaintenanceResponse(BaseModel):
 
 class ComplaintCreate(BaseModel):
     date: date
-    description: str = Field(..., max_length=500)
+    description: str = Field(..., min_length=5, max_length=500)
     status: str = Field("Open")
     student_id: int
 

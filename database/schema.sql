@@ -57,7 +57,13 @@ CREATE TABLE hostel.warden (
         FOREIGN KEY (hostel_id)
         REFERENCES hostel.hostel(hostel_id)
         ON UPDATE CASCADE
-        ON DELETE RESTRICT
+        ON DELETE RESTRICT,
+
+    CONSTRAINT chk_warden_phone_format
+        CHECK (phone ~ '^(\+91)?[6-9][0-9]{9}$'),
+
+    CONSTRAINT chk_warden_name_format
+        CHECK (name ~ '^[A-Za-z][A-Za-z\s\.]*$')
 );
 
 -- ----------------------------------------------------------------------------
@@ -75,7 +81,10 @@ CREATE TABLE hostel.staff (
         FOREIGN KEY (hostel_id)
         REFERENCES hostel.hostel(hostel_id)
         ON UPDATE CASCADE
-        ON DELETE RESTRICT
+        ON DELETE RESTRICT,
+
+    CONSTRAINT chk_staff_phone_format
+        CHECK (phone ~ '^(\+91)?[6-9][0-9]{9}$')
 );
 
 -- ----------------------------------------------------------------------------
@@ -99,7 +108,13 @@ CREATE TABLE hostel.room (
         ON DELETE CASCADE,
 
     CONSTRAINT chk_room_capacity_positive
-        CHECK (capacity > 0)
+        CHECK (capacity > 0),
+
+    CONSTRAINT chk_room_no_range
+        CHECK (room_no BETWEEN 100 AND 999),
+
+    CONSTRAINT chk_room_capacity_range
+        CHECK (capacity BETWEEN 1 AND 10)
 );
 
 -- ----------------------------------------------------------------------------
@@ -112,8 +127,8 @@ CREATE TABLE hostel.mess (
     type            VARCHAR(50)     NOT NULL,
     cost            NUMERIC(10, 2)  NOT NULL,
 
-    CONSTRAINT chk_mess_cost_non_negative
-        CHECK (cost >= 0)
+    CONSTRAINT chk_mess_cost_positive
+        CHECK (cost > 0)
 );
 
 -- ----------------------------------------------------------------------------
@@ -152,7 +167,19 @@ CREATE TABLE hostel.student (
             (hostel_id IS NULL AND room_no IS NULL AND allot_date IS NULL)
             OR
             (hostel_id IS NOT NULL AND room_no IS NOT NULL AND allot_date IS NOT NULL)
-        )
+        ),
+
+    CONSTRAINT chk_student_phone_format
+        CHECK (phone ~ '^(\+91)?[6-9][0-9]{9}$'),
+
+    CONSTRAINT chk_student_reg_no_format
+        CHECK (reg_no ~ '^REG[0-9]{7}$'),
+
+    CONSTRAINT chk_student_fname_format
+        CHECK (fname ~ '^[A-Za-z][A-Za-z\s\.]*$'),
+
+    CONSTRAINT chk_student_lname_format
+        CHECK (lname ~ '^[A-Za-z][A-Za-z\s\.]*$')
 );
 
 -- ----------------------------------------------------------------------------
@@ -173,8 +200,8 @@ CREATE TABLE hostel.fee (
         ON UPDATE CASCADE
         ON DELETE CASCADE,
 
-    CONSTRAINT chk_fee_amount_non_negative
-        CHECK (amount >= 0),
+    CONSTRAINT chk_fee_amount_positive
+        CHECK (amount > 0),
 
     CONSTRAINT chk_fee_status_domain
         CHECK (status IN ('Pending', 'Paid'))
@@ -198,8 +225,8 @@ CREATE TABLE hostel.fine (
         ON UPDATE CASCADE
         ON DELETE CASCADE,
 
-    CONSTRAINT chk_fine_amount_non_negative
-        CHECK (amount >= 0),
+    CONSTRAINT chk_fine_amount_positive
+        CHECK (amount > 0),
 
     CONSTRAINT chk_fine_status_domain
         CHECK (status IN ('Pending', 'Paid'))
@@ -237,7 +264,13 @@ CREATE TABLE hostel.visitor (
     visitor_id      INT             PRIMARY KEY,
     name            VARCHAR(100)    NOT NULL,
     relation        VARCHAR(50)     NOT NULL,
-    phone           VARCHAR(15)     NOT NULL
+    phone           VARCHAR(15)     NOT NULL,
+
+    CONSTRAINT chk_visitor_phone_format
+        CHECK (phone ~ '^(\+91)?[6-9][0-9]{9}$'),
+
+    CONSTRAINT chk_visitor_name_format
+        CHECK (name ~ '^[A-Za-z][A-Za-z\s\.]*$')
 );
 
 -- ----------------------------------------------------------------------------

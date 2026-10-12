@@ -71,13 +71,32 @@ function Field({ label, children }) {
   );
 }
 
-function TextInput({ value, onChange, type = "text", required = false }) {
+function TextInput({
+  value,
+  onChange,
+  type = "text",
+  required = false,
+  placeholder = "",
+  pattern,
+  maxLength,
+  min,
+  max,
+  step,
+  title,
+}) {
   return (
     <input
       type={type}
       value={value}
       onChange={(e) => onChange(e.target.value)}
       required={required}
+      placeholder={placeholder}
+      pattern={pattern}
+      maxLength={maxLength}
+      min={min}
+      max={max}
+      step={step}
+      title={title}
       className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100"
     />
   );
@@ -251,9 +270,23 @@ function RecordPage({ page, data, refreshData, currentUser }) {
   const [modal, setModal] = useState(false);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [statusError, setStatusError] = useState("");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [form, setForm] = useState({});
+  // Optimistic local status overrides: { "fee:12": "Paid", "fine:7": "Pending", ... }
+  const [localStatuses, setLocalStatuses] = useState({});
   const navigate = useNavigate();
+
+  // Helper: get the display status from local override or DB row
+  const getStatus = (type, id, row) => localStatuses[`${type}:${id}`] ?? row.status;
+
+  // Mark status locally for instant feedback
+  const setOptimisticStatus = (type, id, status) =>
+    setLocalStatuses((prev) => ({ ...prev, [`${type}:${id}`]: status }));
+
+  // Rollback optimistic status on failure
+  const rollbackStatus = (type, id) =>
+    setLocalStatuses((prev) => { const n = { ...prev }; delete n[`${type}:${id}`]; return n; });
 
   const setField = (key, value) => setForm((old) => ({ ...old, [key]: value }));
 
@@ -323,23 +356,98 @@ function RecordPage({ page, data, refreshData, currentUser }) {
     e.preventDefault();
     setMessage("");
     setErrorMessage("");
+
+    const indianPhoneRegex = /^(\+91)?[6-9]\d{9}$/;
+    const regNoRegex = /^REG\d{7}$/;
+    const nameRegex = /^[A-Za-z][A-Za-z\s.]*$/;
+
+    // Pattern validations conforming to Indian mobile standards and mock data
+    if (form.phone && !indianPhoneRegex.test(form.phone.trim())) {
+      setErrorMessage("Mobile number must be a valid 10-digit Indian phone number starting with 6, 7, 8, or 9 (optional '+91' prefix, e.g. 9811122201).");
+      return;
+    }
+
+    if (page === "/students") {
+      const cleanReg = (form.reg_no || "").trim().toUpperCase();
+      if (!regNoRegex.test(cleanReg)) {
+        setErrorMessage("Registration number must be exactly 10 characters: 'REG' followed by 7 digits (e.g. REG2024001).");
+        return;
+      }
+      if (form.fname && !nameRegex.test(form.fname.trim())) {
+        setErrorMessage("First name must contain letters, spaces, or dots only.");
+        return;
+      }
+      if (form.lname && !nameRegex.test(form.lname.trim())) {
+        setErrorMessage("Last name must contain letters, spaces, or dots only.");
+        return;
+      }
+      if (!form.phone) {
+        setErrorMessage("Mobile number is required.");
+        return;
+      }
+      if (form.room_no) {
+        const rNo = Number(form.room_no);
+        if (isNaN(rNo) || rNo < 100 || rNo > 999) {
+          setErrorMessage("Room number must be between 100 and 999.");
+          return;
+        }
+      }
+    } else if (page === "/visitors") {
+      if (form.name && !nameRegex.test(form.name.trim())) {
+        setErrorMessage("Visitor name must contain letters, spaces, or dots only.");
+        return;
+      }
+      if (!form.phone) {
+        setErrorMessage("Visitor phone number is required.");
+        return;
+      }
+    } else if (page === "/rooms") {
+      const rNo = Number(form.room_no);
+      if (isNaN(rNo) || rNo < 100 || rNo > 999) {
+        setErrorMessage("Room number must be between 100 and 999.");
+        return;
+      }
+      const cap = Number(form.capacity);
+      if (isNaN(cap) || cap < 1 || cap > 10) {
+        setErrorMessage("Room capacity must be between 1 and 10.");
+        return;
+      }
+    } else if (page === "/fees-fines") {
+      const amt = Number(form.amount);
+      if (isNaN(amt) || amt <= 0) {
+        setErrorMessage("Amount must be greater than 0.");
+        return;
+      }
+    } else if (page === "/mess") {
+      const cost = Number(form.cost);
+      if (isNaN(cost) || cost <= 0) {
+        setErrorMessage("Mess cost must be greater than 0.");
+        return;
+      }
+    } else if (page === "/maintenance" || page === "/complaints") {
+      if (!form.description || form.description.trim().length < 5) {
+        setErrorMessage("Description must be at least 5 characters.");
+        return;
+      }
+    }
+
     try {
       if (page === "/rooms") {
         const roomHostelId = isWarden ? currentUser.hostel_id : Number(form.hostel_id);
         await hostelService.createRoom({
           hostel_id: roomHostelId,
           room_no: Number(form.room_no),
-          type: form.type || "Double AC",
+          type: form.type || "Double Sharing AC",
           capacity: Number(form.capacity),
         });
       } else if (page === "/students") {
         // Enforce warden's hostel when student is added by warden
         const studentHostelId = isWarden ? currentUser.hostel_id : (form.hostel_id ? Number(form.hostel_id) : null);
         await studentService.create({
-          fname: form.fname,
-          lname: form.lname,
-          reg_no: form.reg_no,
-          phone: form.phone,
+          fname: form.fname.trim(),
+          lname: form.lname.trim(),
+          reg_no: form.reg_no.trim().toUpperCase(),
+          phone: form.phone.trim(),
           hostel_id: studentHostelId,
           room_no: form.room_no ? Number(form.room_no) : null,
           allot_date: form.room_no ? new Date().toISOString().split("T")[0] : null,
@@ -359,9 +467,9 @@ function RecordPage({ page, data, refreshData, currentUser }) {
         });
       } else if (page === "/visitors") {
         await visitorService.createVisitor({
-          name: form.name,
-          relation: form.relation,
-          phone: form.phone,
+          name: form.name.trim(),
+          relation: form.relation || "Father",
+          phone: form.phone.trim(),
         });
       } else if (page === "/maintenance") {
         const maintHostelId = isWarden ? currentUser.hostel_id : Number(form.hostel_id);
@@ -391,13 +499,20 @@ function RecordPage({ page, data, refreshData, currentUser }) {
   }
 
   async function handleUpdateStatus(row, newStatus) {
+    setStatusError("");
+    // Determine key for optimistic update
+    let type, id;
+    if (page === "/fees-fines")       { type = "fee";        id = row.fee_id; }
+    else if (page === "/maintenance") { type = "maintenance"; id = row.request_id; }
+    else if (page === "/complaints")  { type = "complaint";   id = row.complaint_id; }
+    else if (page === "/attendance")  { type = "attendance";  id = `${row.student_id}_${row.date}`; }
+
+    // Optimistically update UI instantly
+    if (type) setOptimisticStatus(type, id, newStatus);
+
     try {
       if (page === "/attendance") {
-        await attendanceService.mark({
-          student_id: row.student_id,
-          date: date,
-          status: newStatus,
-        });
+        await attendanceService.mark({ student_id: row.student_id, date: date, status: newStatus });
       } else if (page === "/fees-fines") {
         await feeService.updateFeeStatus(row.fee_id, newStatus);
       } else if (page === "/maintenance") {
@@ -407,17 +522,23 @@ function RecordPage({ page, data, refreshData, currentUser }) {
       }
       refreshData();
     } catch (err) {
-      alert("Error updating status: " + err.message);
+      // Rollback optimistic update on failure
+      if (type) rollbackStatus(type, id);
+      setStatusError("Failed to update status: " + (err.message || "Unknown error"));
     }
   }
 
   async function handleToggleFine(fid, currentStatus) {
+    setStatusError("");
+    const next = currentStatus === "Paid" ? "Pending" : "Paid";
+    // Optimistic update
+    setOptimisticStatus("fine", fid, next);
     try {
-      const next = currentStatus === "Paid" ? "Pending" : "Paid";
       await feeService.updateFineStatus(fid, next);
       refreshData();
     } catch (err) {
-      alert("Error updating fine: " + err.message);
+      rollbackStatus("fine", fid);
+      setStatusError("Failed to update fine: " + (err.message || "Unknown error"));
     }
   }
 
@@ -640,18 +761,18 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                     { key: "reg_no", label: "Reg No" },
                     { key: "amount", label: "Amount", render: (r) => `₹${Number(r.amount).toLocaleString("en-IN")}` },
                     { key: "due_date", label: "Due Date" },
-                    { key: "status", label: "Status", render: (r) => <StatusBadge status={r.status} /> },
+                    { key: "status", label: "Status", render: (r) => <StatusBadge status={getStatus("fee", r.fee_id, r)} /> },
                     {
                       key: "action",
                       label: "Toggle Status",
                       render: (r) => (
                         <select
-                          value={r.status}
+                          value={getStatus("fee", r.fee_id, r)}
                           onChange={(e) => handleUpdateStatus(r, e.target.value)}
                           className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
                         >
-                          <option>Pending</option>
-                          <option>Paid</option>
+                          <option value="Pending">Pending</option>
+                          <option value="Paid">Paid</option>
                         </select>
                       ),
                     },
@@ -689,18 +810,18 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                     },
                     { key: "room_no", label: "Room", render: (r) => r.room_no ? `Room ${r.room_no}` : "—" },
                     { key: "date", label: "Date" },
-                    { key: "status", label: "Status", render: (r) => <StatusBadge status={r.status} /> },
+                    { key: "status", label: "Status", render: (r) => <StatusBadge status={getStatus("attendance", `${r.student_id}_${r.date}`, r)} /> },
                     {
                       key: "action",
                       label: "Change Status",
                       render: (r) => (
                         <select
-                          value={r.status}
+                          value={getStatus("attendance", `${r.student_id}_${r.date}`, r)}
                           onChange={(e) => handleUpdateStatus(r, e.target.value)}
                           className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
                         >
-                          <option>Present</option>
-                          <option>Absent</option>
+                          <option value="Present">Present</option>
+                          <option value="Absent">Absent</option>
                         </select>
                       ),
                     },
@@ -719,19 +840,19 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                     { key: "room_no", label: "Room", render: (r) => r.room_no ? `Room ${r.room_no}` : "Common" },
                     { key: "description", label: "Description" },
                     { key: "date", label: "Date" },
-                    { key: "status", label: "Status", render: (r) => <StatusBadge status={r.status} /> },
+                    { key: "status", label: "Status", render: (r) => <StatusBadge status={getStatus("maintenance", r.request_id, r)} /> },
                     {
                       key: "action",
                       label: "Update",
                       render: (r) => (
                         <select
-                          value={r.status}
+                          value={getStatus("maintenance", r.request_id, r)}
                           onChange={(e) => handleUpdateStatus(r, e.target.value)}
                           className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
                         >
-                          <option>Open</option>
-                          <option>In Progress</option>
-                          <option>Resolved</option>
+                          <option value="Open">Open</option>
+                          <option value="In Progress">In Progress</option>
+                          <option value="Resolved">Resolved</option>
                         </select>
                       ),
                     },
@@ -743,19 +864,19 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                     { key: "reg_no", label: "Reg No" },
                     { key: "description", label: "Description" },
                     { key: "date", label: "Date" },
-                    { key: "status", label: "Status", render: (r) => <StatusBadge status={r.status} /> },
+                    { key: "status", label: "Status", render: (r) => <StatusBadge status={getStatus("complaint", r.complaint_id, r)} /> },
                     {
                       key: "action",
                       label: "Update",
                       render: (r) => (
                         <select
-                          value={r.status}
+                          value={getStatus("complaint", r.complaint_id, r)}
                           onChange={(e) => handleUpdateStatus(r, e.target.value)}
                           className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
                         >
-                          <option>Open</option>
-                          <option>In Progress</option>
-                          <option>Resolved</option>
+                          <option value="Open">Open</option>
+                          <option value="In Progress">In Progress</option>
+                          <option value="Resolved">Resolved</option>
                         </select>
                       ),
                     },
@@ -765,6 +886,14 @@ function RecordPage({ page, data, refreshData, currentUser }) {
             rows={rows}
           />
         </section>
+      )}
+
+      {/* Status error toast */}
+      {statusError && (
+        <div className="mb-4 flex items-center justify-between gap-3 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs font-semibold text-rose-700">
+          <span>{statusError}</span>
+          <button onClick={() => setStatusError("")} className="ml-auto text-rose-500 hover:text-rose-700 font-bold text-sm leading-none">&times;</button>
+        </div>
       )}
 
       {/* Disciplinary Fines Table in Fees View */}
@@ -783,22 +912,25 @@ function RecordPage({ page, data, refreshData, currentUser }) {
               { key: "reg_no", label: "Reg No" },
               { key: "reason", label: "Infraction Reason" },
               { key: "amount", label: "Amount", render: (r) => `₹${Number(r.amount).toLocaleString("en-IN")}` },
-              { key: "status", label: "Status", render: (r) => <StatusBadge status={r.status} /> },
+              { key: "status", label: "Status", render: (r) => <StatusBadge status={getStatus("fine", r.fid, r)} /> },
               {
                 key: "action",
                 label: "Toggle Status",
-                render: (r) => (
-                  <button
-                    onClick={() => handleToggleFine(r.fid, r.status)}
-                    className={`rounded-lg px-2.5 py-1 text-xs font-bold transition ${
-                      r.status === "Paid"
-                        ? "border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100"
-                        : "border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                    }`}
-                  >
-                    Mark {r.status === "Paid" ? "Pending" : "Paid"}
-                  </button>
-                ),
+                render: (r) => {
+                  const fineStatus = getStatus("fine", r.fid, r);
+                  return (
+                    <button
+                      onClick={() => handleToggleFine(r.fid, fineStatus)}
+                      className={`rounded-lg px-2.5 py-1 text-xs font-bold transition ${
+                        fineStatus === "Paid"
+                          ? "border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100"
+                          : "border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                      }`}
+                    >
+                      Mark {fineStatus === "Paid" ? "Pending" : "Paid"}
+                    </button>
+                  );
+                },
               },
             ]}
             rows={isWarden ? data.fines.filter((f) => scopedStudentIds.has(f.student_id)) : data.fines}
@@ -808,8 +940,13 @@ function RecordPage({ page, data, refreshData, currentUser }) {
 
       {/* Add Modal */}
       {modal && (
-        <Modal title={`Add ${current.title} Record`} onClose={() => setModal(false)}>
+        <Modal title={`Add ${current.title} Record`} onClose={() => { setModal(false); setErrorMessage(""); }}>
           <form onSubmit={handleAddRecord} className="space-y-4">
+            {errorMessage && (
+              <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs font-semibold text-rose-700">
+                {errorMessage}
+              </div>
+            )}
             {current.fields.map((key) => (
               <Field key={key} label={key.replace("_", " ").toUpperCase()}>
                 {key === "date" || key === "due_date" ? (
@@ -838,14 +975,104 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                     onChange={(v) => setField(key, v)}
                     options={[{ value: "", label: "No Mess Plan" }, ...data.messPlans.map((m) => ({ value: String(m.mess_id), label: `${m.type} (₹${m.cost})` }))]}
                   />
-                ) : key === "amount" || key === "cost" || key === "capacity" || key === "room_no" ? (
-                  <TextInput type="number" value={form[key] ?? ""} onChange={(v) => setField(key, v)} required={key !== "room_no"} />
+                ) : key === "phone" ? (
+                  <div>
+                    <TextInput
+                      type="tel"
+                      value={form[key] || ""}
+                      onChange={(v) => setField(key, v)}
+                      required
+                      maxLength={13}
+                      pattern="^(\+91)?[6-9][0-9]{9}$"
+                      placeholder="e.g. 9811122201 or +919811122201"
+                      title="10-digit Indian phone number starting with 6, 7, 8, or 9 (optional +91)"
+                    />
+                    <p className="mt-1 text-[11px] text-slate-400">10 digits starting with 6, 7, 8, or 9 (optional +91)</p>
+                  </div>
+                ) : key === "reg_no" ? (
+                  <div>
+                    <TextInput
+                      type="text"
+                      value={form[key] || ""}
+                      onChange={(v) => setField(key, v.toUpperCase())}
+                      required
+                      maxLength={10}
+                      pattern="^REG[0-9]{7}$"
+                      placeholder="e.g. REG2024001"
+                      title="10 characters: REG followed by 7 digits"
+                    />
+                    <p className="mt-1 text-[11px] text-slate-400">Exactly 10 characters: REG followed by 7 digits (e.g. REG2024001)</p>
+                  </div>
+                ) : key === "fname" || key === "lname" || key === "name" ? (
+                  <TextInput
+                    type="text"
+                    value={form[key] || ""}
+                    onChange={(v) => setField(key, v)}
+                    required
+                    pattern="^[A-Za-z][A-Za-z\s\.]*$"
+                    placeholder={key === "fname" ? "e.g. Rahul" : key === "lname" ? "e.g. Nair" : "e.g. K. Radhakrishnan"}
+                    title="Letters, spaces, or dots only"
+                  />
+                ) : key === "relation" ? (
+                  <SelectInput
+                    value={form[key] || "Father"}
+                    onChange={(v) => setField(key, v)}
+                    options={[
+                      { value: "Father", label: "Father" },
+                      { value: "Mother", label: "Mother" },
+                      { value: "Guardian", label: "Guardian" },
+                      { value: "Brother", label: "Brother" },
+                      { value: "Sister", label: "Sister" },
+                    ]}
+                  />
+                ) : key === "type" && page === "/rooms" ? (
+                  <SelectInput
+                    value={form[key] || "Double Sharing AC"}
+                    onChange={(v) => setField(key, v)}
+                    options={[
+                      { value: "Double Sharing AC", label: "Double Sharing AC" },
+                      { value: "Double Sharing Non-AC", label: "Double Sharing Non-AC" },
+                      { value: "Single Deluxe", label: "Single Deluxe" },
+                      { value: "Triple Sharing Non-AC", label: "Triple Sharing Non-AC" },
+                    ]}
+                  />
+                ) : key === "room_no" ? (
+                  <TextInput
+                    type="number"
+                    value={form[key] ?? ""}
+                    onChange={(v) => setField(key, v)}
+                    required={page === "/rooms"}
+                    min={100}
+                    max={999}
+                    placeholder="e.g. 101 (100–999)"
+                  />
+                ) : key === "capacity" ? (
+                  <TextInput
+                    type="number"
+                    value={form[key] ?? ""}
+                    onChange={(v) => setField(key, v)}
+                    required
+                    min={1}
+                    max={10}
+                    placeholder="e.g. 2 (1–10)"
+                  />
+                ) : key === "amount" || key === "cost" ? (
+                  <TextInput
+                    type="number"
+                    value={form[key] ?? ""}
+                    onChange={(v) => setField(key, v)}
+                    required
+                    min={1}
+                    step={1}
+                    placeholder={key === "cost" ? "e.g. 4500" : "e.g. 45000"}
+                  />
                 ) : key === "description" ? (
                   <textarea
                     value={form[key] || ""}
                     onChange={(e) => setField(key, e.target.value)}
                     required
                     rows={3}
+                    placeholder="Provide details (at least 5 characters)..."
                     className="w-full rounded-xl border border-slate-200 p-3 text-sm outline-none focus:border-brand-500"
                   />
                 ) : (
@@ -854,7 +1081,7 @@ function RecordPage({ page, data, refreshData, currentUser }) {
               </Field>
             ))}
             <div className="flex justify-end gap-3 pt-3">
-              <Button secondary onClick={() => setModal(false)}>Cancel</Button>
+              <Button secondary onClick={() => { setModal(false); setErrorMessage(""); }}>Cancel</Button>
               <button type="submit" className="rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-700">
                 Save to Database
               </button>
