@@ -1129,7 +1129,7 @@ function RecordPage({ page, data, refreshData, currentUser }) {
             page === "/fees-fines"
               ? feeFineType === "fine"
                 ? "Issue Disciplinary Fine"
-                : "Add Hostel / Mess Fee Record"
+                : "Add Fee Record"
               : `Add ${current.title} Record`
           }
           onClose={() => { setModal(false); setErrorMessage(""); }}
@@ -1138,39 +1138,6 @@ function RecordPage({ page, data, refreshData, currentUser }) {
             {errorMessage && (
               <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs font-semibold text-rose-700">
                 {errorMessage}
-              </div>
-            )}
-
-            {page === "/fees-fines" && (
-              <div className="flex rounded-xl bg-slate-100 p-1 mb-4">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setFeeFineType("fee");
-                    setErrorMessage("");
-                  }}
-                  className={`flex-1 rounded-lg py-2 text-xs font-bold transition flex items-center justify-center gap-1.5 ${
-                    feeFineType === "fee"
-                      ? "bg-white text-brand-700 shadow-sm"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  <Wallet size={15} /> Fee Record (Hostel / Mess)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setFeeFineType("fine");
-                    setErrorMessage("");
-                  }}
-                  className={`flex-1 rounded-lg py-2 text-xs font-bold transition flex items-center justify-center gap-1.5 ${
-                    feeFineType === "fine"
-                      ? "bg-white text-rose-700 shadow-sm"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  <AlertTriangle size={15} /> Disciplinary Fine (With Reason)
-                </button>
               </div>
             )}
 
