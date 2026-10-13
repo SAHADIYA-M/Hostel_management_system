@@ -47,7 +47,7 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Configure CORS for React frontend (Local dev + Vercel / Netlify / Render deployments)
+# Configure CORS for React frontend (Local dev + Vercel + Railway deployments)
 cors_origins = list(settings.cors_origins_list)
 for origin in ["http://localhost:5173", "http://127.0.0.1:5173"]:
     if origin not in cors_origins:
@@ -56,7 +56,7 @@ for origin in ["http://localhost:5173", "http://127.0.0.1:5173"]:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
-    allow_origin_regex=r"^(https?://(localhost|127\.0\.0\.1)(:[0-9]+)?|https://.*\.vercel\.app|https://.*\.netlify\.app|https://.*\.onrender\.com|https://.*\.railway\.app)$",
+    allow_origin_regex=r"^(https?://(localhost|127\.0\.0\.1)(:[0-9]+)?|https://.*\.vercel\.app|https://.*\.netlify\.app|https://.*\.railway\.app)$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
