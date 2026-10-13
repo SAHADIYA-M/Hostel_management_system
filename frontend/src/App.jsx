@@ -1087,19 +1087,6 @@ function RecordPage({ page, data, refreshData, currentUser }) {
               <span className="text-xs font-semibold text-slate-500">
                 {filteredFines.length} fine records
               </span>
-              <button
-                type="button"
-                onClick={() => {
-                  setFeeFineType("fine");
-                  setForm({ student_id: scopedStudents[0]?.student_id ? String(scopedStudents[0]?.student_id) : "", status: "Pending" });
-                  setMessage("");
-                  setErrorMessage("");
-                  setModal(true);
-                }}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-rose-700 shadow-sm transition"
-              >
-                <Plus size={14} /> Add Fine Record
-              </button>
             </div>
           </div>
           <DataTable
