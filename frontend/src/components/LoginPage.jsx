@@ -245,74 +245,7 @@ export default function LoginPage({ onLoginSuccess }) {
           </form>
         )}
 
-        {/* Quick Demo Credentials */}
-        <div className="mt-6 border-t border-slate-100 pt-5">
-          <p className="mb-2.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-            Quick Fill Demo Accounts:
-          </p>
-          <div className="flex flex-wrap gap-1.5">
-            <button
-              type="button"
-              onClick={() => {
-                setRole("student");
-                setStudentRegNo("REG2024007");
-                setStudentPhone("9811122207");
-                setError("");
-              }}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 transition"
-            >
-              👩 Sahadiya M (REG2024007)
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setRole("student");
-                setStudentRegNo("REG2024001");
-                setStudentPhone("9811122201");
-                setError("");
-              }}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 transition"
-            >
-              👨 Adithyan VT (REG2024001)
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setRole("student");
-                setStudentRegNo("REG2024008");
-                setStudentPhone("9811122208");
-                setError("");
-              }}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 transition"
-            >
-              👩 Rose Sharlin (REG2024008)
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setRole("student");
-                setStudentRegNo("REG2024002");
-                setStudentPhone("9811122202");
-                setError("");
-              }}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 transition"
-            >
-              👨 Bharath P (REG2024002)
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setRole("warden");
-                setWardenId("1");
-                setWardenPhone("9876543210");
-                setError("");
-              }}
-              className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-700 hover:border-slate-400 hover:bg-slate-100 transition"
-            >
-              👔 Warden (ID 1)
-            </button>
-          </div>
-        </div>
+
       </div>
 
       {/* Subtle footer */}
