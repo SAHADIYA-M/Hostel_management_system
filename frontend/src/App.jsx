@@ -936,6 +936,52 @@ function RecordPage({ page, data, refreshData, currentUser }) {
         </div>
       )}
 
+      {/* Lodged Grievance Requests — shown within Maintenance page */}
+      {page === "/maintenance" && (
+        <section className="overflow-hidden rounded-2xl border border-amber-200 bg-white shadow-sm">
+          <div className="p-5 border-b border-amber-100 flex items-center justify-between bg-amber-50/60">
+            <div className="flex items-center gap-2">
+              <span className="rounded-lg bg-amber-100 p-2 text-amber-600">
+                <MessageSquare size={18} />
+              </span>
+              <div>
+                <h3 className="font-bold text-slate-900">Lodged Grievance Requests</h3>
+                <p className="text-xs text-slate-500 mt-0.5">Student complaints formally submitted to the hostel warden</p>
+              </div>
+            </div>
+            <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700">
+              {(isWarden ? data.complaints.filter((c) => scopedStudentIds.has(c.student_id)) : data.complaints).filter((c) => c.status === "Open").length} open
+            </span>
+          </div>
+          <DataTable
+            columns={[
+              { key: "complaint_id", label: "Grievance ID", render: (r) => `GRV-${r.complaint_id}` },
+              { key: "student_name", label: "Student" },
+              { key: "reg_no", label: "Reg No" },
+              { key: "description", label: "Grievance Description" },
+              { key: "date", label: "Date Lodged" },
+              { key: "status", label: "Status", render: (r) => <StatusBadge status={r.status} /> },
+              {
+                key: "action",
+                label: "Update Status",
+                render: (r) => (
+                  <select
+                    value={r.status}
+                    onChange={(e) => handleUpdateStatus(r, e.target.value)}
+                    className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
+                  >
+                    <option>Open</option>
+                    <option>In Progress</option>
+                    <option>Resolved</option>
+                  </select>
+                ),
+              },
+            ]}
+            rows={isWarden ? data.complaints.filter((c) => scopedStudentIds.has(c.student_id)) : data.complaints}
+          />
+        </section>
+      )}
+
       {/* Disciplinary Fines Table in Fees View */}
       {page === "/fees-fines" && (
         <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
