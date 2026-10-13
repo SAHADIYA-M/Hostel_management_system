@@ -145,3 +145,19 @@ def allot_student_room(student_id: int, req: StudentAllotRequest, conn=Depends(g
         except Exception as e:
             conn.rollback()
             raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.delete("/students/{student_id}", status_code=200)
+def delete_student(student_id: int, conn=Depends(get_db_connection)):
+    """Delete a student record."""
+    with conn.cursor() as cur:
+        try:
+            cur.execute("DELETE FROM hostel.student WHERE student_id = %s RETURNING student_id;", (student_id,))
+            row = cur.fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="Student not found")
+            conn.commit()
+            return {"message": "Student record deleted successfully", "student_id": student_id}
+        except Exception as e:
+            conn.rollback()
+            raise HTTPException(status_code=400, detail=str(e))

@@ -95,3 +95,19 @@ def create_visit(visit: VisitCreate, conn=Depends(get_db_connection)):
         except Exception as e:
             conn.rollback()
             raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.delete("/visitors/{visitor_id}", status_code=200)
+def delete_visitor(visitor_id: int, conn=Depends(get_db_connection)):
+    """Delete a visitor record."""
+    with conn.cursor() as cur:
+        try:
+            cur.execute("DELETE FROM hostel.visitor WHERE visitor_id = %s RETURNING visitor_id;", (visitor_id,))
+            row = cur.fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="Visitor not found")
+            conn.commit()
+            return {"message": "Visitor deleted successfully", "visitor_id": visitor_id}
+        except Exception as e:
+            conn.rollback()
+            raise HTTPException(status_code=400, detail=str(e))

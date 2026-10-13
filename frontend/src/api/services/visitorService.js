@@ -20,6 +20,11 @@ export const visitorService = {
     const response = await api.post("/visits", data);
     return response.data;
   },
+
+  async deleteVisitor(visitorId) {
+    const response = await api.delete(`/visitors/${visitorId}`);
+    return response.data;
+  },
 };
 
 export default visitorService;

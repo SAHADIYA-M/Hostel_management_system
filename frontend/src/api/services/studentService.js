@@ -20,6 +20,11 @@ export const studentService = {
     const response = await api.put(`/students/${studentId}/allot`, allotData);
     return response.data;
   },
+
+  async delete(studentId) {
+    const response = await api.delete(`/students/${studentId}`);
+    return response.data;
+  },
 };
 
 export default studentService;

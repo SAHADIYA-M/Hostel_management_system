@@ -17,6 +17,11 @@ export const feeService = {
     return response.data;
   },
 
+  async deleteFee(feeId) {
+    const response = await api.delete(`/fees/${feeId}`);
+    return response.data;
+  },
+
   // Fines
   async getFines(params = {}) {
     const response = await api.get("/fines", { params });
@@ -30,6 +35,11 @@ export const feeService = {
 
   async updateFineStatus(fid, status) {
     const response = await api.put(`/fines/${fid}/status`, { status });
+    return response.data;
+  },
+
+  async deleteFine(fid) {
+    const response = await api.delete(`/fines/${fid}`);
     return response.data;
   },
 };

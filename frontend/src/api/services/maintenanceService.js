@@ -17,6 +17,11 @@ export const maintenanceService = {
     return response.data;
   },
 
+  async delete(requestId) {
+    const response = await api.delete(`/maintenance/${requestId}`);
+    return response.data;
+  },
+
   // Student grievances & complaints
   async getAllComplaints(params = {}) {
     const response = await api.get("/complaints", { params });
@@ -30,6 +35,11 @@ export const maintenanceService = {
 
   async updateComplaintStatus(complaintId, status) {
     const response = await api.put(`/complaints/${complaintId}/status`, { status });
+    return response.data;
+  },
+
+  async deleteComplaint(complaintId) {
+    const response = await api.delete(`/complaints/${complaintId}`);
     return response.data;
   },
 };

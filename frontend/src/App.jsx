@@ -12,7 +12,7 @@ import {
   LayoutDashboard, Building2, DoorOpen, Users, Wallet,
   Utensils, CalendarCheck, UserRound, Wrench, MessageSquare,
   Menu, Search, Plus, ArrowRight, X, CheckCircle2, User,
-  Filter, Shield, RefreshCw, AlertCircle, AlertTriangle
+  Filter, Shield, RefreshCw, AlertCircle, AlertTriangle, Trash2
 } from "lucide-react";
 
 import StatusBadge from "./components/StatusBadge.jsx";
@@ -214,10 +214,10 @@ function Dashboard({ currentUser, data, refreshData }) {
             {currentUser?.hostel_name ? `Warden Administration • ${currentUser.hostel_name}` : "Warden Administration"}
           </p>
           <h2 className="mt-1 text-3xl font-extrabold tracking-tight text-slate-900">Hostel Command Center</h2>
-          <p className="mt-1 text-slate-500">Live operational data synchronized with PostgreSQL database.</p>
+          <p className="mt-1 text-slate-500">Live operational data overview.</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button secondary onClick={refreshData}><RefreshCw size={15} /> Refresh DB</Button>
+          <Button secondary onClick={refreshData}><RefreshCw size={15} /> Refresh Data</Button>
         </div>
       </div>
 
@@ -309,6 +309,7 @@ function RecordPage({ page, data, refreshData, currentUser }) {
   const [selectedHostel, setSelectedHostel] = useState(isWarden ? String(currentUser.hostel_id) : "all");
   const [modal, setModal] = useState(false);
   const [feeFineType, setFeeFineType] = useState("fee"); // "fee" or "fine"
+  const [deleteTarget, setDeleteTarget] = useState(null); // { type, id, label }
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [statusError, setStatusError] = useState("");
@@ -317,6 +318,30 @@ function RecordPage({ page, data, refreshData, currentUser }) {
   // Optimistic local status overrides: { "fee:12": "Paid", "fine:7": "Pending", ... }
   const [localStatuses, setLocalStatuses] = useState({});
   const navigate = useNavigate();
+
+  function requestDelete(type, id, label) {
+    setDeleteTarget({ type, id, label });
+  }
+
+  async function handleConfirmDelete() {
+    if (!deleteTarget) return;
+    const { type, id } = deleteTarget;
+    setDeleteTarget(null);
+    setMessage("");
+    setErrorMessage("");
+    try {
+      if (type === "fee") await feeService.deleteFee(id);
+      else if (type === "fine") await feeService.deleteFine(id);
+      else if (type === "maintenance") await maintenanceService.delete(id);
+      else if (type === "complaint") await maintenanceService.deleteComplaint(id);
+      else if (type === "student") await studentService.delete(id);
+      else if (type === "visitor") await visitorService.deleteVisitor(id);
+      setMessage("Record deleted successfully.");
+      refreshData();
+    } catch (err) {
+      setErrorMessage(err.message || "Failed to delete record.");
+    }
+  }
 
   // Helper: get the display status from local override or DB row
   const getStatus = (type, id, row) => localStatuses[`${type}:${id}`] ?? row.status;
@@ -544,7 +569,6 @@ function RecordPage({ page, data, refreshData, currentUser }) {
             amount: Number(form.amount),
             status: form.status || "Pending",
           });
-          setMessage(`Disciplinary fine record of ₹${Number(form.amount).toLocaleString("en-IN")} issued successfully with reason.`);
         } else {
           await feeService.createFee({
             student_id: studentId,
@@ -552,7 +576,6 @@ function RecordPage({ page, data, refreshData, currentUser }) {
             amount: Number(form.amount),
             status: form.status || "Pending",
           });
-          setMessage(`Fee record of ₹${Number(form.amount).toLocaleString("en-IN")} saved successfully.`);
         }
       } else if (page === "/mess") {
         await messService.createMessPlan({
@@ -583,7 +606,7 @@ function RecordPage({ page, data, refreshData, currentUser }) {
         });
       }
 
-      setMessage("Record saved successfully to live PostgreSQL database.");
+      setMessage("Successfully registered");
       setForm({});
       setModal(false);
       refreshData();
@@ -881,6 +904,19 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                     { key: "hostel_name", label: "Hostel", render: (r) => r.hostel_name || "Un-allotted" },
                     { key: "room_no", label: "Room", render: (r) => r.room_no ? `Room ${r.room_no}` : "Un-allotted" },
                     { key: "mess_type", label: "Mess Plan", render: (r) => r.mess_type || "None" },
+                    {
+                      key: "action",
+                      label: "Action",
+                      render: (r) => (
+                        <button
+                          onClick={() => requestDelete("student", r.student_id, `Student: ${r.fname} ${r.lname} (${r.reg_no})`)}
+                          className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
+                          title="Delete student record"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      ),
+                    },
                   ]
                 : page === "/fees-fines"
                 ? [
@@ -892,16 +928,25 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                     { key: "status", label: "Status", render: (r) => <StatusBadge status={getStatus("fee", r.fee_id, r)} /> },
                     {
                       key: "action",
-                      label: "Toggle Status",
+                      label: "Action",
                       render: (r) => (
-                        <select
-                          value={getStatus("fee", r.fee_id, r)}
-                          onChange={(e) => handleUpdateStatus(r, e.target.value)}
-                          className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
-                        >
-                          <option value="Pending">Pending</option>
-                          <option value="Paid">Paid</option>
-                        </select>
+                        <div className="flex items-center gap-2">
+                          <select
+                            value={getStatus("fee", r.fee_id, r)}
+                            onChange={(e) => handleUpdateStatus(r, e.target.value)}
+                            className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
+                          >
+                            <option value="Pending">Pending</option>
+                            <option value="Paid">Paid</option>
+                          </select>
+                          <button
+                            onClick={() => requestDelete("fee", r.fee_id, `Fee: FEE-${r.fee_id} (₹${Number(r.amount).toLocaleString("en-IN")}) - ${r.student_name}`)}
+                            className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
+                            title="Delete fee record"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        </div>
                       ),
                     },
                   ]
@@ -960,6 +1005,19 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                     { key: "name", label: "Visitor Name" },
                     { key: "relation", label: "Relation" },
                     { key: "phone", label: "Phone" },
+                    {
+                      key: "action",
+                      label: "Action",
+                      render: (r) => (
+                        <button
+                          onClick={() => requestDelete("visitor", r.visitor_id, `Visitor: ${r.name} (${r.relation})`)}
+                          className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
+                          title="Delete visitor"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      ),
+                    },
                   ]
                 : page === "/maintenance"
                 ? [
@@ -971,17 +1029,26 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                     { key: "status", label: "Status", render: (r) => <StatusBadge status={getStatus("maintenance", r.request_id, r)} /> },
                     {
                       key: "action",
-                      label: "Update",
+                      label: "Action",
                       render: (r) => (
-                        <select
-                          value={getStatus("maintenance", r.request_id, r)}
-                          onChange={(e) => handleUpdateStatus(r, e.target.value)}
-                          className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
-                        >
-                          <option value="Open">Open</option>
-                          <option value="In Progress">In Progress</option>
-                          <option value="Resolved">Resolved</option>
-                        </select>
+                        <div className="flex items-center gap-2">
+                          <select
+                            value={getStatus("maintenance", r.request_id, r)}
+                            onChange={(e) => handleUpdateStatus(r, e.target.value)}
+                            className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
+                          >
+                            <option value="Open">Open</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Resolved">Resolved</option>
+                          </select>
+                          <button
+                            onClick={() => requestDelete("maintenance", r.request_id, `Maintenance: REQ-${r.request_id} (${r.description})`)}
+                            className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
+                            title="Delete maintenance request"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        </div>
                       ),
                     },
                   ]
@@ -995,17 +1062,26 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                     { key: "status", label: "Status", render: (r) => <StatusBadge status={getStatus("complaint", r.complaint_id, r)} /> },
                     {
                       key: "action",
-                      label: "Update",
+                      label: "Action",
                       render: (r) => (
-                        <select
-                          value={getStatus("complaint", r.complaint_id, r)}
-                          onChange={(e) => handleUpdateStatus(r, e.target.value)}
-                          className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
-                        >
-                          <option value="Open">Open</option>
-                          <option value="In Progress">In Progress</option>
-                          <option value="Resolved">Resolved</option>
-                        </select>
+                        <div className="flex items-center gap-2">
+                          <select
+                            value={getStatus("complaint", r.complaint_id, r)}
+                            onChange={(e) => handleUpdateStatus(r, e.target.value)}
+                            className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
+                          >
+                            <option value="Open">Open</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Resolved">Resolved</option>
+                          </select>
+                          <button
+                            onClick={() => requestDelete("complaint", r.complaint_id, `Complaint: CMP-${r.complaint_id} (${r.description})`)}
+                            className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
+                            title="Delete complaint"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        </div>
                       ),
                     },
                   ]
@@ -1051,17 +1127,26 @@ function RecordPage({ page, data, refreshData, currentUser }) {
               { key: "status", label: "Status", render: (r) => <StatusBadge status={r.status} /> },
               {
                 key: "action",
-                label: "Update Status",
+                label: "Action",
                 render: (r) => (
-                  <select
-                    value={r.status}
-                    onChange={(e) => handleUpdateStatus(r, e.target.value)}
-                    className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
-                  >
-                    <option>Open</option>
-                    <option>In Progress</option>
-                    <option>Resolved</option>
-                  </select>
+                  <div className="flex items-center gap-2">
+                    <select
+                      value={r.status}
+                      onChange={(e) => handleUpdateStatus(r, e.target.value)}
+                      className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
+                    >
+                      <option>Open</option>
+                      <option>In Progress</option>
+                      <option>Resolved</option>
+                    </select>
+                    <button
+                      onClick={() => requestDelete("complaint", r.complaint_id, `Grievance: GRV-${r.complaint_id} (${r.description})`)}
+                      className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
+                      title="Delete grievance"
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
                 ),
               },
             ]}
@@ -1099,20 +1184,29 @@ function RecordPage({ page, data, refreshData, currentUser }) {
               { key: "status", label: "Status", render: (r) => <StatusBadge status={getStatus("fine", r.fid, r)} /> },
               {
                 key: "action",
-                label: "Toggle Status",
+                label: "Action",
                 render: (r) => {
                   const fineStatus = getStatus("fine", r.fid, r);
                   return (
-                    <button
-                      onClick={() => handleToggleFine(r.fid, fineStatus)}
-                      className={`rounded-lg px-2.5 py-1 text-xs font-bold transition ${
-                        fineStatus === "Paid"
-                          ? "border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100"
-                          : "border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
-                      }`}
-                    >
-                      Mark {fineStatus === "Paid" ? "Pending" : "Paid"}
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleToggleFine(r.fid, fineStatus)}
+                        className={`rounded-lg px-2.5 py-1 text-xs font-bold transition ${
+                          fineStatus === "Paid"
+                            ? "border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100"
+                            : "border border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                        }`}
+                      >
+                        Mark {fineStatus === "Paid" ? "Pending" : "Paid"}
+                      </button>
+                      <button
+                        onClick={() => requestDelete("fine", r.fid, `Fine: FINE-${r.fid} (₹${Number(r.amount).toLocaleString("en-IN")}) - ${r.student_name}`)}
+                        className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
+                        title="Delete fine record"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
                   );
                 },
               },
@@ -1329,6 +1423,36 @@ function RecordPage({ page, data, refreshData, currentUser }) {
           </form>
         </Modal>
       )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteTarget && (
+        <Modal title="Confirm Deletion" onClose={() => setDeleteTarget(null)}>
+          <div className="space-y-4">
+            <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800 flex items-start gap-3">
+              <AlertTriangle className="text-rose-600 shrink-0 mt-0.5" size={20} />
+              <div>
+                <p className="font-bold text-slate-900">Are you sure you want to delete this record?</p>
+                <p className="mt-1 text-xs text-rose-700 font-medium">
+                  {deleteTarget.label}
+                </p>
+                <p className="mt-1 text-xs text-slate-500">
+                  This action cannot be undone and will permanently remove this record from the database.
+                </p>
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 pt-2">
+              <Button secondary onClick={() => setDeleteTarget(null)}>Cancel</Button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                className="rounded-xl bg-rose-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-rose-700 transition"
+              >
+                Confirm Delete
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }
@@ -1419,7 +1543,7 @@ function AppShell({ currentUser, onLogout }) {
             </div>
             <div>
               <h1 className="font-bold text-slate-900">Hostel<span className="text-brand-600">MS</span></h1>
-              <p className="text-xs text-slate-400">PostgreSQL Edition</p>
+              <p className="text-xs text-slate-400">Hostel Portal</p>
             </div>
           </div>
         </div>
@@ -1447,13 +1571,6 @@ function AppShell({ currentUser, onLogout }) {
         </nav>
 
         <div className="border-t border-slate-100 p-4 bg-slate-50/50 space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-500">API Backend</span>
-            <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${backendError ? "bg-rose-100 text-rose-700" : "bg-emerald-100 text-emerald-700"}`}>
-              {backendError ? "Offline" : "Connected"}
-            </span>
-          </div>
-          <p className="text-[11px] text-slate-400">FastAPI + psycopg 3 + Supabase</p>
           <div className="rounded-xl bg-sky-50 border border-sky-100 px-3 py-2">
             <p className="text-[11px] font-bold text-sky-800 truncate">{currentUser?.name}</p>
             <p className="text-[10px] text-sky-600">Warden • {currentUser?.hostel_name}</p>

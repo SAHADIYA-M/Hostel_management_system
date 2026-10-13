@@ -181,3 +181,27 @@ def update_complaint_status(complaint_id: int, req: ComplaintStatusUpdate, conn=
         cur.execute("SELECT CONCAT(fname, ' ', lname) AS student_name, reg_no FROM hostel.student WHERE student_id = %s;", (row["student_id"],))
         s_row = cur.fetchone() or {}
         return {**row, **s_row}
+
+
+@router.delete("/maintenance/{request_id}", status_code=200)
+def delete_maintenance_request(request_id: int, conn=Depends(get_db_connection)):
+    """Delete a maintenance work order."""
+    with conn.cursor() as cur:
+        cur.execute("DELETE FROM hostel.maintenance WHERE request_id = %s RETURNING request_id;", (request_id,))
+        row = cur.fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="Maintenance request not found")
+        conn.commit()
+        return {"message": "Maintenance request deleted successfully", "request_id": request_id}
+
+
+@router.delete("/complaints/{complaint_id}", status_code=200)
+def delete_complaint(complaint_id: int, conn=Depends(get_db_connection)):
+    """Delete a student complaint / grievance."""
+    with conn.cursor() as cur:
+        cur.execute("DELETE FROM hostel.complaint WHERE complaint_id = %s RETURNING complaint_id;", (complaint_id,))
+        row = cur.fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="Complaint not found")
+        conn.commit()
+        return {"message": "Complaint deleted successfully", "complaint_id": complaint_id}

@@ -161,3 +161,27 @@ def update_fine_status(fid: int, req: FineStatusUpdate, conn=Depends(get_db_conn
             raise HTTPException(status_code=404, detail="Fine record not found")
         conn.commit()
         return row
+
+
+@router.delete("/fees/{fee_id}", status_code=200)
+def delete_fee(fee_id: int, conn=Depends(get_db_connection)):
+    """Delete a fee record."""
+    with conn.cursor() as cur:
+        cur.execute("DELETE FROM hostel.fee WHERE fee_id = %s RETURNING fee_id;", (fee_id,))
+        row = cur.fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="Fee record not found")
+        conn.commit()
+        return {"message": "Fee record deleted successfully", "fee_id": fee_id}
+
+
+@router.delete("/fines/{fid}", status_code=200)
+def delete_fine(fid: int, conn=Depends(get_db_connection)):
+    """Delete a fine record."""
+    with conn.cursor() as cur:
+        cur.execute("DELETE FROM hostel.fine WHERE fid = %s RETURNING fid;", (fid,))
+        row = cur.fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="Fine record not found")
+        conn.commit()
+        return {"message": "Fine record deleted successfully", "fid": fid}
