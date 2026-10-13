@@ -12,7 +12,7 @@ import {
   LayoutDashboard, Building2, DoorOpen, Users, Wallet,
   Utensils, CalendarCheck, UserRound, Wrench, MessageSquare,
   Menu, Search, Plus, ArrowRight, X, CheckCircle2, User,
-  Filter, Shield, RefreshCw, AlertCircle
+  Filter, Shield, RefreshCw, AlertCircle, AlertTriangle
 } from "lucide-react";
 
 import StatusBadge from "./components/StatusBadge.jsx";
@@ -308,6 +308,7 @@ function RecordPage({ page, data, refreshData, currentUser }) {
   const [search, setSearch] = useState("");
   const [selectedHostel, setSelectedHostel] = useState(isWarden ? String(currentUser.hostel_id) : "all");
   const [modal, setModal] = useState(false);
+  const [feeFineType, setFeeFineType] = useState("fee"); // "fee" or "fine"
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [statusError, setStatusError] = useState("");
@@ -334,7 +335,10 @@ function RecordPage({ page, data, refreshData, currentUser }) {
     "/hostels": { title: "Hostels & Staff", fields: [] },
     "/rooms": { title: "Rooms & Allotment", fields: ["hostel_id", "room_no", "type", "capacity"] },
     "/students": { title: "Students", fields: ["fname", "lname", "reg_no", "phone", "hostel_id", "room_no", "mess_id"] },
-    "/fees-fines": { title: "Fees & Fines", fields: ["due_date", "amount", "student_id"] },
+    "/fees-fines": {
+      title: "Fees & Fines",
+      fields: feeFineType === "fine" ? ["student_id", "amount", "reason", "status"] : ["student_id", "amount", "due_date", "status"],
+    },
     "/mess": { title: "Mess Subscriptions", fields: ["type", "cost"] },
     "/attendance": { title: "Attendance", fields: [] },
     "/visitors": { title: "Visitors & Visits Log", fields: ["name", "relation", "phone"] },
@@ -391,6 +395,20 @@ function RecordPage({ page, data, refreshData, currentUser }) {
     }
     return result;
   }, [data, page, isWarden, currentUser, selectedHostel, search, date]);
+
+  // Scoped & filtered fines for the Disciplinary Fines section
+  const filteredFines = useMemo(() => {
+    let result = isWarden ? data.fines.filter((f) => scopedStudentIds.has(f.student_id)) : data.fines;
+    if (search.trim()) {
+      const term = search.toLowerCase();
+      result = result.filter((row) =>
+        Object.values(row).some((val) =>
+          String(val ?? "").toLowerCase().includes(term)
+        )
+      );
+    }
+    return result;
+  }, [data.fines, isWarden, scopedStudentIds, search]);
 
   async function handleAddRecord(e) {
     e.preventDefault();
@@ -458,6 +476,25 @@ function RecordPage({ page, data, refreshData, currentUser }) {
         setErrorMessage("Amount must be greater than 0.");
         return;
       }
+      if (feeFineType === "fine") {
+        if (!form.reason || form.reason.trim().length < 5) {
+          setErrorMessage("Fine reason must be at least 5 characters.");
+          return;
+        }
+        if (amt > 50000) {
+          setErrorMessage("Fine amount cannot exceed ₹50,000.");
+          return;
+        }
+      } else {
+        if (!form.due_date) {
+          setErrorMessage("Due date is required for fee records.");
+          return;
+        }
+        if (amt > 200000) {
+          setErrorMessage("Fee amount cannot exceed ₹2,00,000.");
+          return;
+        }
+      }
     } else if (page === "/mess") {
       const cost = Number(form.cost);
       if (isNaN(cost) || cost <= 0) {
@@ -494,12 +531,29 @@ function RecordPage({ page, data, refreshData, currentUser }) {
           mess_id: form.mess_id ? Number(form.mess_id) : null,
         });
       } else if (page === "/fees-fines") {
-        await feeService.createFee({
-          due_date: form.due_date,
-          amount: Number(form.amount),
-          status: "Pending",
-          student_id: Number(form.student_id),
-        });
+        const studentId = Number(form.student_id || scopedStudents[0]?.student_id);
+        if (!studentId) {
+          setErrorMessage("Please select a student.");
+          return;
+        }
+
+        if (feeFineType === "fine") {
+          await feeService.createFine({
+            student_id: studentId,
+            reason: form.reason.trim(),
+            amount: Number(form.amount),
+            status: form.status || "Pending",
+          });
+          setMessage(`Disciplinary fine record of ₹${Number(form.amount).toLocaleString("en-IN")} issued successfully with reason.`);
+        } else {
+          await feeService.createFee({
+            student_id: studentId,
+            due_date: form.due_date,
+            amount: Number(form.amount),
+            status: form.status || "Pending",
+          });
+          setMessage(`Fee record of ₹${Number(form.amount).toLocaleString("en-IN")} saved successfully.`);
+        }
       } else if (page === "/mess") {
         await messService.createMessPlan({
           type: form.type,
@@ -641,7 +695,35 @@ function RecordPage({ page, data, refreshData, currentUser }) {
             </div>
           )}
 
-          {current.fields.length > 0 && (
+          {page === "/fees-fines" ? (
+            <div className="flex items-center gap-2">
+              <Button
+                secondary
+                onClick={() => {
+                  setFeeFineType("fee");
+                  setForm({ student_id: scopedStudents[0]?.student_id ? String(scopedStudents[0]?.student_id) : "", status: "Pending" });
+                  setMessage("");
+                  setErrorMessage("");
+                  setModal(true);
+                }}
+              >
+                <Plus size={17} /> Add Fee
+              </Button>
+              <button
+                type="button"
+                onClick={() => {
+                  setFeeFineType("fine");
+                  setForm({ student_id: scopedStudents[0]?.student_id ? String(scopedStudents[0]?.student_id) : "", status: "Pending" });
+                  setMessage("");
+                  setErrorMessage("");
+                  setModal(true);
+                }}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-rose-700 transition shadow-sm"
+              >
+                <AlertTriangle size={17} /> Add Fine
+              </button>
+            </div>
+          ) : current.fields.length > 0 && (
             <Button onClick={() => { setForm({}); setMessage(""); setErrorMessage(""); setModal(true); }}>
               <Plus size={17} /> Add record
             </Button>
@@ -769,6 +851,12 @@ function RecordPage({ page, data, refreshData, currentUser }) {
       {/* Main Table for Lists */}
       {page !== "/hostels" && page !== "/rooms" && (
         <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+          {page === "/fees-fines" && (
+            <div className="px-5 pt-4 pb-1">
+              <h3 className="font-bold text-slate-900">Hostel & Mess Fee Records</h3>
+              <p className="text-xs text-slate-500">Term fees and recurring mess billing dues</p>
+            </div>
+          )}
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 p-4">
             <div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2">
               <Search size={17} className="text-slate-400" />
@@ -984,12 +1072,35 @@ function RecordPage({ page, data, refreshData, currentUser }) {
 
       {/* Disciplinary Fines Table in Fees View */}
       {page === "/fees-fines" && (
-        <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="p-5 border-b border-slate-100 flex items-center justify-between">
-            <h3 className="font-bold text-slate-900">Disciplinary Fines (Separate Entity: FINE)</h3>
-            <span className="text-xs text-slate-500">
-              {(isWarden ? data.fines.filter((f) => scopedStudentIds.has(f.student_id)) : data.fines).length} fine records
-            </span>
+        <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm mt-6">
+          <div className="p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div className="flex items-center gap-2">
+                <AlertTriangle size={18} className="text-rose-600" />
+                <h3 className="font-bold text-slate-900">Disciplinary Fines (Separate Entity: FINE)</h3>
+              </div>
+              <p className="mt-0.5 text-xs text-slate-500">
+                Hostel penalties and violation fines recorded with infraction reasons
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-semibold text-slate-500">
+                {filteredFines.length} fine records
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setFeeFineType("fine");
+                  setForm({ student_id: scopedStudents[0]?.student_id ? String(scopedStudents[0]?.student_id) : "", status: "Pending" });
+                  setMessage("");
+                  setErrorMessage("");
+                  setModal(true);
+                }}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-rose-700 shadow-sm transition"
+              >
+                <Plus size={14} /> Add Fine Record
+              </button>
+            </div>
           </div>
           <DataTable
             columns={[
@@ -1019,22 +1130,76 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                 },
               },
             ]}
-            rows={isWarden ? data.fines.filter((f) => scopedStudentIds.has(f.student_id)) : data.fines}
+            rows={filteredFines}
           />
         </section>
       )}
 
       {/* Add Modal */}
       {modal && (
-        <Modal title={`Add ${current.title} Record`} onClose={() => { setModal(false); setErrorMessage(""); }}>
+        <Modal
+          title={
+            page === "/fees-fines"
+              ? feeFineType === "fine"
+                ? "Issue Disciplinary Fine"
+                : "Add Hostel / Mess Fee Record"
+              : `Add ${current.title} Record`
+          }
+          onClose={() => { setModal(false); setErrorMessage(""); }}
+        >
           <form onSubmit={handleAddRecord} className="space-y-4">
             {errorMessage && (
               <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs font-semibold text-rose-700">
                 {errorMessage}
               </div>
             )}
+
+            {page === "/fees-fines" && (
+              <div className="flex rounded-xl bg-slate-100 p-1 mb-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFeeFineType("fee");
+                    setErrorMessage("");
+                  }}
+                  className={`flex-1 rounded-lg py-2 text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                    feeFineType === "fee"
+                      ? "bg-white text-brand-700 shadow-sm"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <Wallet size={15} /> Fee Record (Hostel / Mess)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFeeFineType("fine");
+                    setErrorMessage("");
+                  }}
+                  className={`flex-1 rounded-lg py-2 text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                    feeFineType === "fine"
+                      ? "bg-white text-rose-700 shadow-sm"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <AlertTriangle size={15} /> Disciplinary Fine (With Reason)
+                </button>
+              </div>
+            )}
+
             {current.fields.map((key) => (
-              <Field key={key} label={key.replace("_", " ").toUpperCase()}>
+              <Field
+                key={key}
+                label={
+                  key === "reason"
+                    ? "REASON FOR FINE / INFRACTION"
+                    : key === "amount"
+                    ? page === "/fees-fines" && feeFineType === "fine"
+                      ? "FINE AMOUNT (₹)"
+                      : "FEE AMOUNT (₹)"
+                    : key.replace("_", " ").toUpperCase()
+                }
+              >
                 {key === "date" || key === "due_date" ? (
                   <TextInput type="date" value={form[key] || ""} onChange={(v) => setField(key, v)} required />
                 ) : key === "hostel_id" ? (
@@ -1054,6 +1219,29 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                     value={form[key] || String(scopedStudents[0]?.student_id || "")}
                     onChange={(v) => setField(key, v)}
                     options={scopedStudents.map((s) => ({ value: String(s.student_id), label: `${s.fname} ${s.lname} (${s.reg_no})` }))}
+                  />
+                ) : key === "reason" ? (
+                  <div>
+                    <textarea
+                      value={form[key] || ""}
+                      onChange={(e) => setField(key, e.target.value)}
+                      required
+                      minLength={5}
+                      maxLength={255}
+                      rows={3}
+                      placeholder="e.g. Late entry past curfew (10:30 PM), Damaged hostel room property, Unauthorized high-power appliances..."
+                      className="w-full rounded-xl border border-slate-200 p-3 text-sm outline-none focus:border-brand-500"
+                    />
+                    <p className="mt-1 text-[11px] text-slate-400">Specify the infraction or disciplinary reason (min 5 characters)</p>
+                  </div>
+                ) : key === "status" ? (
+                  <SelectInput
+                    value={form[key] || "Pending"}
+                    onChange={(v) => setField(key, v)}
+                    options={[
+                      { value: "Pending", label: "Pending (Payment Due)" },
+                      { value: "Paid", label: "Paid (Settled)" },
+                    ]}
                   />
                 ) : key === "mess_id" ? (
                   <SelectInput
@@ -1149,8 +1337,9 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                     onChange={(v) => setField(key, v)}
                     required
                     min={1}
+                    max={page === "/fees-fines" && feeFineType === "fine" ? 50000 : 200000}
                     step={1}
-                    placeholder={key === "cost" ? "e.g. 4500" : "e.g. 45000"}
+                    placeholder={page === "/fees-fines" && feeFineType === "fine" ? "e.g. 500" : (key === "cost" ? "e.g. 4500" : "e.g. 45000")}
                   />
                 ) : key === "description" ? (
                   <textarea
@@ -1168,8 +1357,19 @@ function RecordPage({ page, data, refreshData, currentUser }) {
             ))}
             <div className="flex justify-end gap-3 pt-3">
               <Button secondary onClick={() => { setModal(false); setErrorMessage(""); }}>Cancel</Button>
-              <button type="submit" className="rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-700">
-                Save to Database
+              <button
+                type="submit"
+                className={`rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition ${
+                  page === "/fees-fines" && feeFineType === "fine"
+                    ? "bg-rose-600 hover:bg-rose-700"
+                    : "bg-brand-600 hover:bg-brand-700"
+                }`}
+              >
+                {page === "/fees-fines"
+                  ? feeFineType === "fine"
+                    ? "Issue Fine Record"
+                    : "Save Fee Record"
+                  : "Save to Database"}
               </button>
             </div>
           </form>
