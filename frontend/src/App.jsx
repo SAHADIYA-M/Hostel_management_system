@@ -1598,9 +1598,11 @@ function AppShell({ currentUser, onLogout }) {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className={`hidden rounded-full px-3 py-1 text-xs font-semibold sm:block ${backendError ? "bg-rose-100 text-rose-700" : "bg-emerald-50 text-emerald-700"}`}>
-              {backendError ? "Backend Disconnected" : "Live Database Mode"}
-            </div>
+            {backendError && (
+              <div className="hidden rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700 sm:block">
+                Backend Disconnected
+              </div>
+            )}
           </div>
         </header>
 
