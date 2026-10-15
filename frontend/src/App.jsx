@@ -1600,7 +1600,7 @@ function AppShell({ currentUser, onLogout }) {
           <div className="flex items-center gap-3">
             {backendError && (
               <div className="hidden rounded-full bg-rose-100 px-3 py-1 text-xs font-semibold text-rose-700 sm:block">
-                Backend Disconnected
+                Connection Lost
               </div>
             )}
           </div>
@@ -1612,8 +1612,8 @@ function AppShell({ currentUser, onLogout }) {
               <div className="flex items-center gap-3">
                 <AlertCircle size={20} />
                 <div>
-                  <p className="font-bold text-sm">Cannot reach FastAPI backend server</p>
-                  <p className="text-xs text-rose-700">Ensure the backend is running (`uvicorn app.main:app --reload` on port 8000).</p>
+                  <p className="font-bold text-sm">Connection Lost</p>
+                  <p className="text-xs text-rose-700">Unable to reach the server. Please check your connection and retry.</p>
                 </div>
               </div>
               <button
