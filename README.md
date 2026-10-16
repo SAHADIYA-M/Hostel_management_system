@@ -298,17 +298,3 @@ UI mockups exported from Figma are stored in `docs/design/`. All design work is 
 Export convention: lowercase kebab-case with a two-digit sequence prefix (e.g., `01-dashboard.png`).
 
 ---
-
-## Team
-
-| Name | Role |
-|---|---|
-| Sahadiya M | Developer |
-| Rose Sharlin | Developer |
-| Adithyan VT | Developer |
-| Bharath P | Developer |
-| Srividya K | Developer |
-| Anagha ES | Developer |
-| Anagha P | Developer |
-| Ayfa P | Developer |
-| Neeraja T | Developer |
