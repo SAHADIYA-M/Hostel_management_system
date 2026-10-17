@@ -317,7 +317,24 @@ function RecordPage({ page, data, refreshData, currentUser }) {
   const [form, setForm] = useState({});
   // Optimistic local status overrides: { "fee:12": "Paid", "fine:7": "Pending", ... }
   const [localStatuses, setLocalStatuses] = useState({});
+  const [grievanceModal, setGrievanceModal] = useState(false);
+  const [grievanceForm, setGrievanceForm] = useState({});
+  const [grievanceError, setGrievanceError] = useState("");
   const navigate = useNavigate();
+
+  // Auto-clear success message after 4 seconds
+  useEffect(() => {
+    if (!message) return;
+    const t = setTimeout(() => setMessage(""), 4000);
+    return () => clearTimeout(t);
+  }, [message]);
+
+  // Clear messages when navigating to another page
+  useEffect(() => {
+    setMessage("");
+    setErrorMessage("");
+    setStatusError("");
+  }, [page]);
 
   function requestDelete(type, id, label) {
     setDeleteTarget({ type, id, label });
@@ -340,6 +357,36 @@ function RecordPage({ page, data, refreshData, currentUser }) {
       refreshData();
     } catch (err) {
       setErrorMessage(err.message || "Failed to delete record.");
+    }
+  }
+
+  // Lodge grievance as warden (Maintenance page)
+  async function handleLodgeGrievance(e) {
+    e.preventDefault();
+    setGrievanceError("");
+    const desc = (grievanceForm.description || "").trim();
+    const studentId = Number(grievanceForm.student_id || scopedStudents[0]?.student_id);
+    if (!desc || desc.length < 5) {
+      setGrievanceError("Description must be at least 5 characters.");
+      return;
+    }
+    if (!studentId) {
+      setGrievanceError("Please select a student.");
+      return;
+    }
+    try {
+      await maintenanceService.createComplaint({
+        student_id: studentId,
+        description: desc,
+        date: new Date().toISOString().split("T")[0],
+        status: "Open",
+      });
+      setMessage("Grievance registered successfully.");
+      setGrievanceForm({});
+      setGrievanceModal(false);
+      refreshData();
+    } catch (err) {
+      setGrievanceError(err.message || "Failed to register grievance.");
     }
   }
 
@@ -642,6 +689,20 @@ function RecordPage({ page, data, refreshData, currentUser }) {
       // Rollback optimistic update on failure
       if (type) rollbackStatus(type, id);
       setStatusError("Failed to update status: " + (err.message || "Unknown error"));
+    }
+  }
+
+  // Dedicated handler for grievance status updates in the grievance panel (always routes to /complaints)
+  async function handleUpdateGrievanceStatus(row, newStatus) {
+    setStatusError("");
+    const id = row.complaint_id;
+    setOptimisticStatus("complaint", id, newStatus);
+    try {
+      await maintenanceService.updateComplaintStatus(id, newStatus);
+      refreshData();
+    } catch (err) {
+      rollbackStatus("complaint", id);
+      setStatusError("Failed to update grievance: " + (err.message || "Unknown error"));
     }
   }
 
@@ -1113,9 +1174,17 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                 <p className="text-xs text-slate-500 mt-0.5">Student complaints formally submitted to the hostel warden</p>
               </div>
             </div>
-            <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700">
-              {(isWarden ? data.complaints.filter((c) => scopedStudentIds.has(c.student_id)) : data.complaints).filter((c) => c.status === "Open").length} open
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-700">
+                {(isWarden ? data.complaints.filter((c) => scopedStudentIds.has(c.student_id)) : data.complaints).filter((c) => c.status === "Open").length} open
+              </span>
+              <button
+                onClick={() => { setGrievanceForm({}); setGrievanceError(""); setGrievanceModal(true); }}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-amber-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-amber-700 transition shadow-sm"
+              >
+                <Plus size={14} /> Lodge Grievance
+              </button>
+            </div>
           </div>
           <DataTable
             columns={[
@@ -1124,20 +1193,20 @@ function RecordPage({ page, data, refreshData, currentUser }) {
               { key: "reg_no", label: "Reg No" },
               { key: "description", label: "Grievance Description" },
               { key: "date", label: "Date Lodged" },
-              { key: "status", label: "Status", render: (r) => <StatusBadge status={r.status} /> },
+              { key: "status", label: "Status", render: (r) => <StatusBadge status={getStatus("complaint", r.complaint_id, r)} /> },
               {
                 key: "action",
                 label: "Action",
                 render: (r) => (
                   <div className="flex items-center gap-2">
                     <select
-                      value={r.status}
-                      onChange={(e) => handleUpdateStatus(r, e.target.value)}
+                      value={getStatus("complaint", r.complaint_id, r)}
+                      onChange={(e) => handleUpdateGrievanceStatus(r, e.target.value)}
                       className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs"
                     >
-                      <option>Open</option>
-                      <option>In Progress</option>
-                      <option>Resolved</option>
+                      <option value="Open">Open</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Resolved">Resolved</option>
                     </select>
                     <button
                       onClick={() => requestDelete("complaint", r.complaint_id, `Grievance: GRV-${r.complaint_id} (${r.description})`)}
@@ -1153,6 +1222,49 @@ function RecordPage({ page, data, refreshData, currentUser }) {
             rows={isWarden ? data.complaints.filter((c) => scopedStudentIds.has(c.student_id)) : data.complaints}
           />
         </section>
+      )}
+
+      {/* Lodge Grievance Modal (Warden Dashboard — Maintenance Page) */}
+      {grievanceModal && (
+        <Modal
+          title="Lodge Student Grievance"
+          onClose={() => { setGrievanceModal(false); setGrievanceError(""); }}
+        >
+          <form onSubmit={handleLodgeGrievance} className="space-y-4">
+            {grievanceError && (
+              <div className="rounded-xl border border-rose-200 bg-rose-50 p-3 text-xs font-semibold text-rose-700">
+                {grievanceError}
+              </div>
+            )}
+            <Field label="STUDENT">
+              <SelectInput
+                value={grievanceForm.student_id || String(scopedStudents[0]?.student_id || "")}
+                onChange={(v) => setGrievanceForm((f) => ({ ...f, student_id: v }))}
+                options={scopedStudents.map((s) => ({ value: String(s.student_id), label: `${s.fname} ${s.lname} (${s.reg_no})` }))}
+              />
+            </Field>
+            <Field label="GRIEVANCE DESCRIPTION">
+              <textarea
+                value={grievanceForm.description || ""}
+                onChange={(e) => setGrievanceForm((f) => ({ ...f, description: e.target.value }))}
+                required
+                rows={4}
+                minLength={5}
+                placeholder="Describe the student's complaint in detail (min 5 characters)..."
+                className="w-full rounded-xl border border-slate-200 p-3 text-sm outline-none focus:border-brand-500"
+              />
+            </Field>
+            <div className="flex justify-end gap-3 pt-2">
+              <Button secondary onClick={() => { setGrievanceModal(false); setGrievanceError(""); }}>Cancel</Button>
+              <button
+                type="submit"
+                className="rounded-xl bg-amber-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-amber-700 transition"
+              >
+                Register Grievance
+              </button>
+            </div>
+          </form>
+        </Modal>
       )}
 
       {/* Disciplinary Fines Table in Fees View */}
