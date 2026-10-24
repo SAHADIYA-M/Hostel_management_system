@@ -276,25 +276,3 @@ The Vite dev server proxies all `/api` requests to `http://localhost:8000`.
 | 8 | Maintenance & Complaints | Maintenance tickets (room-specific or hostel-wide) and student complaints |
 
 The **Student Self-Service Portal** (`09-student-portal.png`) shows each logged-in student only their own data: room, roommates, fee invoices, fines, attendance, complaints, and visitors.
-
----
-
-## Project Rules
-
-1. **Folder discipline**: SQL → `database/`, Python → `backend/`, React → `frontend/`, documentation → `docs/`. No exceptions.
-2. **Raw SQL only**: All database queries use `psycopg 3` with `%s` parameterized queries. No string concatenation, no ORM.
-3. **Schema baseline**: `docs/project-context.md` is the agreed relational design. Do not add/remove tables or change cardinalities without team approval.
-4. **Secrets**: Credentials stay in `.env` files. Only `.env.example` is committed to Git.
-5. **No CORS workarounds**: In production the backend's `CORS_ORIGINS` env var must list the exact frontend domain.
-
----
-
-## Design Assets
-
-UI mockups exported from Figma are stored in `docs/design/`. All design work is done in the shared Figma file:
-
-🎨 **[Hostel Management System — UI Design (Figma)](https://www.figma.com/design/OIT1nOvW1WjS5YMywyweEy/Hostel-Management-System--UI-Design?t=7D2VjWokgU2jFMMr-1)**
-
-Export convention: lowercase kebab-case with a two-digit sequence prefix (e.g., `01-dashboard.png`).
-
----
