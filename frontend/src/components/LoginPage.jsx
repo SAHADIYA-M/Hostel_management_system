@@ -83,19 +83,19 @@ export default function LoginPage({ onLoginSuccess }) {
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 py-12">
       {/* Brand Header */}
       <div className="mb-8 text-center">
-        <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-brand-600 p-1 text-white shadow-md shadow-brand-600/20">
+        <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl bg-white p-1.5 shadow-sm border border-slate-200/80">
           <img
             src="/logo.png"
             alt="Hostel Management System Logo"
-            className="h-full w-full object-contain"
+            className="h-full w-full object-contain rounded-xl"
             onError={(e) => {
               e.currentTarget.style.display = "none";
               const fallback = e.currentTarget.nextElementSibling;
               if (fallback) fallback.style.display = "flex";
             }}
           />
-          <div className="flex h-full w-full items-center justify-center">
-            <Building2 size={26} />
+          <div className="hidden h-full w-full items-center justify-center rounded-xl bg-brand-600 text-white">
+            <Building2 size={28} />
           </div>
         </div>
         <h1 className="text-2xl font-bold tracking-tight text-slate-900">

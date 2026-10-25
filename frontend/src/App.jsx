@@ -1650,18 +1650,18 @@ function AppShell({ currentUser, onLogout }) {
       <aside className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col bg-white border-r border-slate-200/80 shadow-sm transition-transform lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
         <div className="flex h-20 items-center justify-between border-b border-slate-100 px-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-brand-600 p-1 text-white shadow-md shadow-brand-600/30">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-sm border border-slate-200/80">
               <img
                 src="/logo.png"
                 alt="Logo"
-                className="h-full w-full object-contain"
+                className="h-full w-full object-contain rounded-lg"
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
                   const fallback = e.currentTarget.nextElementSibling;
                   if (fallback) fallback.style.display = "flex";
                 }}
               />
-              <div className="flex h-full w-full items-center justify-center">
+              <div className="hidden h-full w-full items-center justify-center rounded-lg bg-brand-600 text-white">
                 <Building2 size={22} />
               </div>
             </div>
