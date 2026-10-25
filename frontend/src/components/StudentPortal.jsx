@@ -138,11 +138,23 @@ export default function StudentPortal({ currentUser, onLogout }) {
       {/* Top App Header */}
       <div className="sticky top-0 z-20 flex items-center justify-between border-b border-slate-200/80 bg-white/90 px-4 py-3 backdrop-blur sm:px-8 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-brand-600 p-2 text-white shadow-md shadow-brand-600/30">
-            <Building2 size={18} />
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-brand-600 p-1 text-white shadow-md shadow-brand-600/30">
+            <img
+              src="/logo.png"
+              alt="Logo"
+              className="h-full w-full object-contain"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+                const fallback = e.currentTarget.nextElementSibling;
+                if (fallback) fallback.style.display = "flex";
+              }}
+            />
+            <div className="flex h-full w-full items-center justify-center">
+              <Building2 size={18} />
+            </div>
           </div>
           <div>
-            <h1 className="font-bold text-slate-900 text-sm">Hostel<span className="text-brand-600">MS</span></h1>
+            <h1 className="font-bold text-slate-900 text-sm">Hostel Management System</h1>
             <p className="text-[10px] text-slate-400">Student Self-Service Portal</p>
           </div>
         </div>

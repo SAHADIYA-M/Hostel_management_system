@@ -1650,12 +1650,24 @@ function AppShell({ currentUser, onLogout }) {
       <aside className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col bg-white border-r border-slate-200/80 shadow-sm transition-transform lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
         <div className="flex h-20 items-center justify-between border-b border-slate-100 px-6">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-brand-600 p-2.5 text-white shadow-md shadow-brand-600/30">
-              <Building2 size={22} />
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-brand-600 p-1 text-white shadow-md shadow-brand-600/30">
+              <img
+                src="/logo.png"
+                alt="Logo"
+                className="h-full w-full object-contain"
+                onError={(e) => {
+                  e.currentTarget.style.display = "none";
+                  const fallback = e.currentTarget.nextElementSibling;
+                  if (fallback) fallback.style.display = "flex";
+                }}
+              />
+              <div className="flex h-full w-full items-center justify-center">
+                <Building2 size={22} />
+              </div>
             </div>
             <div>
-              <h1 className="font-bold text-slate-900">Hostel<span className="text-brand-600">MS</span></h1>
-              <p className="text-xs text-slate-400">Hostel Portal</p>
+              <h1 className="text-sm font-bold leading-tight text-slate-900">Hostel Management System</h1>
+              <p className="text-[11px] text-slate-400">Admin Portal</p>
             </div>
           </div>
         </div>

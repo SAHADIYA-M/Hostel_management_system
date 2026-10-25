@@ -83,13 +83,25 @@ export default function LoginPage({ onLoginSuccess }) {
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-4 py-12">
       {/* Brand Header */}
       <div className="mb-8 text-center">
-        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-600 text-white shadow-md shadow-brand-600/20">
-          <Building2 size={24} />
+        <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center overflow-hidden rounded-2xl bg-brand-600 p-1 text-white shadow-md shadow-brand-600/20">
+          <img
+            src="/logo.png"
+            alt="Hostel Management System Logo"
+            className="h-full w-full object-contain"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+              const fallback = e.currentTarget.nextElementSibling;
+              if (fallback) fallback.style.display = "flex";
+            }}
+          />
+          <div className="flex h-full w-full items-center justify-center">
+            <Building2 size={26} />
+          </div>
         </div>
         <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-          Hostel<span className="text-brand-600">MS</span>
+          Hostel Management System
         </h1>
-        <p className="mt-1 text-sm text-slate-500">Hostel Management System</p>
+        <p className="mt-1 text-sm text-slate-500">Student & Warden Access Portal</p>
       </div>
 
       {/* Main Card */}
