@@ -25,6 +25,12 @@ export const studentService = {
     const response = await api.delete(`/students/${studentId}`);
     return response.data;
   },
+
+  async updateMessPlan(studentId, messId) {
+    // messId = null means unenroll (cancel mess plan)
+    const response = await api.patch(`/students/${studentId}/mess`, { mess_id: messId });
+    return response.data;
+  },
 };
 
 export default studentService;

@@ -3,7 +3,7 @@ from typing import List, Optional
 from datetime import date
 from psycopg.errors import CheckViolation, ForeignKeyViolation
 from app.db import get_db_connection
-from app.schemas import StudentCreate, StudentAllotRequest, StudentResponse
+from app.schemas import StudentCreate, StudentAllotRequest, StudentResponse, MessPlanUpdate
 
 router = APIRouter(prefix="/api/students", tags=["Students"])
 
@@ -142,6 +142,32 @@ def allot_student_room(student_id: int, req: StudentAllotRequest, conn=Depends(g
                 raise HTTPException(status_code=404, detail="Student not found")
             conn.commit()
             return row
+        except Exception as e:
+            conn.rollback()
+            raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.patch("/{student_id}/mess", response_model=StudentResponse)
+def update_student_mess_plan(student_id: int, req: MessPlanUpdate, conn=Depends(get_db_connection)):
+    """Assign a new mess plan or unenroll (mess_id=null) for a student."""
+    with conn.cursor() as cur:
+        try:
+            cur.execute(
+                """
+                UPDATE hostel.student
+                SET mess_id = %s
+                WHERE student_id = %s
+                RETURNING *;
+                """,
+                (req.mess_id, student_id)
+            )
+            row = cur.fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="Student not found")
+            conn.commit()
+            return row
+        except HTTPException:
+            raise
         except Exception as e:
             conn.rollback()
             raise HTTPException(status_code=400, detail=str(e))

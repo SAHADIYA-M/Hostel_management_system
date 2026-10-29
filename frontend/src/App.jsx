@@ -320,6 +320,10 @@ function RecordPage({ page, data, refreshData, currentUser }) {
   const [grievanceModal, setGrievanceModal] = useState(false);
   const [grievanceForm, setGrievanceForm] = useState({});
   const [grievanceError, setGrievanceError] = useState("");
+  // Mess enrollment manager: track which plan panel is open + pending reassign selects
+  const [openMessPanel, setOpenMessPanel] = useState(null); // mess_id of expanded plan
+  const [messReassign, setMessReassign] = useState({}); // { student_id: new_mess_id_string }
+  const [messActionLoading, setMessActionLoading] = useState(null); // student_id being updated
   const navigate = useNavigate();
 
   // Auto-clear success message after 4 seconds
@@ -1172,6 +1176,144 @@ function RecordPage({ page, data, refreshData, currentUser }) {
         <div className="mb-4 flex items-center justify-between gap-3 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs font-semibold text-rose-700">
           <span>{statusError}</span>
           <button onClick={() => setStatusError("")} className="ml-auto text-rose-500 hover:text-rose-700 font-bold text-sm leading-none">&times;</button>
+        </div>
+      )}
+
+      {/* Mess Enrollment Manager — shown only on /mess page */}
+      {page === "/mess" && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 px-1">
+            <Utensils size={17} className="text-brand-600" />
+            <h3 className="font-bold text-slate-900">Enrolled Students per Plan</h3>
+            <span className="ml-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-600">
+              Click a plan to manage enrollments
+            </span>
+          </div>
+          {data.messPlans.map((plan) => {
+            const enrolled = data.students.filter((s) => s.mess_id === plan.mess_id);
+            const isOpen = openMessPanel === plan.mess_id;
+            return (
+              <section key={plan.mess_id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                {/* Plan header — click to toggle */}
+                <button
+                  type="button"
+                  onClick={() => setOpenMessPanel(isOpen ? null : plan.mess_id)}
+                  className="flex w-full items-center justify-between px-5 py-4 text-left hover:bg-slate-50 transition"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+                      <Utensils size={18} />
+                    </span>
+                    <div>
+                      <p className="font-bold text-slate-900">{plan.type}</p>
+                      <p className="text-xs text-slate-500">₹{Number(plan.cost).toLocaleString("en-IN")}/mo</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-bold text-indigo-700">
+                      {enrolled.length} student{enrolled.length !== 1 ? "s" : ""}
+                    </span>
+                    <span className={`transition-transform duration-200 text-slate-400 ${isOpen ? "rotate-90" : ""}`}>
+                      <ArrowRight size={16} />
+                    </span>
+                  </div>
+                </button>
+
+                {/* Enrolled students list */}
+                {isOpen && (
+                  <div className="border-t border-slate-100">
+                    {enrolled.length === 0 ? (
+                      <p className="px-6 py-5 text-sm text-slate-400 italic">No students currently enrolled in this plan.</p>
+                    ) : (
+                      <table className="w-full text-left text-sm">
+                        <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+                          <tr>
+                            <th className="px-5 py-3 font-semibold">Student</th>
+                            <th className="px-5 py-3 font-semibold">Reg No</th>
+                            <th className="px-5 py-3 font-semibold">Hostel</th>
+                            <th className="px-5 py-3 font-semibold">Reassign Plan</th>
+                            <th className="px-5 py-3 font-semibold">Unenroll</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {enrolled.map((s) => {
+                            const isBusy = messActionLoading === s.student_id;
+                            const selectedPlan = messReassign[s.student_id] ?? String(plan.mess_id);
+                            return (
+                              <tr key={s.student_id} className="hover:bg-slate-50/80">
+                                <td className="px-5 py-3 font-semibold text-slate-900">
+                                  {s.fname} {s.lname}
+                                </td>
+                                <td className="px-5 py-3 text-slate-500">{s.reg_no}</td>
+                                <td className="px-5 py-3 text-slate-500">{s.hostel_name || "—"}</td>
+                                <td className="px-5 py-3">
+                                  <div className="flex items-center gap-2">
+                                    <select
+                                      value={selectedPlan}
+                                      disabled={isBusy}
+                                      onChange={(e) => setMessReassign((prev) => ({ ...prev, [s.student_id]: e.target.value }))}
+                                      className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs font-medium outline-none focus:border-brand-500 disabled:opacity-50"
+                                    >
+                                      {data.messPlans.map((p) => (
+                                        <option key={p.mess_id} value={String(p.mess_id)}>
+                                          {p.type} (₹{Number(p.cost).toLocaleString("en-IN")})
+                                        </option>
+                                      ))}
+                                    </select>
+                                    <button
+                                      disabled={isBusy || selectedPlan === String(plan.mess_id)}
+                                      onClick={async () => {
+                                        setMessActionLoading(s.student_id);
+                                        try {
+                                          await studentService.updateMessPlan(s.student_id, Number(selectedPlan));
+                                          setMessage(`${s.fname} ${s.lname} reassigned to new mess plan.`);
+                                          setMessReassign((prev) => { const n = { ...prev }; delete n[s.student_id]; return n; });
+                                          refreshData();
+                                        } catch (err) {
+                                          setErrorMessage(err.message || "Failed to reassign mess plan.");
+                                        } finally {
+                                          setMessActionLoading(null);
+                                        }
+                                      }}
+                                      className="rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-brand-700 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                                    >
+                                      {isBusy ? "Saving…" : "Save"}
+                                    </button>
+                                  </div>
+                                </td>
+                                <td className="px-5 py-3">
+                                  <button
+                                    disabled={isBusy}
+                                    onClick={async () => {
+                                      if (!window.confirm(`Unenroll ${s.fname} ${s.lname} from this mess plan?`)) return;
+                                      setMessActionLoading(s.student_id);
+                                      try {
+                                        await studentService.updateMessPlan(s.student_id, null);
+                                        setMessage(`${s.fname} ${s.lname} unenrolled from mess plan.`);
+                                        refreshData();
+                                      } catch (err) {
+                                        setErrorMessage(err.message || "Failed to unenroll student.");
+                                      } finally {
+                                        setMessActionLoading(null);
+                                      }
+                                    }}
+                                    className="rounded-lg border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-bold text-rose-700 hover:bg-rose-100 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                                    title="Remove from mess plan"
+                                  >
+                                    Unenroll
+                                  </button>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    )}
+                  </div>
+                )}
+              </section>
+            );
+          })}
         </div>
       )}
 

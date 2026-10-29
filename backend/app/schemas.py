@@ -201,6 +201,10 @@ class MessResponse(BaseModel):
     enrolled_count: Optional[int] = 0
 
 
+class MessPlanUpdate(BaseModel):
+    mess_id: Optional[int] = None  # None = cancel/unenroll from mess
+
+
 # -----------------------------------------------------------------------------
 # 6. ATTENDANCE (Composite key: student_id + date)
 # -----------------------------------------------------------------------------
