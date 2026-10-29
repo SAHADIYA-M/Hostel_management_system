@@ -1798,12 +1798,12 @@ function AppShell({ currentUser, onLogout }) {
         <button
           aria-label="Close navigation"
           onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 z-30 bg-slate-950/30 lg:hidden"
+          className="fixed inset-0 z-30 bg-slate-950/30"
         />
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col bg-white border-r border-slate-200/80 shadow-sm transition-transform lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+      <aside className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col bg-white border-r border-slate-200/80 shadow-lg transition-transform duration-300 ease-in-out ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
         <div className="flex h-20 items-center justify-between border-b border-slate-100 px-6">
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white p-1 shadow-sm border border-slate-200/80">
@@ -1826,6 +1826,13 @@ function AppShell({ currentUser, onLogout }) {
               <p className="text-[11px] text-slate-400">Admin Portal</p>
             </div>
           </div>
+          <button
+            aria-label="Close sidebar"
+            onClick={() => setSidebarOpen(false)}
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition"
+          >
+            <X size={20} />
+          </button>
         </div>
 
         <nav className="flex-1 space-y-1 overflow-y-auto p-4">
@@ -1865,10 +1872,14 @@ function AppShell({ currentUser, onLogout }) {
       </aside>
 
       {/* Content Area */}
-      <div className="min-h-screen lg:pl-72">
+      <div className="min-h-screen">
         <header className="sticky top-0 z-20 flex h-20 items-center justify-between border-b border-slate-200/80 bg-white/90 px-4 backdrop-blur sm:px-8">
           <div className="flex items-center gap-3">
-            <button className="rounded-lg p-2 hover:bg-slate-100 lg:hidden" onClick={() => setSidebarOpen(true)}>
+            <button
+              className="rounded-lg p-2 hover:bg-slate-100 transition"
+              onClick={() => setSidebarOpen((prev) => !prev)}
+              aria-label="Toggle navigation"
+            >
               <Menu size={22} />
             </button>
             <div>
