@@ -353,6 +353,7 @@ function RecordPage({ page, data, refreshData, currentUser }) {
       else if (type === "complaint") await maintenanceService.deleteComplaint(id);
       else if (type === "student") await studentService.delete(id);
       else if (type === "visitor") await visitorService.deleteVisitor(id);
+      else if (type === "mess") await messService.deleteMessPlan(id);
       setMessage("Record deleted successfully.");
       refreshData();
     } catch (err) {
@@ -1017,6 +1018,19 @@ function RecordPage({ page, data, refreshData, currentUser }) {
                     { key: "type", label: "Meal Type" },
                     { key: "cost", label: "Cost", render: (r) => `₹${Number(r.cost).toLocaleString("en-IN")}/mo` },
                     { key: "enrolled_count", label: "Enrolled Students" },
+                    {
+                      key: "action",
+                      label: "Action",
+                      render: (r) => (
+                        <button
+                          onClick={() => requestDelete("mess", r.mess_id, `Mess Plan: ${r.type} (₹${Number(r.cost).toLocaleString("en-IN")}/mo) — ${r.enrolled_count} student(s) enrolled`)}
+                          className="rounded-lg p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 transition"
+                          title="Delete mess plan"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      ),
+                    },
                   ]
                 : page === "/attendance"
                 ? [

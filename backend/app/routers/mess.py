@@ -44,3 +44,30 @@ def create_mess_plan(plan: MessCreate, conn=Depends(get_db_connection)):
         conn.commit()
         created["enrolled_count"] = 0
         return created
+
+
+@router.delete("/{mess_id}", status_code=200)
+def delete_mess_plan(mess_id: int, conn=Depends(get_db_connection)):
+    """Delete a mess plan. Fails if students are still enrolled in it."""
+    with conn.cursor() as cur:
+        # Check if any student is still enrolled
+        cur.execute(
+            "SELECT COUNT(*) AS cnt FROM hostel.student WHERE mess_id = %s;",
+            (mess_id,)
+        )
+        enrolled = cur.fetchone()["cnt"]
+        if enrolled > 0:
+            raise HTTPException(
+                status_code=409,
+                detail=f"Cannot delete: {enrolled} student(s) are still enrolled in this mess plan. Please reassign them first."
+            )
+
+        cur.execute(
+            "DELETE FROM hostel.mess WHERE mess_id = %s RETURNING mess_id;",
+            (mess_id,)
+        )
+        deleted = cur.fetchone()
+        if not deleted:
+            raise HTTPException(status_code=404, detail="Mess plan not found.")
+        conn.commit()
+        return {"message": "Mess plan deleted successfully.", "mess_id": mess_id}

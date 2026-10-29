@@ -10,6 +10,11 @@ export const messService = {
     const response = await api.post("/mess", data);
     return response.data;
   },
+
+  async deleteMessPlan(id) {
+    const response = await api.delete(`/mess/${id}`);
+    return response.data;
+  },
 };
 
 export default messService;
